@@ -18,4 +18,4 @@ logging:
 stalser:
   api:
     version: 1
-    url: api/v${market.api.version}
+    url: api/v${stalser.api.version}
