@@ -3,9 +3,11 @@ package ru.gb.stalser.core.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,15 +28,10 @@ public class Activity {
     private String activityInfo;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @CreationTimestamp
+    private Instant createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "tasks")
-    private List<Task> tasks;
-
-    @OneToMany(mappedBy = "users")
-    private List<User> users;
+    private Instant updatedAt;
 }
