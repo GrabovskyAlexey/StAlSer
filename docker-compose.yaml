@@ -4,7 +4,7 @@ services:
     image: postgres:14
     domainname: postgres_auth
     ports:
-      - "5432:5432"
+      - "15432:15432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
