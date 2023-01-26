@@ -1,7 +1,10 @@
 package ru.gb.stalser.core.entity;
 
-import lombok.Data;
+
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -10,7 +13,8 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "task_comments")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Comment {
     @Id
@@ -27,6 +31,7 @@ public class Comment {
     @Column(name = "comment_text")
     private String commentText;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private Instant createdAt;
 

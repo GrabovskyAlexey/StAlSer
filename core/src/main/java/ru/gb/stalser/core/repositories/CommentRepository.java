@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment,Long> {
 
-    // List<Comment>findAllByCommentText(String commentText);
-    //пока не знаю какие методы добавить добавлю позже
+
 }
 
