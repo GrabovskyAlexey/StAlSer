@@ -14,6 +14,5 @@ public interface BoardService {
 
     Board save(Board board);
 
-    @Transactional
     void updateBoardFromDto(Board board);
 }
