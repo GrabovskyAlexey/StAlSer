@@ -36,12 +36,6 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void updateBoardFromDto(Board boardDto) {
 
-        Board board = boardRepository.findById(boardDto.getId()).orElseThrow(() -> new EntityNotFoundException("Product id = " + boardDto.getId() + " not found"));
-
-        board.setBoardAlias(boardDto.getBoardAlias());
-        board.setBoardName(boardDto.getBoardName());
-        board.setBoardDesc(boardDto.getBoardDesc());
-        board.setIsActive(boardDto.getIsActive());
-        boardRepository.save(board);
+        boardRepository.save(boardDto);
     }
 }
