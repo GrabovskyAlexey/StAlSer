@@ -23,11 +23,13 @@ public class Comment {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(mappedBy = "tasks")
-    private List<Task> tasks;
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private Task tasks;
 
-    @ManyToOne(mappedBy = "users")
-    private List<User> users;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User users;
 
     @Column(name = "comment_text")
     private String commentText;
