@@ -38,7 +38,7 @@ public class Sprint {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
 
