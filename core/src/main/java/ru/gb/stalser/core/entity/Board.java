@@ -3,6 +3,7 @@ package ru.gb.stalser.core.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 @Table(name = "boards")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Board {
 
@@ -35,8 +37,9 @@ public class Board {
     private String boardAlias;
     @Column(name = "is_active")
     private Boolean isActive;
-    @Column(name = "creator_id")
-    private Long creatorId;
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creatorId;
 
     @Override
     public boolean equals(Object o) {
