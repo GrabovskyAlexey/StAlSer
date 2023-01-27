@@ -6,14 +6,14 @@ import ru.gb.stalser.core.entity.Board;
 import ru.gb.stalser.core.repositories.BoardRepository;
 import ru.gb.stalser.core.services.interfaces.BoardService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
 
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
 
     @Override
@@ -22,8 +22,10 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Optional<Board> findById(Long id) {
-        return boardRepository.findById(id);
+    public Board findById(Long id) {
+
+        return boardRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Board id=" + id + "{} not found"));
     }
 
     @Override
@@ -34,12 +36,12 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void updateBoardFromDto(Board boardDto) {
 
-        Board board = findById(boardDto.getId()).orElse(new Board());
+        Board board = boardRepository.findById(boardDto.getId()).orElseThrow(() -> new EntityNotFoundException("Product id = " + boardDto.getId() + " not found"));
 
         board.setBoardAlias(boardDto.getBoardAlias());
         board.setBoardName(boardDto.getBoardName());
         board.setBoardDesc(boardDto.getBoardDesc());
         board.setIsActive(boardDto.getIsActive());
-        save(board);
+        boardRepository.save(board);
     }
 }
