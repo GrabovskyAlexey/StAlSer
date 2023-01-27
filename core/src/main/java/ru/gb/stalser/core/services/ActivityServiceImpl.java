@@ -1,7 +1,9 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 import ru.gb.stalser.core.entity.Activity;
 import ru.gb.stalser.core.repositories.ActivityRepository;
 import ru.gb.stalser.core.services.interfaces.ActivityService;
@@ -20,8 +22,8 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Optional<Activity> findById(Long id) {
-        return activityRepository.findById(id);
+    public Activity findById(Long id) {
+        return activityRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Activity id = " + id + " not found"));
     }
 
     @Override
@@ -31,7 +33,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Activity update(Activity activity) {
-        return null;
+        return activityRepository.save(activity);
     }
 
     @Override

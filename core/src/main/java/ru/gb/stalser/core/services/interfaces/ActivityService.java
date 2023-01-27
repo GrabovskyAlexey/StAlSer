@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ActivityService {
     List<Activity> findAll();
 
-    Optional<Activity> findById(Long id);
+    Activity findById(Long id);
 
     Activity save(Activity activity);
 
