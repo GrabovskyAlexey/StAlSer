@@ -1,9 +1,8 @@
 package ru.gb.stalser.core.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,46 +10,46 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.Objects;
 
+
 @Entity
-@Table(name = "boards")
+@Table(name = "task_comments")
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
-public class Board {
-
+@RequiredArgsConstructor
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "board_name")
-    private String boardName;
-    @Column(name = "board_desc")
-    private String boardDesc;
+
+    @ManyToOne(mappedBy = "tasks")
+    private List<Task> tasks;
+
+    @ManyToOne(mappedBy = "users")
+    private List<User> users;
+
+    @Column(name = "comment_text")
+    private String commentText;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private Instant createdAt;
+
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Instant updatedAt;
-    @Column(name = "board_alias")
-    private String boardAlias;
-    @Column(name = "is_active")
-    private Boolean isActive;
-    @ManyToOne
-    @JoinColumn(name = "creator_id")
-    private User creatorId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Board board = (Board) o;
-        return id.equals(board.id);
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Comment comment = (Comment) o;
+        return id != null && Objects.equals(id, comment.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return getClass().hashCode();
     }
 }
