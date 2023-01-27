@@ -16,7 +16,6 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 public class Sprint {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
