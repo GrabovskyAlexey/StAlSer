@@ -22,7 +22,7 @@ public class Tag {
     private Long id;
 
     @Column(name = "tag_name")
-    private String tag_name;
+    private String tagName;
 
     @Column(name = "created_at")
     @CreationTimestamp
