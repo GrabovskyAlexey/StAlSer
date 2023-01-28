@@ -25,11 +25,12 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "task_id")
-    private Task tasks;
+    private Task task;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User users;
+    @JoinColumn(name = "author_id")
+    private User author;
+
 
     @Column(name = "comment_text")
     private String commentText;
