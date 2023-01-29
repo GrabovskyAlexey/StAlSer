@@ -45,6 +45,6 @@ public class BoardControllerImpl implements BoardController {
 
     @Override
     public void updateBoard(Long id, BoardDto board) {
-        boardService.updateBoard(id, boardMapper.mapFromDto(board));
+        boardService.updateBoard(boardMapper.mapFromDto(board));
     }
 }
