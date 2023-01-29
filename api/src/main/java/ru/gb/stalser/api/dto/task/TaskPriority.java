@@ -1,4 +1,4 @@
-package ru.gb.stalser.core.entity;
+package ru.gb.stalser.api.dto.task;
 
 public enum TaskPriority {
     TRIVIAL, MINOR, MAJOR, CRITICAL, BLOCKER;
