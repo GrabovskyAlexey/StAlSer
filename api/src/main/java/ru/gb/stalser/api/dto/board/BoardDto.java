@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.time.Instant;
-import java.util.Date;
 
 @Data
 @Builder
@@ -35,11 +33,6 @@ public class BoardDto {
     @Schema(description = "Описание доски")
     @JsonProperty("boardDesc")
     private String boardDesc;
-
-    @NotEmpty(message = "Дата и время создания доски")
-    @Schema(description = "Дата создания", implementation = Instant.class)
-    @JsonProperty("createdAt")
-    private Date createdAt;
 
     @NotEmpty(message = "Сокращенное название доски не может быть пустым")
     @Size(min = 3, max = 10, message = "Сокращенное название доски должно содержать от 3 до 10 символов. Проверьте длину.")
