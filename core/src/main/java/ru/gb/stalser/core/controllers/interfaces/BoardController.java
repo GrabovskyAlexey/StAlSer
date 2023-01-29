@@ -143,6 +143,7 @@ public interface BoardController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateBoard(
+            @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id,
             @Parameter(name = "Board", description = "Board Item", required = true) @Valid @RequestBody BoardDto board
     );
 }

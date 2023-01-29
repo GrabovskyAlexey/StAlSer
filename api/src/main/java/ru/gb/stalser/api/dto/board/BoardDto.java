@@ -3,6 +3,7 @@ package ru.gb.stalser.api.dto.board;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.time.Instant;
 import java.util.Date;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Информация о доске", name = "Board")
@@ -46,7 +48,6 @@ public class BoardDto {
     private String boardAlias;
 
     @NotEmpty(message = "Маркер активности доски не может быть пустым")
-    @Size(min = 3, max = 10, message = "Сокращенное название доски должно содержать от 3 до 10 символов. Проверьте длину.")
     @Schema(description = "Маркер активности доски")
     @JsonProperty("isActive")
     private Boolean isActive;
