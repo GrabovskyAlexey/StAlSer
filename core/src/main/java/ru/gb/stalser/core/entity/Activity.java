@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "task_activities")
@@ -27,6 +27,14 @@ public class Activity {
     @Column(name = "activity_info")
     private String activityInfo;
 
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private Task task;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private Instant createdAt;
@@ -34,4 +42,17 @@ public class Activity {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Activity activity = (Activity) o;
+        return id.equals(activity.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
