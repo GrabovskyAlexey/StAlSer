@@ -37,7 +37,7 @@ public class BoardDto {
     @NotEmpty(message = "Сокращенное название доски не может быть пустым")
     @Size(min = 3, max = 10, message = "Сокращенное название доски должно содержать от 3 до 10 символов. Проверьте длину.")
     @Schema(description = "Сокращенное название доски")
-    @JsonProperty("boardName")
+    @JsonProperty("boardAlias")
     private String boardAlias;
 
     @NotEmpty(message = "Маркер активности доски не может быть пустым")
