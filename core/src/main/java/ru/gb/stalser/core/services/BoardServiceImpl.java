@@ -34,7 +34,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void updateBoardFromDto(Board boardDto) {
+    public void updateBoard(Board boardDto) {
 
         boardRepository.save(boardDto);
     }
