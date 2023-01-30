@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.gb.stalser.api.dto.task.TaskDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
