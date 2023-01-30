@@ -38,8 +38,8 @@ public class CommentControllerImpl implements CommentController{
     }
 
     @Override
-    public ResponseEntity<CommentDto> updateComment(Long id, CommentDto comment) {
-        return ResponseEntity.ok(commentMapper.mapToDto(commentService.update(commentMapper.mapFromDto(comment))));
+    public void updateComment(Long id, CommentDto comment) {
+        commentService.update(commentMapper.mapFromDto(comment));
     }
 
 

@@ -25,13 +25,13 @@ public class CommentDto {
 
         @NotEmpty(message = "У комментария должна быть задача к которой он относится")
         @Schema(description = "Задача к которой относится комментарий")
-        @JsonProperty("taskDto")
+        @JsonProperty("task")
         private TaskDto task;
 
         @NotEmpty(message = "У комментария должен быть создатель к которему он относится")
         @Schema(description = "Пользователь к которому относится комментарий")
-        @JsonProperty("userDto")
-                private Long userId;
+        @JsonProperty("user")
+                private Long user;
 
         @NotEmpty(message = "Поле комментарий не может быть пустым")
         @Schema(description = "Текст комментария")

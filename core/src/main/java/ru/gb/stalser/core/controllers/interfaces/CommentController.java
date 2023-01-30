@@ -117,11 +117,6 @@ public interface CommentController {
      * PUT /${stalser.api.url}/comments/{id} : Update comment by id
      *
      * @param comment comment item (required)
-     * @return Successfully update comment (status code 204)
-     * or Bad Request (status code 400)
-     * or Unauthorized (status code 401)
-     * or Forbidden (status code 403)
-     * or Not found comment (status code 404)
      */
     @Operation(
             operationId = "updateComment",
@@ -144,12 +139,9 @@ public interface CommentController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    ResponseEntity<CommentDto> updateComment(
+    void updateComment(
             @Parameter(name = "id", description = "comment id", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Comment", description = "Comment Item", required = true) @Valid @RequestBody CommentDto comment
-    );
-
-
+            @Parameter(name = "Comment", description = "Comment Item", required = true) @Valid @RequestBody CommentDto comment);
 
 }
 
