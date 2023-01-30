@@ -34,10 +34,9 @@ public class ActivityControllerImpl implements ActivityController {
     }
 
     @Override
-    public ResponseEntity<ActivityDto> updateActivity(Long id, ActivityDto activity) {
-        return ResponseEntity.ok(activityMapper.mapToDto(activityService.update(activityMapper.mapFromDto(activity))));
+    public void updateActivity(Long id, ActivityDto activity) {
+        activityService.update(activityMapper.mapFromDto(activity));
     }
-
     @Override
     public void deleteActivity(Long id) {
         activityService.deleteById(id);

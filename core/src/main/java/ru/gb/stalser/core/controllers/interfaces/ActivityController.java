@@ -143,7 +143,8 @@ public interface ActivityController {
             produces = {"application/json"},
             consumes = {"application/json"}
     )
-    ResponseEntity<ActivityDto> updateActivity(
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void updateActivity(
             @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id,
             @Parameter(name = "Activity", description = "Activity Item", required = true) @Valid @RequestBody ActivityDto activity
     );

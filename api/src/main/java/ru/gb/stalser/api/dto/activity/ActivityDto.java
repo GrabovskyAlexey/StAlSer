@@ -32,12 +32,12 @@ public class ActivityDto {
 
     @NotEmpty(message = "У активности должна быть задача к которой она относится")
     @Schema(description = "Задача к которой относится активность")
-    @JsonProperty("taskDto")
+    @JsonProperty("task")
     private TaskDto task;
 
     @NotEmpty(message = "У активности должен быть пользователь к которой она относится")
     @Schema(description = "Пользователь к которому относится активность")
-    @JsonProperty("userDto")
+    @JsonProperty("user")
     private Long userId;
 
 }
