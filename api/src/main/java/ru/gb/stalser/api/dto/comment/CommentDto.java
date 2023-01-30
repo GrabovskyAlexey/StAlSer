@@ -28,7 +28,7 @@ public class CommentDto {
         @JsonProperty("taskDto")
         private TaskDto task;
 
-        @NotEmpty(message = "У комментария должен быть создатель к которой он относится")
+        @NotEmpty(message = "У комментария должен быть создатель к которему он относится")
         @Schema(description = "Пользователь к которому относится комментарий")
         @JsonProperty("userDto")
                 private Long userId;

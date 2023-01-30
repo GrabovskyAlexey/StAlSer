@@ -54,7 +54,7 @@ public interface CommentController {
      * @param id Comment id (required)
      * @return Get one comment (status code 200)
      * or Bad Request (status code 400)
-     * or Not found task (status code 404)
+     * or Not found comment (status code 404)
      */
     @Operation(
             operationId = "getCommentById",
@@ -67,7 +67,7 @@ public interface CommentController {
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Задача не найдена", content = {
+                    @ApiResponse(responseCode = "404", description = "комментарий не найден", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     })
             }
@@ -121,7 +121,7 @@ public interface CommentController {
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
      * or Forbidden (status code 403)
-     * or Not found task (status code 404)
+     * or Not found comment (status code 404)
      */
     @Operation(
             operationId = "updateComment",
