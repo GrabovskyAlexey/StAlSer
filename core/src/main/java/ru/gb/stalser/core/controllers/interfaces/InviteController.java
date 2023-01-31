@@ -11,30 +11,30 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.gb.stalser.api.dto.activity.ActivityDto;
+import ru.gb.stalser.api.dto.invite.InviteDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @Validated
-@Tag(name = "activity", description = "Контроллер для работы с активностями")
-public interface ActivityController {
+@Tag(name = "invite", description = "Контроллер для работы с приглашениями")
+public interface InviteController {
 
     /**
-     * GET /${stalser.api.url}/activity : Get all activities
+     * GET /${stalser.api.url}/invites : Get all invites
      *
-     * @return List of all activities (status code 200)
+     * @return List of all invites (status code 200)
      * or Bad Request (status code 400)
      */
     @Operation(
-            operationId = "getAllActivities",
-            summary = "Получение списка активностей",
-            tags = {"activity"},
+            operationId = "getAllInvites",
+            summary = "Получение списка приглашений",
+            tags = {"invite"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Список всех активностей", content = {
+                    @ApiResponse(responseCode = "200", description = "Список всех приглашений", content = {
                             @Content(mediaType = "application/json", array = @ArraySchema(
-                                    schema = @Schema(implementation = ActivityDto.class)))
+                                    schema = @Schema(implementation = InviteDto.class)))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -44,28 +44,28 @@ public interface ActivityController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<ActivityDto>> getAllActivities();
+    ResponseEntity<List<InviteDto>> getAllInvites();
 
     /**
-     * GET /${stalser.api.url}/activity/{id} : Get activity by id
+     * GET /${stalser.api.url}/invites/{id} : Get invite by id
      *
-     * @param id activity id (required)
-     * @return Get one activity (status code 200)
+     * @param id invite id (required)
+     * @return Get one invite (status code 200)
      * or Bad Request (status code 400)
-     * or Not found activity (status code 404)
+     * or Not found invite (status code 404)
      */
     @Operation(
-            operationId = "getActivityById",
-            summary = "Получить активность по идентификатору",
-            tags = {"activity"},
+            operationId = "getInviteById",
+            summary = "Получить приглашение по идентификатору",
+            tags = {"invite"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Активность", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))
+                    @ApiResponse(responseCode = "200", description = "Приглашение", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = InviteDto.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Активность не найдена", content = {
+                    @ApiResponse(responseCode = "404", description = "Приглашение не найдена", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     })
             }
@@ -74,26 +74,26 @@ public interface ActivityController {
             value = "/{id}",
             produces = {"application/json"}
     )
-    ResponseEntity<ActivityDto> getActivityById(
-            @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id
+    ResponseEntity<InviteDto> getInviteById(
+            @Parameter(name = "id", description = "идентификатор приглашения", required = true) @PathVariable("id") Long id
     );
 
     /**
-     * POST /${stalser.api.url}/activity : Add activity
+     * POST /${stalser.api.url}/invites : Add invite
      *
-     * @param activity activity Item (required)
-     * @return Successfully add activity (status code 201)
+     * @param invite invite Item (required)
+     * @return Successfully add invite (status code 201)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
      * or Forbidden (status code 403)
      */
     @Operation(
-            operationId = "addActivity",
-            summary = "Добавление активности",
-            tags = {"activity"},
+            operationId = "addInvite",
+            summary = "Добавление приглашения",
+            tags = {"invite"},
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Активность успешно добавлена", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))
+                    @ApiResponse(responseCode = "201", description = "Приглашение успешно добавлено", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = InviteDto.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -107,34 +107,34 @@ public interface ActivityController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<ActivityDto> addActivity(
-            @Parameter(name = "activity", description = "Activity Item", required = true) @Valid @RequestBody ActivityDto activity
+    ResponseEntity<InviteDto> addInvite(
+            @Parameter(name = "invite", description = "Приглашение", required = true) @Valid @RequestBody InviteDto invite
     );
 
     /**
-     * PUT /${stalser.api.url}/activity/{id} : Update activity by id
+     * PUT /${stalser.api.url}/invites/{id} : Update invite by id
      *
-     * @param activity activity item (required)
-     * @return Successfully update activity (status code 200)
+     * @param invite invite item (required)
+     * @return Successfully update invite (status code 200)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
      * or Forbidden (status code 403)
      * or Not found invite (status code 404)
      */
     @Operation(
-            operationId = "updateActivity",
-            summary = "Обновление активности",
-            tags = {"activity"},
+            operationId = "updateInvite",
+            summary = "Обновление приглашения",
+            tags = {"invite"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Активность успешно обновлена", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))
+                    @ApiResponse(responseCode = "200", description = "Приглашение успешно обновлено", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = InviteDto.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Активность не найдена", content = {
+                    @ApiResponse(responseCode = "404", description = "Приглашение не найдено", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     })
             }
@@ -144,33 +144,33 @@ public interface ActivityController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void updateActivity(
-            @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Activity", description = "Activity Item", required = true) @Valid @RequestBody ActivityDto activity
+    void updateInvite(
+            @Parameter(name = "id", description = "идентификатор приглашения", required = true) @PathVariable("id") Long id,
+            @Parameter(name = "invite", description = "Приглашение", required = true) @Valid @RequestBody InviteDto invite
     );
 
     /**
-     * DELETE /${stalser.api.url}/activity/{id} : Delete activity by id
+     * DELETE /${stalser.api.url}/invites/{id} : Delete invite by id
      *
-     * @param id       activity id (required)
-     * @return Successfully delete activity (status code 200)
+     * @param id       invite id (required)
+     * @return Successfully delete invite (status code 200)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
      * or Forbidden (status code 403)
-     * or Not found activity (status code 404)
+     * or Not found invite (status code 404)
      */
     @Operation(
-            operationId = "deleteActivity",
-            summary = "Удаление активности",
-            tags = {"activity"},
+            operationId = "deleteInvite",
+            summary = "Удаление приглашения",
+            tags = {"invite"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Активность успешно удалена"),
+                    @ApiResponse(responseCode = "200", description = "Приглашение успешно удалено"),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Активность не найдена", content = {
+                    @ApiResponse(responseCode = "404", description = "Приглашение не найдено", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     })
             }
@@ -180,7 +180,7 @@ public interface ActivityController {
             produces = {"application/json"}
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteActivity(
-            @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id
+    void deleteInvite(
+            @Parameter(name = "id", description = "идентификатор приглашения", required = true) @PathVariable("id") Long id
     );
 }
