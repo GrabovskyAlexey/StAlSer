@@ -9,21 +9,21 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class AuthError {
+public class StAlSerError {
 
     private List<String> messages;
     private Date date;
 
-    public AuthError(List<String> messages) {
+    public StAlSerError(List<String> messages) {
         this.messages = messages;
         this.date = new Date();
     }
 
-    public AuthError(String message) {
+    public StAlSerError(String message) {
         this(List.of(message));
     }
 
-    public AuthError(String... messages) {
+    public StAlSerError(String... messages) {
         this(Arrays.asList(messages));
     }
 }
