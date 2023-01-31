@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import ru.gb.stalser.api.dto.invite.InviteStatus;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -27,7 +28,8 @@ public class Invite {
     private String inviteCode;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private InviteStatus status;
 
     @Column(name = "expiration_date")
     private Instant expirationDate;
