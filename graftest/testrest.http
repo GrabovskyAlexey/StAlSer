@@ -1,2 +1,0 @@
-### Получение списка бордов
-GET http://localhost:8081/api/v1/boards
