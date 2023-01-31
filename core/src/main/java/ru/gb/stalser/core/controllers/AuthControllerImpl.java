@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.auth.AuthRequest;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
+import ru.gb.stalser.api.dto.util.MessageDto;
 import ru.gb.stalser.core.controllers.interfaces.AuthController;
-import ru.gb.stalser.core.exceptions.AuthError;
 import ru.gb.stalser.core.services.interfaces.UserService;
 import ru.gb.stalser.core.utils.JwtTokenUtil;
 
@@ -29,7 +29,7 @@ public class AuthControllerImpl implements AuthController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getLogin(), authRequest.getPassword()));
         } catch (BadCredentialsException ex) {
-            return new ResponseEntity<>(new AuthError("Incorrect login or password"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new MessageDto("Incorrect login or password"), HttpStatus.UNAUTHORIZED);
         }
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getLogin());
         String token = jwtTokenUtil.generateToken(userDetails);
