@@ -33,8 +33,8 @@ public class SprintServiceImpl implements SprintService {
     }
 
     @Override
-    public Sprint update (Sprint sprint){
-        return sprintRepository.save(sprint);
+    public void update (Sprint sprint){
+        sprintRepository.save(sprint);
     }
 
     @Override
