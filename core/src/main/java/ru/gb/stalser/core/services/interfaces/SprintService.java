@@ -12,7 +12,7 @@ public interface SprintService {
 
     Sprint save(Sprint sprint);
 
-    Sprint update(Sprint sprint);
+    void update(Sprint sprint);
 
     void deleteById(Long id);
 
