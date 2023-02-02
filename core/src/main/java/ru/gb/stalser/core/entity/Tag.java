@@ -6,14 +6,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "tags")
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
+@Data
 
 public class Tag {
 
@@ -31,6 +29,17 @@ public class Tag {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @ManyToMany
+    @JoinTable(
+            name ="tags_tasks",
+            joinColumns = @JoinColumn(name = "tags_id"),
+            inverseJoinColumns = @JoinColumn(name = "tasks_id")
+    )
+    @ToString.Exclude
+    private List<Task> tasks;
+
+
 
     @Override
     public boolean equals(Object o) {

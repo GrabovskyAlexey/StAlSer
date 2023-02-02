@@ -8,14 +8,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +47,24 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Profile profile;
+
+    @ManyToMany
+    @JoinTable(
+            name ="users_roles",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
+    @ToString.Exclude
+    private List<Role> roles;
+
+    @ManyToMany
+    @JoinTable(
+            name ="users_boards",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "boards_id")
+    )
+    @ToString.Exclude
+    private List<Board> boards ;
 
     @Override
     public boolean equals(final Object o) {
