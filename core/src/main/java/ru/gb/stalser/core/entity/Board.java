@@ -1,22 +1,17 @@
 package ru.gb.stalser.core.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "boards")
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
+@Data
 public class Board {
 
     @Id
@@ -40,6 +35,18 @@ public class Board {
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creatorId;
+
+
+    @ManyToMany
+    @JoinTable(
+            name ="users_boards",
+            joinColumns = @JoinColumn(name = "boards_id"),
+            inverseJoinColumns = @JoinColumn(name = "users_id")
+    )
+    @ToString.Exclude
+    private List<User> users;
+
+
 
     @Override
     public boolean equals(Object o) {

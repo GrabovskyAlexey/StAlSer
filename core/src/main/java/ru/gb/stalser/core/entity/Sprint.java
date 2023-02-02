@@ -1,20 +1,17 @@
 package ru.gb.stalser.core.entity;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "sprints")
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
 public class Sprint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +37,17 @@ public class Sprint {
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @ManyToMany
+    @JoinTable(
+            name ="tasks_sprints",
+            joinColumns = @JoinColumn(name = "sprints_id"),
+            inverseJoinColumns = @JoinColumn(name = "tasks_id")
+    )
+    @ToString.Exclude
+    private List<Task> tasks;
+
+
 
     @Override
     public boolean equals(final Object o) {
