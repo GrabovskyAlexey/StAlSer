@@ -15,18 +15,18 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Activity information", name = "Activity")
+@Schema(description = "Информация об активности", name = "Activity")
 public class ActivityDto {
-    @Schema(description = "Activity id", example = "null")
+    @Schema(description = "Идентификатор активности", example = "null")
     @Min(value = 1)
     private Long id;
 
-    @Schema(description = "Status of activity")
+    @Schema(description = "Статус активности")
     @JsonProperty("status")
     private String status;
 
     @NotEmpty(message = "Информация об активности пользователя не должна быть пустой")
-    @Schema(description = "Information about activity")
+    @Schema(description = "Информация о активности")
     @JsonProperty("activityInfo")
     private String activityInfo;
 
