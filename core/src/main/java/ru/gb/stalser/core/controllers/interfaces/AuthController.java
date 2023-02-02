@@ -21,7 +21,7 @@ import javax.validation.Valid;
 public interface AuthController {
 
     /**
-     * POST /${stalser.api.url}/auth : create token
+     * POST /auth : create token
      *
      * @param authRequest authRequest Item (required)
      * @return Successfully create token (status code 200)
