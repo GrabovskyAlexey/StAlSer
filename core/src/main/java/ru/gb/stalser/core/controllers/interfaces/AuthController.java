@@ -31,10 +31,10 @@ public interface AuthController {
      */
     @Operation(
             operationId = "authenticate",
-            summary = "Authenticate",
+            summary = "Аутентификация",
             tags = {"auth"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successfully authenticate", content = {
+                    @ApiResponse(responseCode = "200", description = "Успешная аутентификация", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
@@ -49,7 +49,7 @@ public interface AuthController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<?> createAuthToken(
+    ResponseEntity<AuthResponse> createAuthToken(
             @Parameter(name = "AuthRequest", description = "AuthRequest Item", required = true) @Valid @RequestBody AuthRequest authRequest
     );
 
