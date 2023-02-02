@@ -1,10 +1,10 @@
 package ru.gb.stalser.api.dto.notify;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 public class EmailMessage {
     private String from;
     private String senderDisplayName;
