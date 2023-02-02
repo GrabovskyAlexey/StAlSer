@@ -1,1 +1,9 @@
-
+spring:
+  mail:
+    host: "smtp.mail.ru"
+    port: 995
+    username: "stalser.app"
+    password: "QdgywEAyPSHA0Kpvhkiv"
+    sender:
+      address: "stalser.app@mail.ru"
+      name: "NoReply Example"
