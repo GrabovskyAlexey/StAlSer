@@ -8,6 +8,8 @@ import ru.gb.stalser.core.services.interfaces.RoleService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -41,4 +43,10 @@ public class RoleServiceImpl implements RoleService {
     public void deleteById(Long id) {
         roleRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<Role> findByName(String roleUser) {
+        return roleRepository.findRoleByRoleName(roleUser);
+    }
+
 }
