@@ -36,13 +36,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("User id=" + id + "{} not found"));
+                () -> new NullPointerException("User id=" + id + "{} not found"));
     }
 
     @Override
     public User findByLogin(String login) {
         return userRepository.findByLogin(login).orElseThrow(
                 () -> new EntityNotFoundException("User login=" + login + "{} not found"));
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> new EntityNotFoundException("User with email= {" + email + "} not found"));
     }
 
     @Override

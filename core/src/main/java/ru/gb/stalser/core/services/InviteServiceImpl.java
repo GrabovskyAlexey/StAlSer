@@ -2,9 +2,14 @@ package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.gb.stalser.core.entity.Board;
 import ru.gb.stalser.core.entity.Invite;
+import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.repositories.InviteRepository;
+import ru.gb.stalser.core.services.interfaces.BoardService;
 import ru.gb.stalser.core.services.interfaces.InviteService;
+import ru.gb.stalser.core.services.interfaces.UserService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -13,6 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InviteServiceImpl implements InviteService {
     private final InviteRepository inviteRepository;
+    private final UserService userService;
+    private final BoardService boardService;
 
     @Override
     public List<Invite> findAll() {
@@ -21,11 +28,23 @@ public class InviteServiceImpl implements InviteService {
 
     @Override
     public Invite findById(Long id) {
-        return inviteRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Invite id = " + id + " not found"));
+        return inviteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Invite id = " + id + " not found"));
     }
 
     @Override
+    @Transactional
     public Invite save(Invite invite) {
+        User user;
+        try {
+            user = userService.findByEmail(invite.getEmail());
+            invite.setUser(user);
+            Board board = boardService.findById(invite.getBoard().getId());
+            board.getUsers().add(user);
+            boardService.updateBoard(board);
+        }
+        catch (EntityNotFoundException e){
+            invite.setUser(null);
+        }
         return inviteRepository.save(invite);
     }
 
