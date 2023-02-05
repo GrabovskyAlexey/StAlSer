@@ -1,5 +1,6 @@
 package ru.gb.stalser.api.dto.notify;
 
+import lombok.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -12,6 +13,8 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class SimpleTextEmailMessage extends EmailMessage{
     private String text;
 }
