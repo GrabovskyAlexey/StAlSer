@@ -1,6 +1,8 @@
 package ru.gb.stalser.api.dto.notify;
 
 import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 /**
