@@ -35,16 +35,21 @@ public class InviteServiceImpl implements InviteService {
     @Transactional
     public Invite save(Invite invite) {
         User user;
-        try {
+        Board board;
+        if (userService.existsByEmail(invite.getEmail())) {
             user = userService.findByEmail(invite.getEmail());
-            invite.setUser(user);
-            Board board = boardService.findById(invite.getBoard().getId());
+        } else {
+            user = null;
+        }
+        invite.setUser(user);
+        try {
+            board = boardService.findById(invite.getBoard().getId());
             board.getUsers().add(user);
             boardService.updateBoard(board);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e.getMessage());
         }
-        catch (EntityNotFoundException e){
-            invite.setUser(null);
-        }
+
         return inviteRepository.save(invite);
     }
 

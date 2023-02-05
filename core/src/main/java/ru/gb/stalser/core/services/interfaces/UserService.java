@@ -19,4 +19,5 @@ public interface UserService extends UserDetailsService {
     User save(User user);
 
     void updateUser(User user);
+    Boolean existsByEmail(String email);
 }
