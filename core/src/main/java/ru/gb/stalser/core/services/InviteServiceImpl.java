@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gb.stalser.core.entity.Board;
 import ru.gb.stalser.core.entity.Invite;
 import ru.gb.stalser.core.entity.User;
+import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
 import ru.gb.stalser.core.repositories.InviteRepository;
 import ru.gb.stalser.core.services.interfaces.BoardService;
 import ru.gb.stalser.core.services.interfaces.InviteService;
@@ -34,12 +35,10 @@ public class InviteServiceImpl implements InviteService {
     @Override
     @Transactional
     public Invite save(Invite invite) {
-        User user;
+        User user = null;
         Board board;
         if (userService.existsByEmail(invite.getEmail())) {
             user = userService.findByEmail(invite.getEmail());
-        } else {
-            user = null;
         }
         invite.setUser(user);
         try {
@@ -47,9 +46,9 @@ public class InviteServiceImpl implements InviteService {
             board.getUsers().add(user);
             boardService.updateBoard(board);
         } catch (EntityNotFoundException e) {
-            throw new RuntimeException(e.getMessage());
+            //TODO Когда появится глобальный обработчик добавить туда исключение
+            throw new InviteWithoutBoardException("Не удалось создать приглашение. Доска с id = " + invite.getBoard().getId() + " не найдена.");
         }
-
         return inviteRepository.save(invite);
     }
 
