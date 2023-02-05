@@ -7,9 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @Builder
@@ -22,9 +20,10 @@ public class UserDto {
     @Min(value = 1)
     private Long id;
 
-    @NotEmpty(message = "E-mail пользователя")
-    @Size(min = 5, max = 100, message = "E-mail пользователя должен содержать не мение пяти символов")
-    @Schema(description = "E-mail пользователя",example = "example@example.com")
+    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
+            flags = Pattern.Flag.CASE_INSENSITIVE)
+    @NotEmpty(message = "Email не может быть пустым")
+    @Schema(description = "Email пользователя", example = "Example@example.com")
     private String email;
 
     @NotEmpty(message = "Логин пользователя не может быть пустым")
