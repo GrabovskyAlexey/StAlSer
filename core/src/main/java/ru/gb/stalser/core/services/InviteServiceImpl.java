@@ -3,6 +3,7 @@ package ru.gb.stalser.core.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gb.stalser.api.dto.notify.SimpleTextEmailMessage;
 import ru.gb.stalser.core.entity.Board;
 import ru.gb.stalser.core.entity.Invite;
 import ru.gb.stalser.core.entity.User;
@@ -45,6 +46,7 @@ public class InviteServiceImpl implements InviteService {
             board = boardService.findById(invite.getBoard().getId());
             board.getUsers().add(user);
             boardService.updateBoard(board);
+            SimpleTextEmailMessage message = configureSimpleTextMsgFromInvite(invite);
         } catch (EntityNotFoundException e) {
             //TODO Когда появится глобальный обработчик добавить туда исключение
             throw new InviteWithoutBoardException("Не удалось создать приглашение. Доска с id = " + invite.getBoard().getId() + " не найдена.");
@@ -60,5 +62,13 @@ public class InviteServiceImpl implements InviteService {
     @Override
     public void deleteById(Long id) {
         inviteRepository.deleteById(id);
+    }
+
+    private SimpleTextEmailMessage configureSimpleTextMsgFromInvite(Invite invite) {
+        return SimpleTextEmailMessage.builder()
+                .to(invite.getEmail())
+                .from("no-replay@stalser.com")
+                .subject("Приглашение на доску " + invite.getBoard().getBoardName())
+                .text("Для принятия приглашения перейдите по ссылке ..........").build();
     }
 }
