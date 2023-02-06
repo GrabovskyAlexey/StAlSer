@@ -10,14 +10,12 @@ import ru.gb.stalser.api.dto.task.TaskType;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "tasks")
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,6 +62,28 @@ public class Task {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @ManyToMany
+    @JoinTable(
+            name ="tasks_sprints",
+            joinColumns = @JoinColumn(name = "tasks_id"),
+            inverseJoinColumns = @JoinColumn(name = "sprints_id")
+    )
+    @ToString.Exclude
+    private List<Sprint> sprints;
+
+
+    @ManyToMany
+    @JoinTable(
+            name ="tags_tasks",
+            joinColumns = @JoinColumn(name = "tasks_id"),
+            inverseJoinColumns = @JoinColumn(name = "tags_id")
+    )
+    @ToString.Exclude
+    private List<Tag> tags;
+
+
+
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -71,6 +91,7 @@ public class Task {
         final Task task = (Task) o;
         return id != null && Objects.equals(id, task.id);
     }
+
 
     @Override
     public int hashCode() {

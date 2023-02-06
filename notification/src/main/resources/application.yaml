@@ -1,1 +1,17 @@
+spring:
+  mail:
+    host: "smtp.mail.ru"
+    port: 465
+    username: "stalser.app@mail.ru"
+    password: "QdgywEAyPSHA0Kpvhkiv"
+    sender:
+      address: "stalser.app@mail.ru"
+      name: "NoReply Example"
+  kafka:
+    consumer:
+      properties:
+        spring.json.trusted.packages: "ru.gb.stalser.api.dto.notify.SimpleTextEmailMessage"
+kafka:
+  group-id: notify
+  server: localhost:9092
 
