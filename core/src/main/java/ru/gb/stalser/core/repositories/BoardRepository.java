@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.gb.stalser.core.entity.Board;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-
+Boolean existsBoardById(Long id);
 
 }
