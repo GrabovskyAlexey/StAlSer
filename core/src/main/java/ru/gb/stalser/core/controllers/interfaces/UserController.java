@@ -18,7 +18,7 @@ import ru.gb.stalser.api.dto.util.MessageDto;
 import javax.validation.Valid;
 
 @Tag(name = "auth", description = "Контроллер для аутентификации")
-public interface AuthController {
+public interface UserController {
 
     /**
      * POST /auth : create token

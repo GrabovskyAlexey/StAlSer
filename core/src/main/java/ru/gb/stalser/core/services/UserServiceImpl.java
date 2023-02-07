@@ -1,6 +1,9 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,11 +11,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gb.stalser.api.dto.auth.AuthRequest;
+import ru.gb.stalser.api.dto.auth.AuthResponse;
 import ru.gb.stalser.core.entity.Role;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.repositories.UserRepository;
 import ru.gb.stalser.core.services.interfaces.RoleService;
 import ru.gb.stalser.core.services.interfaces.UserService;
+import ru.gb.stalser.core.utils.JwtTokenUtil;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -27,6 +33,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     public List<User> findAll() {
@@ -80,5 +89,15 @@ public class UserServiceImpl implements UserService {
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
+    }
+
+    @Override
+    public ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest) {
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getLogin(), authRequest.getPassword()));
+
+        UserDetails userDetails = userService.loadUserByUsername(authRequest.getLogin());
+        String token = jwtTokenUtil.generateToken(userDetails);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }
