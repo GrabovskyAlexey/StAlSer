@@ -34,7 +34,6 @@ public class UserServiceImpl implements UserService {
     private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final UserService userService;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Override
@@ -96,7 +95,7 @@ public class UserServiceImpl implements UserService {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getLogin(), authRequest.getPassword()));
 
-        UserDetails userDetails = userService.loadUserByUsername(authRequest.getLogin());
+        UserDetails userDetails = loadUserByUsername(authRequest.getLogin());
         String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new AuthResponse(token));
     }
