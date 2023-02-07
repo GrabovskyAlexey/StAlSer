@@ -46,7 +46,8 @@ public interface UserController {
     )
     @PostMapping(
             produces = {"application/json"},
-            consumes = {"application/json"}
+            consumes = {"application/json"},
+            path = {"/auth"}
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<AuthResponse> createAuthToken(
