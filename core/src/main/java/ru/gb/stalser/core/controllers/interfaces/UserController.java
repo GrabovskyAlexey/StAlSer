@@ -18,7 +18,7 @@ import ru.gb.stalser.api.dto.util.MessageDto;
 import javax.validation.Valid;
 
 @Tag(name = "auth", description = "Контроллер для аутентификации")
-public interface AuthController {
+public interface UserController {
 
     /**
      * POST /auth : create token
@@ -46,7 +46,8 @@ public interface AuthController {
     )
     @PostMapping(
             produces = {"application/json"},
-            consumes = {"application/json"}
+            consumes = {"application/json"},
+            path = {"/auth"}
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<AuthResponse> createAuthToken(
