@@ -49,29 +49,19 @@ public class InviteServiceImpl implements InviteService {
         invite.setStatus(InviteStatus.SENT);//устанавливаем статус что приглашение отправлено
         invite.setInviteCode(UUID.randomUUID().toString());//генерируем уникальное число и сохраняем его в приглашении
         invite.setExpirationDate(Instant.now().plus(7, ChronoUnit.DAYS));//устанавливаем дату когда приглашение "протухнет"
-        if (boardService.existsBoardById(invite.getBoard().getId())) {
-            if (userService.existsByEmail(invite.getEmail())) {
-                user = userService.findByEmail(invite.getEmail());
-                message = SimpleTextEmailMessage.builder()
-                        .from("no-reply@stalser.com")
-                        .to(invite.getEmail())
-                        .subject("Приглашение на добавление на доску " + boardService.findById(invite.getBoard().getId()).getBoardName())
-                        .text(url + "/invites?code=" + invite.getInviteCode())//если пользователь существует, кидаем его на страницу с приглашением, где он может принять или отклонить его.
-                        .build();
-                kafkaTemplate.send("simple-text-email", message);
-            } else {
-                message = SimpleTextEmailMessage.builder()
-                        .from("no-reply@stalser.com")
-                        .to(invite.getEmail())
-                        .subject("Приглашение на добавление на доску " + boardService.findById(invite.getBoard().getId()).getBoardName())
-                        .text(url + "/register?code=" + invite.getInviteCode() + "&email=" + invite.getEmail().replaceAll("@", "%40"))//пользователя нет, кидаем на страницу регистрации
-                        .build();
-                kafkaTemplate.send("simple-text-email", message);
-            }
-        } else {
+        if (!boardService.existsBoardById(invite.getBoard().getId())) {
             //TODO Когда появится глобальный обработчик добавить туда исключение
             throw new InviteWithoutBoardException("Не удалось создать приглашение. Доска с id = " + invite.getBoard().getId() + " не найдена.");
         }
+        String boardName = boardService.findById(invite.getBoard().getId()).getBoardName();
+        message = configureMessage(invite.getEmail(), boardName);
+        if (userService.existsByEmail(invite.getEmail())) {
+            user = userService.findByEmail(invite.getEmail());
+            message.setText(url + "/invites?code=" + invite.getInviteCode());//если пользователь существует, кидаем его на страницу с приглашением, где он может принять или отклонить его.
+        } else {
+            message.setText(url + "/register?code=" + invite.getInviteCode() + "&email=" + invite.getEmail().replaceAll("@", "%40"));//пользователя нет, кидаем на страницу регистрации
+        }
+        kafkaTemplate.send("simple-text-email", message);
         invite.setUser(user);
         return inviteRepository.save(invite);
     }
@@ -84,5 +74,13 @@ public class InviteServiceImpl implements InviteService {
     @Override
     public void deleteById(Long id) {
         inviteRepository.deleteById(id);
+    }
+
+    private SimpleTextEmailMessage configureMessage(String email, String boardName){
+        return SimpleTextEmailMessage.builder()
+                .from("no-reply@stalser.com")
+                .to(email)
+                .subject("Приглашение на добавление на доску " + boardName)
+                .build();
     }
 }
