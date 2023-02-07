@@ -25,6 +25,8 @@ import java.util.UUID;
 public class InviteServiceImpl implements InviteService {
     @Value("${stalser.invite.url}")
     private String url;
+    @Value("${stalser.invite.email-address-from}")
+    private String emailFrom;
     private final InviteRepository inviteRepository;
     private final UserService userService;
     private final BoardService boardService;
@@ -46,7 +48,7 @@ public class InviteServiceImpl implements InviteService {
     public Invite save(Invite invite) {
         User user = null;
         SimpleTextEmailMessage message;
-        invite.setStatus(InviteStatus.SENT);//устанавливаем статус что приглашение отправлено
+        invite.setStatus(InviteStatus.SENT);//устанавливаем статус, что приглашение отправлено
         invite.setInviteCode(UUID.randomUUID().toString());//генерируем уникальное число и сохраняем его в приглашении
         invite.setExpirationDate(Instant.now().plus(7, ChronoUnit.DAYS));//устанавливаем дату когда приглашение "протухнет"
         if (!boardService.existsBoardById(invite.getBoard().getId())) {
@@ -78,7 +80,7 @@ public class InviteServiceImpl implements InviteService {
 
     private SimpleTextEmailMessage configureMessage(String email, String boardName){
         return SimpleTextEmailMessage.builder()
-                .from("no-reply@stalser.com")
+                .from(emailFrom)
                 .to(email)
                 .subject("Приглашение на добавление на доску " + boardName)
                 .build();
