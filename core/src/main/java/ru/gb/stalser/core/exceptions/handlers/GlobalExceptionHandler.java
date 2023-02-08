@@ -18,6 +18,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<?> catchResourceNotFoundException(UserRoleNotFoundException e) {
-        return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.NOT_FOUND);
     }
 }
