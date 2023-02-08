@@ -12,8 +12,8 @@ import ru.gb.stalser.core.exceptions.UserRoleNotFoundException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<?> catchResourceNotFoundException(InviteWithoutBoardException e) {
-        return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.CONFLICT);
+    public ResponseEntity<MessageDto> catchResourceNotFoundException(InviteWithoutBoardException e) {
+        return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler
