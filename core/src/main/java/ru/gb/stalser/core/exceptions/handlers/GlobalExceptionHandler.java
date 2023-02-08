@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> catchResourceNotFoundException(UserRoleNotFoundException e) {
+    public ResponseEntity<MessageDto> catchResourceNotFoundException(UserRoleNotFoundException e) {
         return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.NOT_FOUND);
     }
 }
