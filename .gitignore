@@ -35,3 +35,5 @@ build/
 
 ### Optional ###
 security.yaml
+front/.mvn
+front/mvnw*
