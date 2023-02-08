@@ -15,6 +15,7 @@ import ru.gb.stalser.api.dto.auth.AuthRequest;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
 import ru.gb.stalser.core.entity.Role;
 import ru.gb.stalser.core.entity.User;
+import ru.gb.stalser.core.exceptions.UserRoleNotFoundException;
 import ru.gb.stalser.core.repositories.UserRepository;
 import ru.gb.stalser.core.services.interfaces.RoleService;
 import ru.gb.stalser.core.services.interfaces.UserService;
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        Role role = roleService.findByName("ROLE_USER").orElseThrow(() -> new UsernameNotFoundException("Role: \"ROLE_USER\" not found"));
+        Role role = roleService.findByName("ROLE_USER").orElseThrow(() -> new UserRoleNotFoundException("Role: \"ROLE_USER\" not found"));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(new ArrayList<>());
         user.getRoles().add(role);
