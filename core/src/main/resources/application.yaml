@@ -19,6 +19,11 @@ stalser:
   api:
     version: 1
     url: api/v${stalser.api.version}
+  invite:
+    url: localhost:${server.port}/${stalser.api.url}
+    email-address-from: "stalser.app@mail.ru"
 jwt:
   secret: sdfsdfsef5hrjghjukl3kjol5rt653w4r3w43r54rty6tyui6675r54e6w454e52rtu4y13ty5u
   lifetime: 360000000
+kafka:
+  server: localhost:9092
