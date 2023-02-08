@@ -11,7 +11,7 @@ import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<?> catchResourceNotFoundException(InviteWithoutBoardException e) {
-        return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.CONFLICT);
+    public ResponseEntity<MessageDto> catchResourceNotFoundException(InviteWithoutBoardException e) {
+        return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }
