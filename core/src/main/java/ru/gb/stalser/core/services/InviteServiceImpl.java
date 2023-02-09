@@ -10,8 +10,7 @@ import ru.gb.stalser.api.dto.notify.SimpleTextEmailMessage;
 import ru.gb.stalser.core.entity.Board;
 import ru.gb.stalser.core.entity.Invite;
 import ru.gb.stalser.core.entity.User;
-import ru.gb.stalser.core.exceptions.DifferentEmailException;
-import ru.gb.stalser.core.exceptions.InviteWasExpiredException;
+import ru.gb.stalser.core.exceptions.InviteException;
 import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
 import ru.gb.stalser.core.repositories.InviteRepository;
 import ru.gb.stalser.core.services.interfaces.BoardService;
@@ -95,10 +94,10 @@ public class InviteServiceImpl implements InviteService {
         Invite invite = inviteRepository.findByInviteCode(code).orElseThrow(() -> new EntityNotFoundException("Приглашение с кодом = " + code + " не найдено"));
         User user = userService.findByLogin(login);
         if (invite.getStatus().equals(InviteStatus.EXPIRED) || invite.getExpirationDate().isBefore(Instant.now())){
-            throw new InviteWasExpiredException("Время ожидания приглашения истекло");
+            throw new InviteException("Время ожидания приглашения истекло");
         }
         if (!user.getEmail().equals(invite.getEmail())) {
-            throw new DifferentEmailException("Почта пользователя не совпадает с почтой в приглашении");
+            throw new InviteException("Почта пользователя не совпадает с почтой в приглашении");
         }
         Board board = invite.getBoard();
         board.getUsers().add(user);
