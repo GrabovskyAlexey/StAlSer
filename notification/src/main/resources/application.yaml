@@ -7,6 +7,14 @@ spring:
     sender:
       address: "stalser.app@mail.ru"
       name: "NoReply Example"
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          ssl:
+            enable: true
+          auth: true
   kafka:
     consumer:
       properties:
