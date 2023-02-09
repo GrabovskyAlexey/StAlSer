@@ -45,6 +45,11 @@ public class Role {
     @ToString.Exclude
     private List<User> users;
 
+    public Role(final String roleName, final String roleDescription) {
+        this.roleName = roleName;
+        this.roleDescription = roleDescription;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

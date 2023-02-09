@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.gb.stalser.api.dto.auth.AuthRequest;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
+import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.core.entity.User;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface UserService extends UserDetailsService {
 
     User findByEmail(String email);
 
-    User save(User user);
+    AuthResponse register(RegisterRequest registerRequest);
 
     void updateUser(User user);
 
