@@ -7,13 +7,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.stalser.api.dto.invite.InviteStatus;
 import ru.gb.stalser.api.dto.notify.SimpleTextEmailMessage;
+import ru.gb.stalser.core.entity.Board;
 import ru.gb.stalser.core.entity.Invite;
 import ru.gb.stalser.core.entity.User;
+import ru.gb.stalser.core.exceptions.DifferentEmailException;
+import ru.gb.stalser.core.exceptions.InviteWasExpiredException;
 import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
 import ru.gb.stalser.core.repositories.InviteRepository;
 import ru.gb.stalser.core.services.interfaces.BoardService;
 import ru.gb.stalser.core.services.interfaces.InviteService;
 import ru.gb.stalser.core.services.interfaces.UserService;
+
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -78,11 +82,28 @@ public class InviteServiceImpl implements InviteService {
         inviteRepository.deleteById(id);
     }
 
-    private SimpleTextEmailMessage configureMessage(String email, String boardName){
+    private SimpleTextEmailMessage configureMessage(String email, String boardName) {
         return SimpleTextEmailMessage.builder()
                 .from(emailFrom)
                 .to(email)
                 .subject("Приглашение на добавление на доску " + boardName)
                 .build();
+    }
+
+    @Transactional
+    public void acceptInvite(String code, String login) {
+        Invite invite = inviteRepository.findByInviteCode(code).orElseThrow(() -> new EntityNotFoundException("Приглашение с кодом = " + code + " не найдено"));
+        User user = userService.findByLogin(login);
+        if (invite.getStatus().equals(InviteStatus.EXPIRED) || invite.getExpirationDate().isBefore(Instant.now())){
+            throw new InviteWasExpiredException("Время ожидания приглашения истекло");
+        }
+        if (!user.getEmail().equals(invite.getEmail())) {
+            throw new DifferentEmailException("Почта пользователя не совпадает с почтой в приглашении");
+        }
+        Board board = invite.getBoard();
+        board.getUsers().add(user);
+        boardService.updateBoard(board);
+        invite.setStatus(InviteStatus.ACCEPT);
+        inviteRepository.save(invite);
     }
 }
