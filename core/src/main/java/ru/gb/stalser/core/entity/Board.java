@@ -7,7 +7,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "boards")
@@ -34,6 +33,7 @@ public class Board extends BaseEntity{
     private Boolean isActive;
     @ManyToOne
     @JoinColumn(name = "creator_id")
+    @ToString.Exclude
     private User creatorId;
 
 

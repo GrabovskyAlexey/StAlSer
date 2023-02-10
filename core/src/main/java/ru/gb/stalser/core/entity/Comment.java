@@ -25,10 +25,12 @@ public class Comment extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "task_id")
+    @ToString.Exclude
     private Task task;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
+    @ToString.Exclude
     private User author;
 
     @Column(name = "comment_text")

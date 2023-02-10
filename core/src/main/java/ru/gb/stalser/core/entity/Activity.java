@@ -3,12 +3,13 @@ package ru.gb.stalser.core.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Objects;
+
 
 @Entity
 @Table(name = "task_activities")
@@ -29,10 +30,12 @@ public class Activity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
+    @ToString.Exclude
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "task_id")
+    @ToString.Exclude
     private Task task;
 
     @Column(name = "created_at")

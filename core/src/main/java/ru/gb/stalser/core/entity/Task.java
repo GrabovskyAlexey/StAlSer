@@ -1,7 +1,6 @@
 package ru.gb.stalser.core.entity;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ru.gb.stalser.api.dto.task.TaskPriority;
@@ -11,7 +10,6 @@ import ru.gb.stalser.api.dto.task.TaskType;
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "tasks")
@@ -48,10 +46,12 @@ public class Task extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "assignee_id")
+    @ToString.Exclude
     private User assigneeId;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
+    @ToString.Exclude
     private User creatorId;
 
     @CreationTimestamp

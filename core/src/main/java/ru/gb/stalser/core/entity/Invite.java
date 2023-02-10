@@ -3,13 +3,13 @@ package ru.gb.stalser.core.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ru.gb.stalser.api.dto.invite.InviteStatus;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Objects;
 
 @Entity
 @Table(name = "invites")
@@ -44,10 +44,12 @@ public class Invite extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "board_id")
+    @ToString.Exclude
     private Board board;
 
 }
