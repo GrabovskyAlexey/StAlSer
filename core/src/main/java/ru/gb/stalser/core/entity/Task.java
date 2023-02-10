@@ -16,7 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "tasks")
 @Data
-public class Task {
+public class Task extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -83,18 +83,4 @@ public class Task {
 
 
 
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        final Task task = (Task) o;
-        return id != null && Objects.equals(id, task.id);
-    }
-
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
