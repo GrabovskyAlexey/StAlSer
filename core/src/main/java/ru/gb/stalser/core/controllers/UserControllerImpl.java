@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.auth.AuthRequest;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
+import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.core.controllers.interfaces.UserController;
 import ru.gb.stalser.core.services.UserServiceImpl;
 
@@ -21,5 +22,10 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<AuthResponse> createAuthToken(@RequestBody AuthRequest authRequest) {
 
         return userService.authenticate(authRequest);
+    }
+
+    @Override
+    public ResponseEntity<AuthResponse> register(final RegisterRequest registerRequest) {
+        return ResponseEntity.ok(userService.register(registerRequest));
     }
 }

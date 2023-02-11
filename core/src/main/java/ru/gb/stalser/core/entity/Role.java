@@ -43,5 +43,5 @@ public class Role extends BaseEntity {
     )
     @ToString.Exclude
     private List<User> users;
-
 }
+
