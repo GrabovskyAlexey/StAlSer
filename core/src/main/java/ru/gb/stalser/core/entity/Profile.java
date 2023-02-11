@@ -1,13 +1,12 @@
 package ru.gb.stalser.core.entity;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Objects;
+
 
 @Entity
 @Table(name = "profiles")
@@ -15,7 +14,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class Profile {
+public class Profile extends BaseEntity {
     @Id
     private Long id;
 
@@ -38,16 +37,5 @@ public class Profile {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        final Profile profile = (Profile) o;
-        return id != null && Objects.equals(id, profile.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
