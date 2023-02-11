@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.gb.stalser.api.dto.util.MessageDto;
+import ru.gb.stalser.core.exceptions.DifferentEmailException;
+import ru.gb.stalser.core.exceptions.InviteWasExpiredException;
 import ru.gb.stalser.core.exceptions.EmailAlreadyExistsException;
 import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
 import ru.gb.stalser.core.exceptions.UserAlreadyExistsException;
@@ -24,6 +26,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<MessageDto> catchResourceNotFoundException(UserRoleNotFoundException e) {
         return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({
+            InviteWasExpiredException.class,
+            DifferentEmailException.class
+    })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public MessageDto catchInviteException(RuntimeException e) {
+        return new MessageDto(e.getMessage());
     }
 
     @ExceptionHandler({
