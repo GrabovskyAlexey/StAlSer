@@ -1,8 +1,6 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,12 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gb.stalser.api.dto.auth.AuthRequest;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
 import ru.gb.stalser.api.dto.auth.RegisterRequest;
-import ru.gb.stalser.api.dto.notify.SimpleTextEmailMessage;
 import ru.gb.stalser.core.entity.Role;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.exceptions.EmailAlreadyExistsException;
 import ru.gb.stalser.core.exceptions.UserAlreadyExistsException;
-import ru.gb.stalser.core.exceptions.UserRoleNotFoundException;
 import ru.gb.stalser.core.repositories.UserRepository;
 import ru.gb.stalser.core.services.interfaces.RoleService;
 import ru.gb.stalser.core.services.interfaces.UserService;
@@ -68,14 +64,14 @@ public class UserServiceImpl implements UserService {
 
         Role role = roleService.findByName("ROLE_USER")
                 .orElse(new Role("ROLE_USER", "Пользователь"));
-        if(Objects.isNull(role.getId())){
+        if (Objects.isNull(role.getId())) {
             roleService.save(role);
         }
-        if(userRepository.existsByLoginIgnoreCase(registerRequest.getLogin())) {
+        if (userRepository.existsByLoginIgnoreCase(registerRequest.getLogin())) {
             throw new UserAlreadyExistsException(
                     "Пользователь с логином {" + registerRequest.getLogin() + "} уже существует");
         }
-        if(userRepository.existsByEmailIgnoreCase(registerRequest.getEmail())) {
+        if (userRepository.existsByEmailIgnoreCase(registerRequest.getEmail())) {
             throw new EmailAlreadyExistsException(
                     "Пользователь с электронной почтой {" + registerRequest.getEmail() + "} уже существует");
         }
@@ -120,12 +116,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest) {
+    public AuthResponse authenticate(AuthRequest authRequest) {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getLogin(), authRequest.getPassword()));
 
         UserDetails userDetails = loadUserByUsername(authRequest.getLogin());
         String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthResponse(token));
+//        return ResponseEntity.ok(new AuthResponse(token));
+        return new AuthResponse(token);
     }
 }
