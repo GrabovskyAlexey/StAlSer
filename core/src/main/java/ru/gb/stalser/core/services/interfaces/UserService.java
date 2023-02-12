@@ -1,7 +1,6 @@
 package ru.gb.stalser.core.services.interfaces;
 
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.gb.stalser.api.dto.auth.AuthRequest;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
@@ -26,5 +25,5 @@ public interface UserService extends UserDetailsService {
 
     Boolean existsByEmail(String email);
 
-    ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest);
+    AuthResponse authenticate(AuthRequest authRequest);
 }
