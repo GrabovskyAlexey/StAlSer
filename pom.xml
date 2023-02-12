@@ -13,6 +13,7 @@
         <module>core</module>
         <module>notification</module>
         <module>front</module>
+        <module>qa_automation</module>
     </modules>
 
     <properties>
