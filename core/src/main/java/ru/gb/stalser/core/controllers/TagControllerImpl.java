@@ -41,9 +41,8 @@ public class TagControllerImpl  implements TagController {
     }
 
     @Override
-    public void updateTag(Long id) {
-        tagService.update(Optional.of(tagService.findById(id))
-                .orElseThrow(() -> new ResourceNotFoundException("Tag не найден")));
+    public void updateTag(Long id, TagDto tagDto) {
+       tagService.update(tagMapper.mapFromDto(tagDto));
     }
 
     @Override

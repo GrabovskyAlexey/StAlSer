@@ -117,6 +117,7 @@ public interface TagController {
      * PUT /${stalser.api.url}/tag/{id} : Update tag by id
      *
      * @param id tag id (required)
+     * @param tagDto tag item (required)
      * @return Successfully update tag (status code 200)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
@@ -148,7 +149,8 @@ public interface TagController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateTag(
-            @Parameter(name = "id", description = "Tag id", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "Tag id", required = true) @PathVariable("id") Long id,
+            @Parameter(name = "Tag", description = "Tag item", required = true) @Valid @RequestBody TagDto tagDto
             );
 
     /**
