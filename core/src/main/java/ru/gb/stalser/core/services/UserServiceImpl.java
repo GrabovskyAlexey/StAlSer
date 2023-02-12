@@ -122,7 +122,6 @@ public class UserServiceImpl implements UserService {
 
         UserDetails userDetails = loadUserByUsername(authRequest.getLogin());
         String token = jwtTokenUtil.generateToken(userDetails);
-//        return ResponseEntity.ok(new AuthResponse(token));
         return new AuthResponse(token);
     }
 }
