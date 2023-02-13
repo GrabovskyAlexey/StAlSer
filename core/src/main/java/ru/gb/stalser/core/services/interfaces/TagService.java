@@ -11,7 +11,7 @@ public interface TagService {
 
     Tag findById(Long id);
 
-    void save(Tag tag);
+    Tag save(Tag tag);
 
     void update(Tag tag);
 

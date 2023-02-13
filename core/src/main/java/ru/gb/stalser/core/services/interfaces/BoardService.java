@@ -14,4 +14,6 @@ public interface BoardService {
     Board save(Board board);
 
     void updateBoard(Board board);
+
+    Boolean existsBoardById(Long id);
 }

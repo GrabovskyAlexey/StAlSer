@@ -38,4 +38,9 @@ public class BoardServiceImpl implements BoardService {
 
         boardRepository.save(boardDto);
     }
+
+    @Override
+    public Boolean existsBoardById(Long id) {
+        return boardRepository.existsBoardById(id);
+    }
 }

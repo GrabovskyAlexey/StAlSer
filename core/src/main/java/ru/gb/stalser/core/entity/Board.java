@@ -7,12 +7,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "boards")
 @Data
-public class Board {
+public class Board extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +33,7 @@ public class Board {
     private Boolean isActive;
     @ManyToOne
     @JoinColumn(name = "creator_id")
+    @ToString.Exclude
     private User creatorId;
 
 
@@ -46,18 +46,4 @@ public class Board {
     @ToString.Exclude
     private List<User> users;
 
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Board board = (Board) o;
-        return id.equals(board.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }
