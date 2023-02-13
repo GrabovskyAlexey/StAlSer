@@ -3,6 +3,7 @@ package ru.gb.stalser.core.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 @Table(name = "task_activities")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Activity extends BaseEntity {
     @Id

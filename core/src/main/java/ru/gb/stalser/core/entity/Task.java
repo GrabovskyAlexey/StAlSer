@@ -17,6 +17,7 @@ import java.util.Objects;
 @Table(name = "tasks")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Task extends BaseEntity {
     @Id

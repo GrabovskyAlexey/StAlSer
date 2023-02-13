@@ -13,6 +13,7 @@ import java.util.Objects;
 @Table(name = "sprints")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Sprint extends BaseEntity {
     @Id

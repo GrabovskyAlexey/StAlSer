@@ -3,6 +3,7 @@ package ru.gb.stalser.core.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ru.gb.stalser.api.dto.invite.InviteStatus;
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Table(name = "invites")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Invite extends BaseEntity {
     @Id

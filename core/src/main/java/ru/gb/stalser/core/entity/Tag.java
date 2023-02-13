@@ -13,6 +13,7 @@ import java.util.Objects;
 @Table(name = "tags")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 
 public class Tag extends BaseEntity{
