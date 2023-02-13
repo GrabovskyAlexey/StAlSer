@@ -11,7 +11,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "sprints")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Sprint extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

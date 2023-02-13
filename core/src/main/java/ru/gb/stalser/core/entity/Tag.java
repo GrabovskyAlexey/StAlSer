@@ -11,7 +11,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tags")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 
 public class Tag extends BaseEntity{
 

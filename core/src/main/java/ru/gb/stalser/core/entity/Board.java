@@ -11,7 +11,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "boards")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Board extends BaseEntity{
 
     @Id

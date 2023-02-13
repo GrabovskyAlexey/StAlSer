@@ -13,7 +13,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Role extends BaseEntity {
 
     @Id

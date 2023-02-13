@@ -15,7 +15,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tasks")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Task extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
