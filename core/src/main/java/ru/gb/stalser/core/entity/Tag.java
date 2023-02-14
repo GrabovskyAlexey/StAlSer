@@ -11,7 +11,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "tags")
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 
 public class Tag extends BaseEntity{
 

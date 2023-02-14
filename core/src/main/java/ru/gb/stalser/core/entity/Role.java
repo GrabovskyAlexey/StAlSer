@@ -12,7 +12,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class Role extends BaseEntity {
 
     @Id
