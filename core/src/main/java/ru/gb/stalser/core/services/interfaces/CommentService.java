@@ -1,11 +1,10 @@
 package ru.gb.stalser.core.services.interfaces;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import ru.gb.stalser.core.entity.Comment;
 
 public interface CommentService {
-        List<Comment> findAll();
+        Page<Comment> findAll(int pageIndex, int pageSize);
 
         Comment findById(Long id);
 

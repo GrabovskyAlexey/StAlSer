@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -43,7 +44,9 @@ public interface TaskController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<TaskDto>> getAllTasks();
+    ResponseEntity<Page<TaskDto>> getAllTasks(
+            @Parameter(name = "p", description = "page index", required = true) @RequestParam(name = "p", defaultValue = "1") int pageIndex
+    );
 
     /**
      * GET /${stalser.api.url}/tasks/{id} : Get Task by id

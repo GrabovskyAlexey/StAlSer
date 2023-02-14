@@ -1,8 +1,10 @@
 package ru.gb.stalser.core.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.invite.InviteDto;
 import ru.gb.stalser.core.controllers.interfaces.InviteController;
@@ -19,8 +21,11 @@ public class InviteControllerImpl implements InviteController {
     private final InviteService inviteService;
     private final InviteMapper inviteMapper;
     @Override
-    public ResponseEntity<List<InviteDto>> getAllInvites() {
-        return ResponseEntity.ok(inviteService.findAll().stream().map(inviteMapper::mapToDto).collect(Collectors.toList()));
+    public ResponseEntity<Page<InviteDto>> getAllInvites(int pageIndex) {
+        if (pageIndex < 1) {
+            pageIndex = 1;
+        }
+        return ResponseEntity.ok(inviteService.findAll(pageIndex-1, 10).map(inviteMapper::mapToDto));
     }
 
     @Override

@@ -1,13 +1,15 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.gb.stalser.core.entity.Comment;
 import ru.gb.stalser.core.repositories.CommentRepository;
 import ru.gb.stalser.core.services.interfaces.CommentService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -15,8 +17,8 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
 
     @Override
-    public List<Comment> findAll() {
-        return commentRepository.findAll();
+    public Page<Comment> findAll(int pageIndex, int pageSize) {
+        return commentRepository.findAll(PageRequest.of(pageIndex, pageSize));
     }
 
     @Override

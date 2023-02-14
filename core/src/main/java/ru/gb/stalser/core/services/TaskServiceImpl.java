@@ -1,21 +1,22 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.gb.stalser.core.entity.Task;
 import ru.gb.stalser.core.repositories.TaskRepository;
 import ru.gb.stalser.core.services.interfaces.TaskService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private  final TaskRepository taskRepository;
     @Override
-    public List<Task> findAll() {
-        return taskRepository.findAll();
+    public Page<Task> findAll(int pageIndex, int pageSize) {
+        return taskRepository.findAll(PageRequest.of(pageIndex, pageSize));
     }
 
     @Override

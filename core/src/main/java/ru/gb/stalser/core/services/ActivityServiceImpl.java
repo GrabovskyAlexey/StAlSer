@@ -1,13 +1,15 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.gb.stalser.core.entity.Activity;
 import ru.gb.stalser.core.repositories.ActivityRepository;
 import ru.gb.stalser.core.services.interfaces.ActivityService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -15,8 +17,8 @@ public class ActivityServiceImpl implements ActivityService {
     private final ActivityRepository activityRepository;
 
     @Override
-    public List<Activity> findAll() {
-        return activityRepository.findAll();
+    public Page<Activity> findAll(int pageIndex, int pageSize) {
+        return activityRepository.findAll(PageRequest.of(pageIndex, pageSize));
     }
 
     @Override

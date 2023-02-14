@@ -3,8 +3,10 @@ package ru.gb.stalser.core.controllers;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.hibernate.ResourceClosedException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.core.controllers.interfaces.TagController;
@@ -26,8 +28,11 @@ public class TagControllerImpl  implements TagController {
     private final TagMapper tagMapper;
 
     @Override
-    public ResponseEntity<List<TagDto>> getAllTags() {
-        return ResponseEntity.ok(tagService.findAll().stream().map(tagMapper::mapToDto).collect(Collectors.toList()));
+    public ResponseEntity<Page<TagDto>> getAllTags(int pageIndex) {
+        if (pageIndex < 1) {
+            pageIndex = 1;
+        }
+        return ResponseEntity.ok(tagService.findAll(pageIndex-1, 10).map(tagMapper::mapToDto));
     }
 
     @Override

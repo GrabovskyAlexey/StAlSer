@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -36,7 +37,9 @@ public interface SprintController {
     )
 
     @GetMapping(produces = {"application/json"})
-    ResponseEntity<List<SprintDto>> getAllSprints();
+    ResponseEntity<Page<SprintDto>> getAllSprints(
+            @Parameter(name = "p", description = "page index", required = true) @RequestParam(name = "p", defaultValue = "1") int pageIndex
+    );
 
     @Operation(
             operationId = "getSprintById",

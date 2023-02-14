@@ -1,13 +1,14 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.gb.stalser.core.entity.Role;
 import ru.gb.stalser.core.repositories.RoleRepository;
 import ru.gb.stalser.core.services.interfaces.RoleService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -19,8 +20,8 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public List<Role> findAll() {
-        return roleRepository.findAll();
+    public Page<Role> findAll(int pageIndex, int pageSize) {
+        return roleRepository.findAll(PageRequest.of(pageIndex, pageSize));
     }
 
     @Override

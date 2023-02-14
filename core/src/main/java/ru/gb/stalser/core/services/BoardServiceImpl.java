@@ -1,13 +1,15 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.gb.stalser.core.entity.Board;
 import ru.gb.stalser.core.repositories.BoardRepository;
 import ru.gb.stalser.core.services.interfaces.BoardService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +19,8 @@ public class BoardServiceImpl implements BoardService {
 
 
     @Override
-    public List<Board> findAll() {
-        return boardRepository.findAll();
+    public Page<Board> findAll(int pageIndex, int pageSize) {
+        return boardRepository.findAll(PageRequest.of(pageIndex, pageSize));
     }
 
     @Override
