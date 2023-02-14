@@ -1,13 +1,13 @@
 insert into users (email, login, password)
-values ('Ivan@gmail.com', 'Ivan', '$2a$12$7FXCEUFEMFYip9dhrA.MEeFXDo9ZzwtGk1q7Todqmnpupjk73a32C'),
-       ('Lesha@gmail.com', 'Lesha', '$2a$12$BVQ3qMrmGbHGkWiSgoNQ2eYMgy2kI3rs3Dy5t44eyqQLp3xBIvSQK'),
-       ('Mary@gmail.com', 'Mary', '$2a$12$.88RmaU5xMi8aqfYI0ge9uKa8bCIZPerAzCswCRejYVSUvmTA0jSS'),
-       ('Dasha@gmail.com', 'Dasha', '$2a$12$fH9ud2EGnwwwTyw/ZBqTbO5fT43i.pXfKOtwwD.isyYB2lSWntWvq'),
-       ('Alex@gmail.com', 'Alex', '$2a$12$oEExJRVwzWhDmlKK0Ek5Ee6a/DfwTbertBcKJ4NUFK9yCalxnpEIe'),
-       ('Stas@gmail.com', 'Stas', '$2a$12$IBsnVW703w8wxhZ7AYjqpeWs8nx2M8pxAsM/oe0gufe8jNvOs1Q6.'),
-       ('Vasilisa@gmail.com', 'Vasilisa', '$2a$12$pMhNadeqcJ4uWDGQnnoMx.lPI7ySquin/yLtl.7RrJG.E.v3xH4T.'),
-       ('Tema@gmail.com', 'Tema', '$2a$12$H7k.Cu3y9F2Uq/CG7QxsXOw21by8hQ3zmshhE3bkb9cJ5eWV5vOrm'),
-       ('Teodor@gmail.com', 'Teodor', '$2a$12$LvDdDm7qxghtS6GeWGKLEO8DAi1gNyMhQxwDz0i0/.XpTJ/pZefTa');
+values ('Ivan@example.com', 'Ivan', '$2a$12$7FXCEUFEMFYip9dhrA.MEeFXDo9ZzwtGk1q7Todqmnpupjk73a32C'),
+       ('Lesha@example.com', 'Lesha', '$2a$12$BVQ3qMrmGbHGkWiSgoNQ2eYMgy2kI3rs3Dy5t44eyqQLp3xBIvSQK'),
+       ('Mary@example.com', 'Mary', '$2a$12$.88RmaU5xMi8aqfYI0ge9uKa8bCIZPerAzCswCRejYVSUvmTA0jSS'),
+       ('Dasha@example.com', 'Dasha', '$2a$12$fH9ud2EGnwwwTyw/ZBqTbO5fT43i.pXfKOtwwD.isyYB2lSWntWvq'),
+       ('Alex@example.com', 'Alex', '$2a$12$oEExJRVwzWhDmlKK0Ek5Ee6a/DfwTbertBcKJ4NUFK9yCalxnpEIe'),
+       ('Stas@example.com', 'Stas', '$2a$12$IBsnVW703w8wxhZ7AYjqpeWs8nx2M8pxAsM/oe0gufe8jNvOs1Q6.'),
+       ('Vasilisa@example.com', 'Vasilisa', '$2a$12$pMhNadeqcJ4uWDGQnnoMx.lPI7ySquin/yLtl.7RrJG.E.v3xH4T.'),
+       ('Tema@example.com', 'Tema', '$2a$12$H7k.Cu3y9F2Uq/CG7QxsXOw21by8hQ3zmshhE3bkb9cJ5eWV5vOrm'),
+       ('Teodor@example.com', 'Teodor', '$2a$12$LvDdDm7qxghtS6GeWGKLEO8DAi1gNyMhQxwDz0i0/.XpTJ/pZefTa');
 --login: Ivan, password: 100
 --login: Lesha, password: 200
 --login: Mary, password: 300
@@ -46,10 +46,10 @@ values (1, 2),
        (10, 1);
 
 insert into boards(board_name, board_desc, board_alias, creator_id)
-VALUES ('Проект1', 'Тестовый проект', 'test1', 1),
-       ('Проект2', 'Тестовый проект', 'test2', 3),
-       ('Проект3', 'Тестовый проект', 'test3', 7),
-       ('Проект4', 'Тестовый проект', 'test4', 9);
+VALUES ('Проект1', 'Тестовый проект 1', 'test1', 1),
+       ('Проект2', 'Тестовый проект 2', 'test2', 3),
+       ('Проект3', 'Тестовый проект 3', 'test3', 7),
+       ('Проект4', 'Тестовый проект 4', 'test4', 9);
 
 insert into tasks(board_id, name, description, status, priority, type, deadline, assignee_id, creator_id)
 VALUES (1, 'Задача 1', 'Описание задача 1', 'IN_WORK', 'MINOR', 'TASK', '2023-03-01', 5, 1),
