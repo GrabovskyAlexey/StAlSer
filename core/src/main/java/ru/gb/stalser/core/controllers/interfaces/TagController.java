@@ -16,6 +16,7 @@ import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Validated
@@ -45,7 +46,7 @@ public interface TagController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<TagDto>> getAllTags();
+    ResponseEntity<List<TagDto>> getAllTags(Principal principal);
 
 
     /**
@@ -77,7 +78,9 @@ public interface TagController {
             produces = {"application/json"}
     )
     ResponseEntity<TagDto> getTagById(
-            @Parameter(name = "id", description = "tag id", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "tag id", required = true)
+            @PathVariable("id") Long id,
+            Principal principal
     );
 
     /**
@@ -110,7 +113,9 @@ public interface TagController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<TagDto> addTag(
-            @Parameter(name = "tag", description = "Tag Item", required = true) @Valid @RequestBody TagDto tag
+            @Parameter(name = "tag", description = "Tag Item", required = true)
+            @Valid @RequestBody TagDto tag,
+            Principal principal
     );
 
     /**
@@ -150,7 +155,8 @@ public interface TagController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateTag(
             @Parameter(name = "id", description = "Tag id", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Tag", description = "Tag item", required = true) @Valid @RequestBody TagDto tagDto
+            @Parameter(name = "Tag", description = "Tag item", required = true) @Valid @RequestBody TagDto tagDto,
+            Principal principal
             );
 
     /**
@@ -185,7 +191,7 @@ public interface TagController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteTag(
-            @Parameter(name = "id", description = "Tag id", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "Tag id", required = true) @PathVariable("id") Long id,Principal principal
     );
 
 }

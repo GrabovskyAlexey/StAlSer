@@ -15,6 +15,7 @@ import ru.gb.stalser.api.dto.activity.ActivityDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Validated
@@ -44,7 +45,7 @@ public interface ActivityController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<ActivityDto>> getAllActivities();
+    ResponseEntity<List<ActivityDto>> getAllActivities(Principal principal);
 
     /**
      * GET /${stalser.api.url}/activity/{id} : Get activity by id
@@ -75,7 +76,7 @@ public interface ActivityController {
             produces = {"application/json"}
     )
     ResponseEntity<ActivityDto> getActivityById(
-            @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id, Principal principal
     );
 
     /**
@@ -108,7 +109,7 @@ public interface ActivityController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<ActivityDto> addActivity(
-            @Parameter(name = "activity", description = "Activity Item", required = true) @Valid @RequestBody ActivityDto activity
+            @Parameter(name = "activity", description = "Activity Item", required = true) @Valid @RequestBody ActivityDto activity,Principal principal
     );
 
     /**
@@ -146,7 +147,7 @@ public interface ActivityController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateActivity(
             @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Activity", description = "Activity Item", required = true) @Valid @RequestBody ActivityDto activity
+            @Parameter(name = "Activity", description = "Activity Item", required = true) @Valid @RequestBody ActivityDto activity,Principal principal
     );
 
     /**
@@ -181,6 +182,6 @@ public interface ActivityController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteActivity(
-            @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id,Principal principal
     );
 }

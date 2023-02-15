@@ -11,6 +11,8 @@ import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.core.controllers.interfaces.UserController;
 import ru.gb.stalser.core.services.UserServiceImpl;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
@@ -19,13 +21,13 @@ public class UserControllerImpl implements UserController {
     private final UserServiceImpl userService;
 
     @Override
-    public ResponseEntity<AuthResponse> createAuthToken(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<AuthResponse> createAuthToken(@RequestBody AuthRequest authRequest, Principal principal) {
 
         return ResponseEntity.ok(userService.authenticate(authRequest));
     }
 
     @Override
-    public ResponseEntity<AuthResponse> register(final RegisterRequest registerRequest) {
+    public ResponseEntity<AuthResponse> register(final RegisterRequest registerRequest,Principal principal) {
         return ResponseEntity.ok(userService.register(registerRequest));
     }
 }

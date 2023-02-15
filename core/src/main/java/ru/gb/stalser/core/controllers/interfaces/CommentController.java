@@ -14,6 +14,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.comment.CommentDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
+
+import java.security.Principal;
 import java.util.List;
 
 
@@ -46,7 +48,7 @@ public interface CommentController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<CommentDto>> getAllComments();
+    ResponseEntity<List<CommentDto>> getAllComments(Principal principal);
 
     /**
      * GET /${stalser.api.url}/comments/{id} : Get Comment by id
@@ -77,7 +79,7 @@ public interface CommentController {
             produces = {"application/json"}
     )
     ResponseEntity<CommentDto> getCommentById(
-            @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id,Principal principal
     );
 
     /**
@@ -110,7 +112,7 @@ public interface CommentController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<CommentDto> addComment(
-            @Parameter(name = "Comment", description = "Comment Item", required = true) @Valid @RequestBody CommentDto comment
+            @Parameter(name = "Comment", description = "Comment Item", required = true) @Valid @RequestBody CommentDto comment,Principal principal
     );
 
     /**
@@ -141,7 +143,7 @@ public interface CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateComment(
             @Parameter(name = "id", description = "comment id", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Comment", description = "Comment Item", required = true) @Valid @RequestBody CommentDto comment);
+            @Parameter(name = "Comment", description = "Comment Item", required = true) @Valid @RequestBody CommentDto comment,Principal principal);
 
 }
 

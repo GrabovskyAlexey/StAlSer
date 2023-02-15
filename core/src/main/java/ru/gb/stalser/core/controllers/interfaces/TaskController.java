@@ -15,6 +15,7 @@ import ru.gb.stalser.api.dto.task.TaskDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Validated
@@ -43,7 +44,7 @@ public interface TaskController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<TaskDto>> getAllTasks();
+    ResponseEntity<List<TaskDto>> getAllTasks(Principal principal);
 
     /**
      * GET /${stalser.api.url}/tasks/{id} : Get Task by id
@@ -74,7 +75,7 @@ public interface TaskController {
             produces = {"application/json"}
     )
     ResponseEntity<TaskDto> getTaskById(
-            @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id,Principal principal
     );
 
     /**
@@ -107,7 +108,7 @@ public interface TaskController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<TaskDto> addTask(
-            @Parameter(name = "Task", description = "Task Item", required = true) @Valid @RequestBody TaskDto task
+            @Parameter(name = "Task", description = "Task Item", required = true) @Valid @RequestBody TaskDto task,Principal principal
     );
 
     /**
@@ -143,7 +144,8 @@ public interface TaskController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateTask(
             @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Task", description = "Task Item", required = true) @Valid @RequestBody TaskDto task
+            @Parameter(name = "Task", description = "Task Item", required = true) @Valid @RequestBody TaskDto task,
+            Principal principal
     );
 
     /**
@@ -178,7 +180,8 @@ public interface TaskController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteTask(
-            @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id,
+            Principal principal
     );
     
 }

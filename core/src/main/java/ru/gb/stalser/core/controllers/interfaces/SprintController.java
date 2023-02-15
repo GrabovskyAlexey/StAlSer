@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.sprint.SprintDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Validated
@@ -36,7 +37,7 @@ public interface SprintController {
     )
 
     @GetMapping(produces = {"application/json"})
-    ResponseEntity<List<SprintDto>> getAllSprints();
+    ResponseEntity<List<SprintDto>> getAllSprints(Principal principal);
 
     @Operation(
             operationId = "getSprintById",
@@ -58,7 +59,7 @@ public interface SprintController {
     @GetMapping(value = "/{id}", produces = {"application/json"})
     ResponseEntity<SprintDto> getSprintById(
             @Parameter(name = "id", description = "sprint id", required = true)
-            @PathVariable("id") Long id
+            @PathVariable("id") Long id,Principal principal
     );
 
     @Operation(
@@ -85,7 +86,8 @@ public interface SprintController {
     ResponseEntity<SprintDto> addSprint(
             @Parameter(name = "Sprint", description = "Sprint Item", required = true)
             @Valid
-            @RequestBody SprintDto sprint
+            @RequestBody SprintDto sprint,
+            Principal principal
     );
 
     @Operation(
@@ -113,7 +115,8 @@ public interface SprintController {
             @Parameter(name = "id", description = "Sprint id", required = true)
             @PathVariable("id") Long id,
             @Parameter(name = "Sprint", description = "Sprint Item", required = true)
-            @Valid @RequestBody SprintDto sprint
+            @Valid @RequestBody SprintDto sprint,
+            Principal principal
     );
 
     @Operation(
@@ -139,7 +142,8 @@ public interface SprintController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteSprint(
             @Parameter(name = "id", description = "sprint id", required = true)
-            @PathVariable("id") Long id
+            @PathVariable("id") Long id,
+            Principal principal
     );
 
 }

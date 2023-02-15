@@ -15,6 +15,7 @@ import ru.gb.stalser.api.dto.board.BoardDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Validated
@@ -44,7 +45,7 @@ public interface BoardController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<BoardDto>> getAllBoards();
+    ResponseEntity<List<BoardDto>> getAllBoards(Principal principal);
 
     /**
      * GET /${stalser.api.url}/boards/{id} : Get board by id
@@ -75,7 +76,7 @@ public interface BoardController {
             produces = {"application/json"}
     )
     ResponseEntity<BoardDto> getBoardById(
-            @Parameter(name = "id", description = "board id", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "board id", required = true) @PathVariable("id") Long id,Principal principal
     );
 
     /**
@@ -108,7 +109,7 @@ public interface BoardController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<BoardDto> addBoard(
-            @Parameter(name = "Board", description = "Board Item", required = true) @Valid @RequestBody BoardDto board
+            @Parameter(name = "Board", description = "Board Item", required = true) @Valid @RequestBody BoardDto board,Principal principal
     );
 
     /**
@@ -144,6 +145,6 @@ public interface BoardController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateBoard(
             @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Board", description = "Board Item", required = true) @Valid @RequestBody BoardDto board
+            @Parameter(name = "Board", description = "Board Item", required = true) @Valid @RequestBody BoardDto board,Principal principal
     );
 }

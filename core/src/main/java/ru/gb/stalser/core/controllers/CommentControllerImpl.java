@@ -9,6 +9,7 @@ import ru.gb.stalser.core.controllers.interfaces.CommentController;
 import ru.gb.stalser.core.mappers.CommentMapper;
 import ru.gb.stalser.core.services.interfaces.CommentService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,24 +22,24 @@ public class CommentControllerImpl implements CommentController{
     private final CommentMapper commentMapper;
 
     @Override
-    public ResponseEntity<List<CommentDto>> getAllComments() {
+    public ResponseEntity<List<CommentDto>> getAllComments(Principal principal) {
         return ResponseEntity.ok(commentService.findAll().stream()
                         .map(commentMapper::mapToDto)
                         .collect(Collectors.toList()));
     }
 
     @Override
-    public ResponseEntity<CommentDto> getCommentById(Long id) {
+    public ResponseEntity<CommentDto> getCommentById(Long id,Principal principal) {
         return ResponseEntity.ok(commentMapper.mapToDto(commentService.findById(id)));
     }
 
     @Override
-    public ResponseEntity<CommentDto> addComment(CommentDto comment) {
+    public ResponseEntity<CommentDto> addComment(CommentDto comment,Principal principal) {
         return ResponseEntity.ok(commentMapper.mapToDto(commentService.save(commentMapper.mapFromDto(comment))));
     }
 
     @Override
-    public void updateComment(Long id, CommentDto comment) {
+    public void updateComment(Long id, CommentDto comment,Principal principal) {
         commentService.update(commentMapper.mapFromDto(comment));
     }
 
