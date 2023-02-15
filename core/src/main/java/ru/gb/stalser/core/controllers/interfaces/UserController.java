@@ -17,7 +17,7 @@ import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
-import java.security.Principal;
+
 
 @Tag(name = "auth", description = "Контроллер для аутентификации")
 public interface UserController {
@@ -53,7 +53,7 @@ public interface UserController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<AuthResponse> createAuthToken(
-            @Parameter(name = "AuthRequest", description = "AuthRequest Item", required = true) @Valid @RequestBody AuthRequest authRequest, Principal principal
+            @Parameter(name = "AuthRequest", description = "AuthRequest Item", required = true) @Valid @RequestBody AuthRequest authRequest
     );
 
     /**
@@ -83,7 +83,8 @@ public interface UserController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<AuthResponse> register(
-            @Parameter(name = "RegisterRequest", description = "RegisterRequest Item", required = true) @Valid @RequestBody RegisterRequest registerRequest,Principal principal
+            @Parameter(name = "RegisterRequest", description = "RegisterRequest Item", required = true)
+            @Valid @RequestBody RegisterRequest registerRequest
     );
 
 }

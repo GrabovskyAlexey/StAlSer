@@ -76,7 +76,9 @@ public interface InviteController {
             produces = {"application/json"}
     )
     ResponseEntity<InviteDto> getInviteById(
-            @Parameter(name = "id", description = "идентификатор приглашения", required = true) @PathVariable("id") Long id,Principal principal
+            @Parameter(name = "id", description = "идентификатор приглашения", required = true)
+            @PathVariable("id") Long id,
+            Principal principal
     );
 
     /**
@@ -109,7 +111,9 @@ public interface InviteController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<InviteDto> addInvite(
-            @Parameter(name = "invite", description = "Приглашение", required = true) @Valid @RequestBody InviteDto invite,Principal principal
+            @Parameter(name = "invite", description = "Приглашение", required = true)
+            @Valid @RequestBody InviteDto invite,
+            Principal principal
     );
 
     /**
@@ -147,7 +151,9 @@ public interface InviteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateInvite(
             @Parameter(name = "id", description = "идентификатор приглашения", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "invite", description = "Приглашение", required = true) @Valid @RequestBody InviteDto invite,Principal principal
+            @Parameter(name = "invite", description = "Приглашение", required = true)
+            @Valid @RequestBody InviteDto invite,
+            Principal principal
     );
 
     /**
@@ -182,6 +188,8 @@ public interface InviteController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteInvite(
-            @Parameter(name = "id", description = "идентификатор приглашения", required = true) @PathVariable("id") Long id,Principal principalv
+            @Parameter(name = "id", description = "идентификатор приглашения", required = true)
+            @PathVariable("id") Long id,
+            Principal principal
     );
 }

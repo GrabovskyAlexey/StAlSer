@@ -76,7 +76,9 @@ public interface ActivityController {
             produces = {"application/json"}
     )
     ResponseEntity<ActivityDto> getActivityById(
-            @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id, Principal principal
+            @Parameter(name = "id", description = "activity id", required = true)
+            @PathVariable("id") Long id,
+            Principal principal
     );
 
     /**
@@ -109,7 +111,9 @@ public interface ActivityController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<ActivityDto> addActivity(
-            @Parameter(name = "activity", description = "Activity Item", required = true) @Valid @RequestBody ActivityDto activity,Principal principal
+            @Parameter(name = "activity", description = "Activity Item", required = true)
+            @Valid @RequestBody ActivityDto activity,
+            Principal principal
     );
 
     /**
@@ -147,7 +151,9 @@ public interface ActivityController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateActivity(
             @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Activity", description = "Activity Item", required = true) @Valid @RequestBody ActivityDto activity,Principal principal
+            @Parameter(name = "Activity", description = "Activity Item", required = true)
+            @Valid @RequestBody ActivityDto activity,
+            Principal principal
     );
 
     /**
@@ -182,6 +188,8 @@ public interface ActivityController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteActivity(
-            @Parameter(name = "id", description = "activity id", required = true) @PathVariable("id") Long id,Principal principal
+            @Parameter(name = "id", description = "activity id", required = true)
+            @PathVariable("id") Long id,
+            Principal principal
     );
 }

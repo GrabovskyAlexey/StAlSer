@@ -75,7 +75,9 @@ public interface TaskController {
             produces = {"application/json"}
     )
     ResponseEntity<TaskDto> getTaskById(
-            @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id,Principal principal
+            @Parameter(name = "id", description = "task id", required = true)
+            @PathVariable("id") Long id,
+            Principal principal
     );
 
     /**
@@ -108,7 +110,9 @@ public interface TaskController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<TaskDto> addTask(
-            @Parameter(name = "Task", description = "Task Item", required = true) @Valid @RequestBody TaskDto task,Principal principal
+            @Parameter(name = "Task", description = "Task Item", required = true)
+            @Valid @RequestBody TaskDto task,
+            Principal principal
     );
 
     /**
@@ -180,7 +184,8 @@ public interface TaskController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteTask(
-            @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id,
+            @Parameter(name = "id", description = "task id", required = true)
+            @PathVariable("id") Long id,
             Principal principal
     );
     

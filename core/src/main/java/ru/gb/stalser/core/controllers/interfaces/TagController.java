@@ -191,7 +191,9 @@ public interface TagController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteTag(
-            @Parameter(name = "id", description = "Tag id", required = true) @PathVariable("id") Long id,Principal principal
+            @Parameter(name = "id", description = "Tag id", required = true)
+            @PathVariable("id") Long id,
+            Principal principal
     );
 
 }

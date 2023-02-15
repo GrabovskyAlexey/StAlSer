@@ -79,7 +79,9 @@ public interface CommentController {
             produces = {"application/json"}
     )
     ResponseEntity<CommentDto> getCommentById(
-            @Parameter(name = "id", description = "task id", required = true) @PathVariable("id") Long id,Principal principal
+            @Parameter(name = "id", description = "task id", required = true)
+            @PathVariable("id") Long id,
+            Principal principal
     );
 
     /**
@@ -112,7 +114,9 @@ public interface CommentController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<CommentDto> addComment(
-            @Parameter(name = "Comment", description = "Comment Item", required = true) @Valid @RequestBody CommentDto comment,Principal principal
+            @Parameter(name = "Comment", description = "Comment Item", required = true)
+            @Valid @RequestBody CommentDto comment,
+            Principal principal
     );
 
     /**
@@ -143,7 +147,10 @@ public interface CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateComment(
             @Parameter(name = "id", description = "comment id", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Comment", description = "Comment Item", required = true) @Valid @RequestBody CommentDto comment,Principal principal);
+            @Parameter(name = "Comment", description = "Comment Item", required = true)
+            @Valid @RequestBody CommentDto comment,
+            Principal principal
+    );
 
 }
 

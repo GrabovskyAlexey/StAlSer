@@ -59,7 +59,8 @@ public interface SprintController {
     @GetMapping(value = "/{id}", produces = {"application/json"})
     ResponseEntity<SprintDto> getSprintById(
             @Parameter(name = "id", description = "sprint id", required = true)
-            @PathVariable("id") Long id,Principal principal
+            @PathVariable("id") Long id,
+            Principal principal
     );
 
     @Operation(
