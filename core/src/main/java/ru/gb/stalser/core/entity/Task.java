@@ -13,7 +13,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "tasks")
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class Task extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -12,7 +12,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class Role extends BaseEntity {
 
     @Id
@@ -43,5 +46,10 @@ public class Role extends BaseEntity {
     )
     @ToString.Exclude
     private List<User> users;
+
+    public Role(final String roleName, final String roleDescription) {
+        this.roleName = roleName;
+        this.roleDescription = roleDescription;
+    }
 }
 

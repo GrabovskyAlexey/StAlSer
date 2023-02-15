@@ -21,7 +21,7 @@ public class UserControllerImpl implements UserController {
     @Override
     public ResponseEntity<AuthResponse> createAuthToken(@RequestBody AuthRequest authRequest) {
 
-        return userService.authenticate(authRequest);
+        return ResponseEntity.ok(userService.authenticate(authRequest));
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.time.Instant;
 @Table(name = "task_activities")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Activity extends BaseEntity {
     @Id

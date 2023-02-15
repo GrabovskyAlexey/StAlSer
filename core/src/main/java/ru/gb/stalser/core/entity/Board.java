@@ -10,7 +10,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "boards")
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class Board extends BaseEntity{
 
     @Id
