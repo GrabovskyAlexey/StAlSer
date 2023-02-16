@@ -1,7 +1,10 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,13 +14,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.stalser.api.dto.auth.AuthRequest;
+import ru.gb.stalser.api.dto.auth.AuthRequestPassUpdate;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
 import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.core.entity.Role;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.exceptions.EmailAlreadyExistsException;
 import ru.gb.stalser.core.exceptions.UserAlreadyExistsException;
-import ru.gb.stalser.core.repositories.UserRepository;
+import ru.gb.stalser.core.services.repositories.UserRepository;
 import ru.gb.stalser.core.services.interfaces.RoleService;
 import ru.gb.stalser.core.services.interfaces.UserService;
 import ru.gb.stalser.core.utils.JwtTokenUtil;
@@ -123,5 +127,21 @@ public class UserServiceImpl implements UserService {
         UserDetails userDetails = loadUserByUsername(authRequest.getLogin());
         String token = jwtTokenUtil.generateToken(userDetails);
         return new AuthResponse(token);
+    }
+
+    @Override
+    public AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate){
+
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestPassUpdate.getLogin(), authRequestPassUpdate.getOldPassword()));
+
+        User user = userRepository.findByLogin(authRequestPassUpdate.getLogin())
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User '%s' not found", authRequestPassUpdate.getLogin())));
+
+        user.setPassword(bCryptPasswordEncoder.encode(authRequestPassUpdate.getNewPassword()));
+        userRepository.save(user);
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), authRequestPassUpdate.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
+        String token = jwtTokenUtil.generateToken(userDetails);
+        return new AuthResponse(token);
+
     }
 }
