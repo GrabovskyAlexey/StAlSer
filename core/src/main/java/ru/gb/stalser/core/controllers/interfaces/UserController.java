@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.gb.stalser.api.dto.auth.AuthRequest;
+import ru.gb.stalser.api.dto.auth.AuthRequestPassUpdate;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
 import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.api.dto.util.MessageDto;
@@ -84,5 +85,31 @@ public interface UserController {
     ResponseEntity<AuthResponse> register(
             @Parameter(name = "RegisterRequest", description = "RegisterRequest Item", required = true) @Valid @RequestBody RegisterRequest registerRequest
     );
+
+
+
+    @Operation(
+            operationId = "userUpdate",
+            summary = "Смена пароля",
+            tags = {"auth"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Токен авторизации при успешной смене пароля", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+            }
+    )
+    @PostMapping(
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            path = {"/register/update"}
+    )
+    @ResponseStatus(HttpStatus.CREATED)
+    ResponseEntity<AuthResponse> registerUpdate(
+            @Parameter(name = "RegisterUpdateRequest", description = "AuthRequestPassUpdate Item", required = true) @Valid @RequestBody AuthRequestPassUpdate authRequestPassUpdate
+            );
+
 
 }
