@@ -31,12 +31,12 @@ public class BoardControllerImpl implements BoardController {
     }
 
     @Override
-    public ResponseEntity<BoardDto> getBoardById(Long id,Principal principal) {
+    public ResponseEntity<BoardDto> getBoardById(Long id, Principal principal) {
         return ResponseEntity.ok(boardMapper.mapToDto(boardService.findById(id)));
     }
 
     @Override
-    public ResponseEntity<BoardDto> addBoard(BoardDto board,Principal principal) {
+    public ResponseEntity<BoardDto> addBoard(BoardDto board, Principal principal) {
         return ResponseEntity.ok(
                 boardMapper.mapToDto(
                         boardService.save(boardMapper.mapFromDto(board))
@@ -45,7 +45,7 @@ public class BoardControllerImpl implements BoardController {
     }
 
     @Override
-    public void updateBoard(Long id, BoardDto board,Principal principal) {
+    public void updateBoard(Long id, BoardDto board, Principal principal) {
         boardService.updateBoard(boardMapper.mapFromDto(board));
     }
 }

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/${stalser.api.url}/tag")
 @RequiredArgsConstructor
-public class TagControllerImpl  implements TagController {
+public class TagControllerImpl implements TagController {
 
     private final TagService tagService;
     private final TagMapper tagMapper;
@@ -32,22 +32,22 @@ public class TagControllerImpl  implements TagController {
     }
 
     @Override
-    public ResponseEntity<TagDto> getTagById(Long id,Principal principal) {
+    public ResponseEntity<TagDto> getTagById(Long id, Principal principal) {
         return ResponseEntity.ok(tagMapper.mapToDto(tagService.findById(id)));
     }
 
     @Override
-    public ResponseEntity<TagDto> addTag(@Valid TagDto tag,Principal principal) {
+    public ResponseEntity<TagDto> addTag(@Valid TagDto tag, Principal principal) {
         return ResponseEntity.ok(tagMapper.mapToDto(tagService.save(tagMapper.mapFromDto(tag))));
     }
 
     @Override
-    public void updateTag(Long id, TagDto tagDto,Principal principal) {
-       tagService.update(tagMapper.mapFromDto(tagDto));
+    public void updateTag(Long id, TagDto tagDto, Principal principal) {
+        tagService.update(tagMapper.mapFromDto(tagDto));
     }
 
     @Override
-    public void deleteTag(Long id,Principal principal) {
-      tagService.deleteById(id);
+    public void deleteTag(Long id, Principal principal) {
+        tagService.deleteById(id);
     }
 }

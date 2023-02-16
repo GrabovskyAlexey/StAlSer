@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/${stalser.api.url}/comments")
 @RequiredArgsConstructor
-public class CommentControllerImpl implements CommentController{
+public class CommentControllerImpl implements CommentController {
 
     private final CommentService commentService;
     private final CommentMapper commentMapper;
@@ -24,25 +24,24 @@ public class CommentControllerImpl implements CommentController{
     @Override
     public ResponseEntity<List<CommentDto>> getAllComments(Principal principal) {
         return ResponseEntity.ok(commentService.findAll().stream()
-                        .map(commentMapper::mapToDto)
-                        .collect(Collectors.toList()));
+                .map(commentMapper::mapToDto)
+                .collect(Collectors.toList()));
     }
 
     @Override
-    public ResponseEntity<CommentDto> getCommentById(Long id,Principal principal) {
+    public ResponseEntity<CommentDto> getCommentById(Long id, Principal principal) {
         return ResponseEntity.ok(commentMapper.mapToDto(commentService.findById(id)));
     }
 
     @Override
-    public ResponseEntity<CommentDto> addComment(CommentDto comment,Principal principal) {
+    public ResponseEntity<CommentDto> addComment(CommentDto comment, Principal principal) {
         return ResponseEntity.ok(commentMapper.mapToDto(commentService.save(commentMapper.mapFromDto(comment))));
     }
 
     @Override
-    public void updateComment(Long id, CommentDto comment,Principal principal) {
+    public void updateComment(Long id, CommentDto comment, Principal principal) {
         commentService.update(commentMapper.mapFromDto(comment));
     }
-
 
 
 }

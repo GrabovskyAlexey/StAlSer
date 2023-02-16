@@ -103,6 +103,7 @@ public interface TaskController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
+
     )
     @PostMapping(
             produces = {"application/json"},
@@ -155,7 +156,7 @@ public interface TaskController {
     /**
      * DELETE /${stalser.api.url}/tasks/{id} : Delete task by id
      *
-     * @param id       task id (required)
+     * @param id task id (required)
      * @return Successfully delete task (status code 204)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
@@ -188,5 +189,5 @@ public interface TaskController {
             @PathVariable("id") Long id,
             Principal principal
     );
-    
+
 }

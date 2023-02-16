@@ -121,7 +121,7 @@ public interface TagController {
     /**
      * PUT /${stalser.api.url}/tag/{id} : Update tag by id
      *
-     * @param id tag id (required)
+     * @param id     tag id (required)
      * @param tagDto tag item (required)
      * @return Successfully update tag (status code 200)
      * or Bad Request (status code 400)
@@ -157,7 +157,7 @@ public interface TagController {
             @Parameter(name = "id", description = "Tag id", required = true) @PathVariable("id") Long id,
             @Parameter(name = "Tag", description = "Tag item", required = true) @Valid @RequestBody TagDto tagDto,
             Principal principal
-            );
+    );
 
     /**
      * DELETE /${stalser.api.url}/tag/{id} : Delete tag by id

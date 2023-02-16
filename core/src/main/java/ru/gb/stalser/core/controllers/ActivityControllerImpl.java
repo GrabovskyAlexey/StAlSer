@@ -19,27 +19,29 @@ import java.util.stream.Collectors;
 public class ActivityControllerImpl implements ActivityController {
     private final ActivityService activityService;
     private final ActivityMapper activityMapper;
+
     @Override
     public ResponseEntity<List<ActivityDto>> getAllActivities(Principal principal) {
         return ResponseEntity.ok(activityService.findAll().stream().map(activityMapper::mapToDto).collect(Collectors.toList()));
     }
 
     @Override
-    public ResponseEntity<ActivityDto> getActivityById(Long id,Principal principal) {
+    public ResponseEntity<ActivityDto> getActivityById(Long id, Principal principal) {
         return ResponseEntity.ok(activityMapper.mapToDto(activityService.findById(id)));
     }
 
     @Override
-    public ResponseEntity<ActivityDto> addActivity(ActivityDto activity,Principal principal) {
+    public ResponseEntity<ActivityDto> addActivity(ActivityDto activity, Principal principal) {
         return ResponseEntity.ok(activityMapper.mapToDto(activityService.save(activityMapper.mapFromDto(activity))));
     }
 
     @Override
-    public void updateActivity(Long id, ActivityDto activity,Principal principal) {
+    public void updateActivity(Long id, ActivityDto activity, Principal principal) {
         activityService.update(activityMapper.mapFromDto(activity));
     }
+
     @Override
-    public void deleteActivity(Long id,Principal principal) {
+    public void deleteActivity(Long id, Principal principal) {
         activityService.deleteById(id);
     }
 }

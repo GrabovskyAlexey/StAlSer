@@ -159,7 +159,7 @@ public interface InviteController {
     /**
      * DELETE /${stalser.api.url}/invites/{id} : Delete invite by id
      *
-     * @param id       invite id (required)
+     * @param id invite id (required)
      * @return Successfully delete invite (status code 200)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)

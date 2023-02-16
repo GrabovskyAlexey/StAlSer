@@ -32,12 +32,12 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<TaskDto> getTaskById(final Long id,Principal principal) {
+    public ResponseEntity<TaskDto> getTaskById(final Long id, Principal principal) {
         return ResponseEntity.ok(taskMapper.mapToDto(taskService.findById(id)));
     }
 
     @Override
-    public ResponseEntity<TaskDto> addTask(final TaskDto task,Principal principal) {
+    public ResponseEntity<TaskDto> addTask(final TaskDto task, Principal principal) {
         return ResponseEntity.ok(
                 taskMapper.mapToDto(
                         taskService.save(taskMapper.mapFromDto(task))
@@ -46,12 +46,12 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public void updateTask(final Long id, final TaskDto task,Principal principal) {
+    public void updateTask(final Long id, final TaskDto task, Principal principal) {
         taskService.update(taskMapper.mapFromDto(task));
     }
 
     @Override
-    public void deleteTask(final Long id,Principal principal) {
+    public void deleteTask(final Long id, Principal principal) {
         taskService.deleteById(id);
     }
 }

@@ -31,14 +31,14 @@ public class SprintControllerImpl implements SprintController {
     }
 
     @Override
-    public ResponseEntity<SprintDto> getSprintById(final Long id,Principal principal) {
+    public ResponseEntity<SprintDto> getSprintById(final Long id, Principal principal) {
         return ResponseEntity.ok(sprintMapper
                 .mapToDto(sprintService
                         .findById(id)));
     }
 
     @Override
-    public ResponseEntity<SprintDto> addSprint(final SprintDto sprintDto,Principal principal) {
+    public ResponseEntity<SprintDto> addSprint(final SprintDto sprintDto, Principal principal) {
         return ResponseEntity.ok(sprintMapper.mapToDto(
                         sprintService.save(sprintMapper.mapFromDto(sprintDto))
                 )
@@ -46,7 +46,7 @@ public class SprintControllerImpl implements SprintController {
     }
 
     @Override
-    public void updateSprint(final Long id, final SprintDto sprintDto,Principal principal) {
+    public void updateSprint(final Long id, final SprintDto sprintDto, Principal principal) {
         sprintService.update(sprintMapper.mapFromDto(sprintDto));
     }
 

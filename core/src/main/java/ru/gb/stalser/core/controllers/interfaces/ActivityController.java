@@ -159,7 +159,7 @@ public interface ActivityController {
     /**
      * DELETE /${stalser.api.url}/activity/{id} : Delete activity by id
      *
-     * @param id       activity id (required)
+     * @param id activity id (required)
      * @return Successfully delete activity (status code 200)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
