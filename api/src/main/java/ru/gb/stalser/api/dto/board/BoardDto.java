@@ -6,10 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.gb.stalser.api.dto.user.UserDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @Builder
@@ -44,4 +46,12 @@ public class BoardDto {
     @Schema(description = "Маркер активности доски")
     @JsonProperty("isActive")
     private Boolean isActive;
+
+    @Schema(description = "Создатель")
+    @JsonProperty("creator")
+    private UserDto creator;
+
+    @Schema(description = "Список пользователей")
+    @JsonProperty("users")
+    private List<UserDto> users;
 }

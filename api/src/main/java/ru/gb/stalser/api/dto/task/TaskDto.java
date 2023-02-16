@@ -6,12 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.gb.stalser.api.dto.board.BoardDto;
+import ru.gb.stalser.api.dto.sprint.SprintDto;
+import ru.gb.stalser.api.dto.tag.TagDto;
+import ru.gb.stalser.api.dto.user.UserDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -36,10 +41,9 @@ public class TaskDto {
     @JsonProperty("taskDescription")
     private String description;
 
-    // TODO Возможно стоит переделать на BoardDto как появится
     @Schema(description = "Идентификатор доски", example = "1")
     @Min(value = 1)
-    private Long boardId;
+    private BoardDto board;
 
     @NotEmpty(message = "Статус задачи не может быть пустым")
     @Schema(description = "Статус задачи", implementation = TaskStatus.class)
@@ -60,13 +64,19 @@ public class TaskDto {
     @JsonProperty("deadline")
     private Date deadline;
 
-    // TODO Возможно стоит переделать на UserDto как появится
     @Schema(description = "Исполнитель")
-    @Min(value = 1)
-    private Long assignee;
+    @JsonProperty("assignee")
+    private UserDto assignee;
 
-    // TODO Возможно стоит переделать на UserDto как появится
     @Schema(description = "Создатель")
-    @Min(value = 1)
-    private Long creator;
+    @JsonProperty("creator")
+    private UserDto creator;
+
+    @Schema(description = "Список спринтов в которых")
+    @JsonProperty("tasks")
+    private List<TagDto> tags;
+
+    @Schema(description = "Список спринтов")
+    @JsonProperty("sprints")
+    private List<SprintDto> sprints;
 }

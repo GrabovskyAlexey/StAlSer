@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.gb.stalser.api.dto.task.TaskDto;
+import ru.gb.stalser.api.dto.user.UserDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -38,6 +39,6 @@ public class ActivityDto {
     @NotEmpty(message = "У активности должен быть пользователь к которой она относится")
     @Schema(description = "Пользователь к которому относится активность")
     @JsonProperty("user")
-    private Long userId;
+    private UserDto user;
 
 }

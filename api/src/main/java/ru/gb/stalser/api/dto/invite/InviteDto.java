@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.gb.stalser.api.dto.board.BoardDto;
+import ru.gb.stalser.api.dto.user.UserDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -49,5 +50,5 @@ public class InviteDto {
 
     @Schema(description = "Зарегистрированный пользователь, которому было отправлено приглашение")
     @JsonProperty("user")
-    private Long userId;
+    private UserDto user;
 }

@@ -7,11 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.gb.stalser.api.dto.board.BoardDto;
+import ru.gb.stalser.api.dto.task.TaskDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -26,7 +28,7 @@ public class SprintDto {
 
     @NotEmpty(message = "Спринт не может быть вне доски")
     @Schema(description = "Идентификатор доски")
-    private BoardDto boardDto;
+    private BoardDto board;
 
     @NotEmpty(message = "Номер спринта не может быть пустым")
     @Schema(description = "Номер спринта", example = "1")
@@ -42,5 +44,9 @@ public class SprintDto {
     @Schema(description = "Дата окончания спринта", implementation = Instant.class)
     @JsonProperty("endDate")
     private Date endDate;
+
+    @Schema(description = "Список задач")
+    @JsonProperty("tasks")
+    private List<TaskDto> tasks;
 
 }
