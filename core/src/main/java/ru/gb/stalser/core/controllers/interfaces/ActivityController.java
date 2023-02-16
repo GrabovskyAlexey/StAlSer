@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -44,7 +45,9 @@ public interface ActivityController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<ActivityDto>> getAllActivities();
+    ResponseEntity<Page<ActivityDto>> getAllActivities(
+            @Parameter(name = "p", description = "page index", required = true) @RequestParam(name = "p", defaultValue = "1") int pageIndex
+    );
 
     /**
      * GET /${stalser.api.url}/activity/{id} : Get activity by id

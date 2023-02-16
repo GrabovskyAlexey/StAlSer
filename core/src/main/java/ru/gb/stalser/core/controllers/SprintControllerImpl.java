@@ -1,8 +1,10 @@
 package ru.gb.stalser.core.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.sprint.SprintDto;
 import ru.gb.stalser.core.controllers.interfaces.SprintController;
@@ -20,11 +22,12 @@ public class SprintControllerImpl implements SprintController {
     private final SprintMapper sprintMapper;
 
     @Override
-    public ResponseEntity<List<SprintDto>> getAllSprints() {
+    public ResponseEntity<Page<SprintDto>> getAllSprints(int pageIndex) {
+        if (pageIndex < 1) {
+            pageIndex = 1;
+        }
         return ResponseEntity.ok(
-                sprintService.findAll().stream()
-                        .map(sprintMapper::mapToDto)
-                        .collect(Collectors.toList())
+                sprintService.findAll(pageIndex-1, 10).map(sprintMapper::mapToDto)
         );
     }
 

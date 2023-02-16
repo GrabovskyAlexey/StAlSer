@@ -1,13 +1,13 @@
 package ru.gb.stalser.core.services.interfaces;
 
 
+import org.springframework.data.domain.Page;
 import ru.gb.stalser.core.entity.Role;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface RoleService {
-    List<Role> findAll();
+    Page<Role> findAll(int pageIndex, int pageSize);
 
     Role findById(Long id);
 

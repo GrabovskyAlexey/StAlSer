@@ -1,13 +1,14 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.gb.stalser.core.entity.Sprint;
 import ru.gb.stalser.core.repositories.SprintRepository;
 import ru.gb.stalser.core.services.interfaces.SprintService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +18,8 @@ public class SprintServiceImpl implements SprintService {
     private final SprintRepository sprintRepository;
 
     @Override
-    public List<Sprint> findAll (){
-        return sprintRepository.findAll();
+    public Page<Sprint> findAll (int pageIndex, int pageSize){
+        return sprintRepository.findAll(PageRequest.of(pageIndex, pageSize));
     }
 
     @Override

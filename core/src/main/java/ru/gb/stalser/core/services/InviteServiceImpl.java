@@ -2,6 +2,8 @@ package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +23,6 @@ import ru.gb.stalser.core.services.interfaces.UserService;
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -38,8 +39,8 @@ public class InviteServiceImpl implements InviteService {
     private final KafkaTemplate<String, SimpleTextEmailMessage> kafkaTemplate;
 
     @Override
-    public List<Invite> findAll() {
-        return inviteRepository.findAll();
+    public Page<Invite> findAll(int pageIndex, int pageSize) {
+        return inviteRepository.findAll(PageRequest.of(pageIndex, pageSize));
     }
 
     @Override

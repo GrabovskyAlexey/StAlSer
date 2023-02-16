@@ -1,12 +1,12 @@
 package ru.gb.stalser.core.services.interfaces;
 
+import org.springframework.data.domain.Page;
 import ru.gb.stalser.core.entity.Sprint;
 
-import java.util.List;
 
 public interface SprintService {
 
-    List<Sprint> findAll();
+    Page<Sprint> findAll(int pageIndex, int pageSize);
 
     Sprint findById(Long id);
 

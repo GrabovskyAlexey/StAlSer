@@ -1,11 +1,11 @@
 package ru.gb.stalser.core.services.interfaces;
 
+import org.springframework.data.domain.Page;
 import ru.gb.stalser.core.entity.Task;
 
-import java.util.List;
 
 public interface TaskService {
-    List<Task> findAll();
+    Page<Task> findAll(int pageIndex, int pageSize);
 
     Task findById(Long id);
 

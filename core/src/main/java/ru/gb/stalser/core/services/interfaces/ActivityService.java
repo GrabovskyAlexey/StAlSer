@@ -1,12 +1,12 @@
 package ru.gb.stalser.core.services.interfaces;
 
+import org.springframework.data.domain.Page;
 import ru.gb.stalser.core.entity.Activity;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ActivityService {
-    List<Activity> findAll();
+    Page<Activity> findAll(int pageIndex, int pageSize);
 
     Activity findById(Long id);
 

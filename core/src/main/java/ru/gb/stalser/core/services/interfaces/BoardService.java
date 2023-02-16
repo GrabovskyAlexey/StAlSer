@@ -1,13 +1,14 @@
 package ru.gb.stalser.core.services.interfaces;
 
 
+import org.springframework.data.domain.Page;
 import ru.gb.stalser.core.entity.Board;
 
-import java.util.List;
+
 
 public interface BoardService {
 
-    List<Board> findAll();
+    Page<Board> findAll(int pageIndex, int pageSize);
 
     Board findById(Long id);
 

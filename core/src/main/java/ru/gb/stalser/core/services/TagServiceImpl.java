@@ -1,13 +1,14 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.gb.stalser.core.entity.Tag;
 import ru.gb.stalser.core.repositories.TagRepository;
 import ru.gb.stalser.core.services.interfaces.TagService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,8 +17,8 @@ public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
 
     @Override
-    public List<Tag> findAll() {
-       return tagRepository.findAll();
+    public Page<Tag> findAll(int pageIndex, int pageSize) {
+       return tagRepository.findAll(PageRequest.of(pageIndex, pageSize));
     }
 
     @Override

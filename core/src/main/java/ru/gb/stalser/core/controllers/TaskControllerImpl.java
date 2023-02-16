@@ -1,8 +1,10 @@
 package ru.gb.stalser.core.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.task.TaskDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
@@ -22,12 +24,13 @@ public class TaskControllerImpl implements TaskController {
     private final TaskMapper taskMapper;
 
     @Override
-    public ResponseEntity<List<TaskDto>> getAllTasks() {
+    public ResponseEntity<Page<TaskDto>> getAllTasks(int pageIndex) {
+        if (pageIndex < 1) {
+            pageIndex = 1;
+        }
         return ResponseEntity.ok(
-                taskService.findAll().stream()
-                        .map(taskMapper::mapToDto)
-                        .collect(Collectors.toList())
-        );
+                taskService.findAll(pageIndex-1, 10).map(taskMapper::mapToDto));
+
     }
 
     @Override

@@ -1,8 +1,10 @@
 package ru.gb.stalser.core.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.comment.CommentDto;
 import ru.gb.stalser.core.controllers.interfaces.CommentController;
@@ -21,10 +23,11 @@ public class CommentControllerImpl implements CommentController{
     private final CommentMapper commentMapper;
 
     @Override
-    public ResponseEntity<List<CommentDto>> getAllComments() {
-        return ResponseEntity.ok(commentService.findAll().stream()
-                        .map(commentMapper::mapToDto)
-                        .collect(Collectors.toList()));
+    public ResponseEntity<Page<CommentDto>> getAllComments(int pageIndex) {
+        if (pageIndex < 1) {
+            pageIndex = 1;
+        }
+        return ResponseEntity.ok(commentService.findAll(pageIndex-1, 10).map(commentMapper::mapToDto));
     }
 
     @Override

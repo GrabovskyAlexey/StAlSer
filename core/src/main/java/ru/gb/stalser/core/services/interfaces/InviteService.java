@@ -1,11 +1,11 @@
 package ru.gb.stalser.core.services.interfaces;
 
+import org.springframework.data.domain.Page;
 import ru.gb.stalser.core.entity.Invite;
 
-import java.util.List;
 
 public interface InviteService {
-    List<Invite> findAll();
+    Page<Invite> findAll(int pageIndex, int pageSize);
 
     Invite findById(Long id);
 
