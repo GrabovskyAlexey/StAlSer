@@ -1,7 +1,6 @@
 package ru.gb.stalser.core.entity;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ru.gb.stalser.api.dto.task.TaskPriority;
@@ -11,12 +10,14 @@ import ru.gb.stalser.api.dto.task.TaskType;
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "tasks")
-@Data
-public class Task {
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+public class Task extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,10 +49,12 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "assignee_id")
+    @ToString.Exclude
     private User assigneeId;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
+    @ToString.Exclude
     private User creatorId;
 
     @CreationTimestamp
@@ -83,18 +86,4 @@ public class Task {
 
 
 
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        final Task task = (Task) o;
-        return id != null && Objects.equals(id, task.id);
-    }
-
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
