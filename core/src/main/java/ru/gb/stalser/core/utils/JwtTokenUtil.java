@@ -3,15 +3,19 @@ package ru.gb.stalser.core.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.gb.stalser.api.dto.ConfirmToken;
+import ru.gb.stalser.core.exceptions.IncorrectConfirmTokenException;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static ru.gb.stalser.api.dto.ConfirmToken.TokenType;
 
 @Component
 public class JwtTokenUtil {
@@ -59,7 +63,7 @@ public class JwtTokenUtil {
                 .getBody();
     }
 
-    public String generateConfirmationToken(ConfirmToken token){
+    public String generateConfirmationToken(ConfirmToken token) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("confirm", token);
         Calendar calendar = Calendar.getInstance();
@@ -75,6 +79,21 @@ public class JwtTokenUtil {
     }
 
     public ConfirmToken parseConfirmToken(String token) {
-        return getClaimFromToken(token, claims -> claims.get("confirm", ConfirmToken.class));
+        try {
+            final Map<String, String> confirm =
+                    getClaimFromToken(token, (Function<Claims, Map<String, String>>) claims -> claims.get("confirm", Map.class));
+
+            final ConfirmToken confirmToken = ConfirmToken.builder()
+                    .code(confirm.get("code"))
+                    .email(confirm.get("email"))
+                    .type(TokenType.getByName(confirm.get("type")))
+                    .build();
+            if (confirmToken.isValidToken()) {
+                return confirmToken;
+            }
+        } catch (SignatureException ignored) {
+
+        }
+        throw new IncorrectConfirmTokenException("Ошибка в данных токена");
     }
 }
