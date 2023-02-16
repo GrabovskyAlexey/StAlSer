@@ -9,6 +9,7 @@ import ru.gb.stalser.core.controllers.interfaces.InviteController;
 import ru.gb.stalser.core.mappers.InviteMapper;
 import ru.gb.stalser.core.services.interfaces.InviteService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,28 +19,29 @@ import java.util.stream.Collectors;
 public class InviteControllerImpl implements InviteController {
     private final InviteService inviteService;
     private final InviteMapper inviteMapper;
+
     @Override
-    public ResponseEntity<List<InviteDto>> getAllInvites() {
+    public ResponseEntity<List<InviteDto>> getAllInvites(Principal principal) {
         return ResponseEntity.ok(inviteService.findAll().stream().map(inviteMapper::mapToDto).collect(Collectors.toList()));
     }
 
     @Override
-    public ResponseEntity<InviteDto> getInviteById(Long id) {
+    public ResponseEntity<InviteDto> getInviteById(Long id, Principal principal) {
         return ResponseEntity.ok(inviteMapper.mapToDto(inviteService.findById(id)));
     }
 
     @Override
-    public ResponseEntity<InviteDto> addInvite(InviteDto invite) {
+    public ResponseEntity<InviteDto> addInvite(InviteDto invite, Principal principal) {
         return ResponseEntity.ok(inviteMapper.mapToDto(inviteService.save(inviteMapper.mapFromDto(invite))));
     }
 
     @Override
-    public void updateInvite(Long id, InviteDto invite) {
+    public void updateInvite(Long id, InviteDto invite, Principal principal) {
         inviteService.update(inviteMapper.mapFromDto(invite));
     }
 
     @Override
-    public void deleteInvite(Long id) {
+    public void deleteInvite(Long id, Principal principal) {
         inviteService.deleteById(id);
     }
 }

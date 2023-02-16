@@ -152,7 +152,7 @@ public interface HelloController {
     /**
      * DELETE /${stalser.api.url}/hello/{id} : Delete hello by id
      *
-     * @param id       hello id (required)
+     * @param id hello id (required)
      * @return Successfully delete hello (status code 200)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
