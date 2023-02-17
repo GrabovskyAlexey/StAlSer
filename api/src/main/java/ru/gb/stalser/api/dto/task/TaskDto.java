@@ -73,7 +73,7 @@ public class TaskDto {
     private UserDto creator;
 
     @Schema(description = "Список спринтов в которых")
-    @JsonProperty("tasks")
+    @JsonProperty("tags")
     private List<TagDto> tags;
 
     @Schema(description = "Список спринтов")
