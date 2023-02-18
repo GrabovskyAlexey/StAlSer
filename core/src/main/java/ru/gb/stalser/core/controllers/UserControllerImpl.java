@@ -11,6 +11,7 @@ import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.core.controllers.interfaces.UserController;
 import ru.gb.stalser.core.services.UserServiceImpl;
 
+
 @RestController
 @RequestMapping
 @RequiredArgsConstructor

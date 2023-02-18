@@ -2,17 +2,12 @@ package ru.gb.stalser.core.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Objects;
 
 
-@Entity
 @Getter
 @Setter
-@ToString
 public abstract class BaseEntity {
-    @Id
     private Long id;
 
     public BaseEntity(Long id) {

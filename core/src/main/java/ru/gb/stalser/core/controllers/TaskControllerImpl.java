@@ -10,6 +10,7 @@ import ru.gb.stalser.core.controllers.interfaces.TaskController;
 import ru.gb.stalser.core.mappers.TaskMapper;
 import ru.gb.stalser.core.services.interfaces.TaskService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class TaskControllerImpl implements TaskController {
     private final TaskMapper taskMapper;
 
     @Override
-    public ResponseEntity<List<TaskDto>> getAllTasks() {
+    public ResponseEntity<List<TaskDto>> getAllTasks(Principal principal) {
         return ResponseEntity.ok(
                 taskService.findAll().stream()
                         .map(taskMapper::mapToDto)
@@ -31,12 +32,12 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<TaskDto> getTaskById(final Long id) {
+    public ResponseEntity<TaskDto> getTaskById(final Long id, Principal principal) {
         return ResponseEntity.ok(taskMapper.mapToDto(taskService.findById(id)));
     }
 
     @Override
-    public ResponseEntity<TaskDto> addTask(final TaskDto task) {
+    public ResponseEntity<TaskDto> addTask(final TaskDto task, Principal principal) {
         return ResponseEntity.ok(
                 taskMapper.mapToDto(
                         taskService.save(taskMapper.mapFromDto(task))
@@ -45,12 +46,12 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public void updateTask(final Long id, final TaskDto task) {
+    public void updateTask(final Long id, final TaskDto task, Principal principal) {
         taskService.update(taskMapper.mapFromDto(task));
     }
 
     @Override
-    public void deleteTask(final Long id) {
+    public void deleteTask(final Long id, Principal principal) {
         taskService.deleteById(id);
     }
 }

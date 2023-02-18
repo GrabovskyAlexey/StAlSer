@@ -1,0 +1,32 @@
+.navbar {
+    background-color: #e3f2fd;
+    /*padding: 0;*/
+}
+.d-flex {
+    margin-right: 10px;
+}
+form.dropdown-menu{
+    --bs-dropdown-min-width: 15rem
+}
+
+.inner-card {
+    margin: 10px;
+}
+.container{
+    padding-bottom: 10px;
+}
+
+.board-column{
+    width: 15rem;
+}
+.inner-card .card-title {
+    font-size: small;
+    text-align: left;
+}
+.card{
+    --bs-card-title-spacer-y: 0;
+}
+
+.card-title {
+    text-align: center;
+}

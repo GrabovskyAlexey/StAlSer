@@ -15,6 +15,7 @@ import ru.gb.stalser.api.dto.invite.InviteDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Validated
@@ -44,7 +45,7 @@ public interface InviteController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<InviteDto>> getAllInvites();
+    ResponseEntity<List<InviteDto>> getAllInvites(Principal principal);
 
     /**
      * GET /${stalser.api.url}/invites/{id} : Get invite by id
@@ -75,7 +76,9 @@ public interface InviteController {
             produces = {"application/json"}
     )
     ResponseEntity<InviteDto> getInviteById(
-            @Parameter(name = "id", description = "идентификатор приглашения", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "идентификатор приглашения", required = true)
+            @PathVariable("id") Long id,
+            Principal principal
     );
 
     /**
@@ -108,7 +111,9 @@ public interface InviteController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<InviteDto> addInvite(
-            @Parameter(name = "invite", description = "Приглашение", required = true) @Valid @RequestBody InviteDto invite
+            @Parameter(name = "invite", description = "Приглашение", required = true)
+            @Valid @RequestBody InviteDto invite,
+            Principal principal
     );
 
     /**
@@ -146,13 +151,15 @@ public interface InviteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateInvite(
             @Parameter(name = "id", description = "идентификатор приглашения", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "invite", description = "Приглашение", required = true) @Valid @RequestBody InviteDto invite
+            @Parameter(name = "invite", description = "Приглашение", required = true)
+            @Valid @RequestBody InviteDto invite,
+            Principal principal
     );
 
     /**
      * DELETE /${stalser.api.url}/invites/{id} : Delete invite by id
      *
-     * @param id       invite id (required)
+     * @param id invite id (required)
      * @return Successfully delete invite (status code 200)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
@@ -181,6 +188,8 @@ public interface InviteController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteInvite(
-            @Parameter(name = "id", description = "идентификатор приглашения", required = true) @PathVariable("id") Long id
+            @Parameter(name = "id", description = "идентификатор приглашения", required = true)
+            @PathVariable("id") Long id,
+            Principal principal
     );
 }
