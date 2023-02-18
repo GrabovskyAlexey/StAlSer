@@ -24,10 +24,10 @@ public class Role extends BaseEntity {
     private Long id;
 
 
-    @JoinColumn(name = "role_name")
+    @Column(name = "role_name")
     private String roleName;
 
-    @JoinColumn(name = "role_desc")
+    @Column(name = "role_desc")
     private String roleDescription;
 
     @CreationTimestamp
