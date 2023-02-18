@@ -7,6 +7,7 @@ import ru.gb.stalser.api.dto.auth.AuthResponse;
 import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.core.entity.User;
 
+import javax.security.auth.message.AuthException;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
@@ -26,4 +27,6 @@ public interface UserService extends UserDetailsService {
     Boolean existsByEmail(String email);
 
     AuthResponse authenticate(AuthRequest authRequest);
+
+    AuthResponse refresh(String refreshToken) throws AuthException;
 }
