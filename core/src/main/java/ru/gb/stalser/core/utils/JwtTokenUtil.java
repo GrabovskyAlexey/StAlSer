@@ -43,7 +43,7 @@ public class JwtTokenUtil {
         claims.put("roles", rolesList);
 
         Date issuedDate = new Date();
-        final Instant refresh = LocalDateTime.now().plusDays(accessLifetime).toInstant(ZoneOffset.UTC);
+        final Instant refresh = LocalDateTime.now().plusMinutes(accessLifetime).toInstant(ZoneOffset.UTC);
         final Date expiredDate = Date.from(refresh);
         return Jwts.builder()
                 .setClaims(claims)
