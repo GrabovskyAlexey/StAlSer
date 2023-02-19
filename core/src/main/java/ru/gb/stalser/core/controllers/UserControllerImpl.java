@@ -13,6 +13,8 @@ import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.core.controllers.interfaces.UserController;
 import ru.gb.stalser.core.services.UserServiceImpl;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<AuthResponse> changePassword (@RequestBody AuthRequestPassUpdate authRequestPassUpdate){
+    public ResponseEntity<AuthResponse> changePassword (@RequestBody AuthRequestPassUpdate authRequestPassUpdate, Principal principal){
         return ResponseEntity.ok(userService.registerPassUpdate(authRequestPassUpdate));
     }
 }

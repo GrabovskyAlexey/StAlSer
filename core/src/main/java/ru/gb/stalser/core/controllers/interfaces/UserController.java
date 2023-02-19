@@ -18,6 +18,7 @@ import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Tag(name = "auth", description = "Контроллер для аутентификации")
 public interface UserController {
@@ -108,7 +109,7 @@ public interface UserController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<AuthResponse> changePassword(
-            @Parameter(name = "RegisterUpdateRequest", description = "AuthRequestPassUpdate Item", required = true) @Valid @RequestBody AuthRequestPassUpdate authRequestPassUpdate
+            @Parameter(name = "RegisterUpdateRequest", description = "AuthRequestPassUpdate Item", required = true) @Valid @RequestBody AuthRequestPassUpdate authRequestPassUpdate, Principal principal
             );
 
 

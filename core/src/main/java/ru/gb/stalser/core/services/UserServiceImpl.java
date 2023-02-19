@@ -30,6 +30,7 @@ import ru.gb.stalser.core.services.interfaces.UserService;
 import ru.gb.stalser.core.utils.JwtTokenUtil;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -134,13 +135,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate) throws NullPointerException{
+
+        Principal principal
         
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) {
-            return null;
-        }
-        Object principal = auth.getPrincipal();
-        User user = (principal instanceof User) ? (User) principal : null;
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth == null) {
+//            return null;
+//        }
+//        Object principal = auth.getPrincipal();
+//        User user = (principal instanceof User) ? (User) principal : null;
 
         if(bCryptPasswordEncoder.matches(authRequestPassUpdate.getOldPassword(), user.getPassword())){
             user.setPassword(bCryptPasswordEncoder.encode(authRequestPassUpdate.getNewPassword()));
