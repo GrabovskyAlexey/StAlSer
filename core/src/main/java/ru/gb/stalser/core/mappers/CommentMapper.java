@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import ru.gb.stalser.api.dto.comment.CommentDto;
 import ru.gb.stalser.core.entity.Comment;
 
-@Mapper
+@Mapper(uses = {UserMapper.class})
 public interface CommentMapper {
 
     CommentDto mapToDto(Comment entity);
