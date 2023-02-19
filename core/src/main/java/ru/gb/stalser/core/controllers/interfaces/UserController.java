@@ -107,7 +107,7 @@ public interface UserController {
             consumes = {"application/json"},
             path = {"/password/change"}
     )
-    @ResponseStatus(HttpStatus.CREATED)
+
     ResponseEntity<AuthResponse> changePassword(
             @Parameter(name = "RegisterUpdateRequest", description = "AuthRequestPassUpdate Item", required = true)
             @Valid @RequestBody AuthRequestPassUpdate authRequestPassUpdate,
