@@ -2,6 +2,8 @@ package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.gb.stalser.api.dto.tag.TagDto;
+import ru.gb.stalser.core.entity.Tag;
 import ru.gb.stalser.core.entity.Task;
 import ru.gb.stalser.core.repositories.TaskRepository;
 import ru.gb.stalser.core.services.interfaces.TaskService;
@@ -41,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findAllBy(String str) {
-        return taskRepository.findAllBy(str);
+    public List<Task> findAllTaskByTag(TagDto tag) {
+        return taskRepository.findAllByTagsContaining(tag);
     }
 }

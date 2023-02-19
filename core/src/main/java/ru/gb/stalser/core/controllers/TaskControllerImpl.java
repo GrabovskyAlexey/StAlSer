@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.api.dto.task.TaskDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 import ru.gb.stalser.core.controllers.interfaces.TaskController;
@@ -37,9 +38,9 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<List<TaskDto>> getAllBy(String tagName) {
+    public ResponseEntity<List<TaskDto>> getAllTaskByTag(TagDto tagDto) {
         return ResponseEntity.ok(
-                taskService.findAllBy(tagName)
+                taskService.findAllTaskByTag(tagDto)
                         .stream()
                         .map(taskMapper::mapToDto)
                         .collect(Collectors.toList())
