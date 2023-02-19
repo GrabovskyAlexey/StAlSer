@@ -35,6 +35,6 @@ public class UserControllerImpl implements UserController {
 
     @Override
     public ResponseEntity<AuthResponse> changePassword (@RequestBody AuthRequestPassUpdate authRequestPassUpdate, Principal principal){
-        return ResponseEntity.ok(userService.registerPassUpdate(authRequestPassUpdate));
+        return ResponseEntity.ok(userService.registerPassUpdate(authRequestPassUpdate, principal));
     }
 }

@@ -23,6 +23,8 @@ import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.core.entity.Role;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.exceptions.EmailAlreadyExistsException;
+import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
+import ru.gb.stalser.core.exceptions.PasswordNotConfirmedException;
 import ru.gb.stalser.core.exceptions.UserAlreadyExistsException;
 import ru.gb.stalser.core.repositories.UserRepository;
 import ru.gb.stalser.core.services.interfaces.RoleService;
@@ -134,27 +136,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate) throws NullPointerException{
+    public AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate, Principal principal){
 
-        Principal principal
-        
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth == null) {
-//            return null;
-//        }
-//        Object principal = auth.getPrincipal();
-//        User user = (principal instanceof User) ? (User) principal : null;
+        User user = userRepository.findByLogin(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User '%s' not found", principal.getName())));
 
-        if(bCryptPasswordEncoder.matches(authRequestPassUpdate.getOldPassword(), user.getPassword())){
+        if (!bCryptPasswordEncoder.matches(authRequestPassUpdate.getOldPassword(), user.getPassword())) {
+            throw new PasswordNotConfirmedException(String.format("Пароль пользователя '%s' не подтвержден", user.getLogin()));
+        }
+
             user.setPassword(bCryptPasswordEncoder.encode(authRequestPassUpdate.getNewPassword()));
             userRepository.save(user);
             UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), authRequestPassUpdate.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
             String token = jwtTokenUtil.generateToken(userDetails);
             return new AuthResponse(token);
-        }else {
-           return new AuthResponse(String.format("Пароль пользователя '%s' не подтвержден", user.getLogin()));
-        }
-
 
     }
 }

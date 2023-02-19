@@ -8,6 +8,7 @@ import ru.gb.stalser.api.dto.auth.AuthResponse;
 import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.core.entity.User;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
@@ -28,5 +29,5 @@ public interface UserService extends UserDetailsService {
 
     AuthResponse authenticate(AuthRequest authRequest);
 
-    AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate);
+    AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate, Principal principal);
 }

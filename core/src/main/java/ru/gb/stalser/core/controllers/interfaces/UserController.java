@@ -109,7 +109,9 @@ public interface UserController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<AuthResponse> changePassword(
-            @Parameter(name = "RegisterUpdateRequest", description = "AuthRequestPassUpdate Item", required = true) @Valid @RequestBody AuthRequestPassUpdate authRequestPassUpdate, Principal principal
+            @Parameter(name = "RegisterUpdateRequest", description = "AuthRequestPassUpdate Item", required = true)
+            @Valid @RequestBody AuthRequestPassUpdate authRequestPassUpdate,
+            Principal principal
             );
 
 
