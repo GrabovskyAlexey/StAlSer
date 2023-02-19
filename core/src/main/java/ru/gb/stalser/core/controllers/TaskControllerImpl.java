@@ -38,7 +38,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<List<TaskDto>> getAllTaskByTag(TagDto tagDto) {
+    public ResponseEntity<List<TaskDto>> getAllTaskByTag(TagDto tagDto, Principal principal) {
         return ResponseEntity.ok(
                 taskService.findAllTaskByTag(tagDto)
                         .stream()
