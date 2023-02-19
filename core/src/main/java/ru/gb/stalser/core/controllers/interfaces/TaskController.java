@@ -108,7 +108,7 @@ public interface TaskController {
     ResponseEntity<List<TaskDto>> getAllTaskByTag(
             @Parameter(name = "tag", description = "Tags item", required = true)
             @Valid @RequestBody TagDto tagDto,
-            @Parameter Principal principal
+            Principal principal
             );
 
     /**
