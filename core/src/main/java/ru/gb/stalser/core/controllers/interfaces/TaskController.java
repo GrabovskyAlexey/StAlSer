@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.api.dto.task.TaskDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
@@ -79,6 +80,36 @@ public interface TaskController {
             @PathVariable("id") Long id,
             Principal principal
     );
+
+    /**
+     * GET /${stalser.api.url}/tasks/tag : Get list of Task by Tag's name
+     *
+     * @param tagDto Tag item (required)
+     * @return Get list of task (status code 200)
+     * or Bad Request (status code 400)
+     */
+    @Operation(
+            operationId = "getTasksByTagsName",
+            summary = "Получить список задач по тегу",
+            tags = {"task"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Задача", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+            }
+    )
+    @GetMapping(
+            value = "/tag",
+            produces = {"application/json"}
+    )
+    ResponseEntity<List<TaskDto>> getAllTaskByTag(
+            @Parameter(name = "tag", description = "Tags item", required = true)
+            @Valid @RequestBody TagDto tagDto,
+            Principal principal
+            );
 
     /**
      * POST /${stalser.api.url}/tasks : Add task
