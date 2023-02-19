@@ -81,6 +81,39 @@ public interface TaskController {
     );
 
     /**
+     * GET /${stalser.api.url}/tasks/{tagName} : Get list of Task by Tag's name
+     *
+     * @param tagName Tag's name (required)
+     * @return Get list of task (status code 200)
+     * or Bad Request (status code 400)
+     * or Not found task (status code 404)
+     */
+    @Operation(
+            operationId = "getTasksByTagsName",
+            summary = "Получить список задач по тегу",
+            tags = {"task"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Задача", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Задача не найдена", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    })
+            }
+    )
+    @GetMapping(
+            value = "/{tagName}",
+            produces = {"application/json"}
+    )
+    ResponseEntity<List<TaskDto>> getAllBy(
+            @Parameter(name = "tagName", description = "Tags name", required = true)
+            @PathVariable("tagName") String tagName
+    );
+
+    /**
      * POST /${stalser.api.url}/tasks : Add task
      *
      * @param task task Item (required)

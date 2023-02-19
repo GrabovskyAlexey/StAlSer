@@ -37,6 +37,16 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
+    public ResponseEntity<List<TaskDto>> getAllBy(String tagName) {
+        return ResponseEntity.ok(
+                taskService.findAllBy(tagName)
+                        .stream()
+                        .map(taskMapper::mapToDto)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Override
     public ResponseEntity<TaskDto> addTask(final TaskDto task, Principal principal) {
         return ResponseEntity.ok(
                 taskMapper.mapToDto(

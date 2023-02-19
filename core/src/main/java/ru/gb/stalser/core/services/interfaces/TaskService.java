@@ -14,4 +14,6 @@ public interface TaskService {
     void update(Task task);
 
     void deleteById(Long id);
+
+    List<Task> findAllBy (String str);
 }
