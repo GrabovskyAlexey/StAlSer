@@ -1,5 +1,4 @@
 package ru.gb.stalser.core.controllers.interfaces;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -13,12 +12,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.api.dto.task.TaskDto;
+import ru.gb.stalser.api.dto.user.UserDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-
 @Validated
 @Tag(name = "task", description = "Контроллер для работы с задачами")
 public interface TaskController {
@@ -46,7 +45,6 @@ public interface TaskController {
             produces = {"application/json"}
     )
     ResponseEntity<List<TaskDto>> getAllTasks(Principal principal);
-
     /**
      * GET /${stalser.api.url}/tasks/{id} : Get Task by id
      *
@@ -101,6 +99,7 @@ public interface TaskController {
                     }),
             }
     )
+
     @GetMapping(
             value = "/tag",
             produces = {"application/json"}
@@ -109,7 +108,34 @@ public interface TaskController {
             @Parameter(name = "tag", description = "Tags item", required = true)
             @Valid @RequestBody TagDto tagDto,
             Principal principal
-            );
+    );
+    /**
+     * GET /${stalser.api.url}/tasks/{userId} : Get Task by user
+     *
+     * @param userId User id (required)
+     * @return Get one task (status code 200)
+     * or Bad Request (status code 400)
+     * or Not found task (status code 404)
+     */
+    @Operation(
+            operationId = "getTaskByUser",
+            summary = "Получить Список задач по пользователю",
+            tags = {"task"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Список задач", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "пользователь не найден", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    })
+            }
+    )
+    @GetMapping(produces = {"application/json"})
+    ResponseEntity<List<TaskDto>> getTasksByUser(@Parameter(name = "userId", description = "user id", required = true)
+                                                 @PathVariable("userId") UserDto userId, Principal principal);
 
     /**
      * POST /${stalser.api.url}/tasks : Add task
@@ -134,7 +160,6 @@ public interface TaskController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
-
     )
     @PostMapping(
             produces = {"application/json"},
@@ -146,7 +171,6 @@ public interface TaskController {
             @Valid @RequestBody TaskDto task,
             Principal principal
     );
-
     /**
      * PUT /${stalser.api.url}/tasks/{id} : Update task by id
      *
@@ -183,7 +207,6 @@ public interface TaskController {
             @Parameter(name = "Task", description = "Task Item", required = true) @Valid @RequestBody TaskDto task,
             Principal principal
     );
-
     /**
      * DELETE /${stalser.api.url}/tasks/{id} : Delete task by id
      *
@@ -220,5 +243,4 @@ public interface TaskController {
             @PathVariable("id") Long id,
             Principal principal
     );
-
 }
