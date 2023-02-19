@@ -32,7 +32,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<AuthResponse> registerUpdate (@RequestBody AuthRequestPassUpdate authRequestPassUpdate){
+    public ResponseEntity<AuthResponse> changePassword (@RequestBody AuthRequestPassUpdate authRequestPassUpdate){
         return ResponseEntity.ok(userService.registerPassUpdate(authRequestPassUpdate));
     }
 }

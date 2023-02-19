@@ -1,13 +1,16 @@
 package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,7 +24,7 @@ import ru.gb.stalser.core.entity.Role;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.exceptions.EmailAlreadyExistsException;
 import ru.gb.stalser.core.exceptions.UserAlreadyExistsException;
-import ru.gb.stalser.core.services.repositories.UserRepository;
+import ru.gb.stalser.core.repositories.UserRepository;
 import ru.gb.stalser.core.services.interfaces.RoleService;
 import ru.gb.stalser.core.services.interfaces.UserService;
 import ru.gb.stalser.core.utils.JwtTokenUtil;
@@ -130,18 +133,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate){
+    public AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate) throws NullPointerException{
+        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            return null;
+        }
+        Object principal = auth.getPrincipal();
+        User user = (principal instanceof User) ? (User) principal : null;
 
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestPassUpdate.getLogin(), authRequestPassUpdate.getOldPassword()));
+        if(bCryptPasswordEncoder.matches(authRequestPassUpdate.getOldPassword(), user.getPassword())){
+            user.setPassword(bCryptPasswordEncoder.encode(authRequestPassUpdate.getNewPassword()));
+            userRepository.save(user);
+            UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), authRequestPassUpdate.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
+            String token = jwtTokenUtil.generateToken(userDetails);
+            return new AuthResponse(token);
+        }else {
+           return new AuthResponse(String.format("Пароль пользователя '%s' не подтвержден", user.getLogin()));
+        }
 
-        User user = userRepository.findByLogin(authRequestPassUpdate.getLogin())
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("User '%s' not found", authRequestPassUpdate.getLogin())));
-
-        user.setPassword(bCryptPasswordEncoder.encode(authRequestPassUpdate.getNewPassword()));
-        userRepository.save(user);
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), authRequestPassUpdate.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
-        String token = jwtTokenUtil.generateToken(userDetails);
-        return new AuthResponse(token);
 
     }
 }

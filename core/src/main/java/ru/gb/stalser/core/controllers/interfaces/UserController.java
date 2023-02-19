@@ -104,10 +104,10 @@ public interface UserController {
     @PostMapping(
             produces = {"application/json"},
             consumes = {"application/json"},
-            path = {"/register/update"}
+            path = {"/password/change"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<AuthResponse> registerUpdate(
+    ResponseEntity<AuthResponse> changePassword(
             @Parameter(name = "RegisterUpdateRequest", description = "AuthRequestPassUpdate Item", required = true) @Valid @RequestBody AuthRequestPassUpdate authRequestPassUpdate
             );
 
