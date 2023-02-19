@@ -1,7 +1,6 @@
 package ru.stalser.framework.helpers;
 
 
-import io.qameta.allure.attachment.DefaultAttachmentProcessor;
 import io.qameta.allure.attachment.FreemarkerAttachmentRenderer;
 import io.qameta.allure.attachment.http.HttpRequestAttachment;
 import io.qameta.allure.attachment.http.HttpResponseAttachment;
@@ -39,7 +38,7 @@ public class RestAssuredLoggingFilter extends AllureRestAssured {
         }
 
         HttpRequestAttachment requestAttachment = requestAttachmentBuilder.build();
-        (new DefaultAttachmentProcessor()).addAttachment(requestAttachment, new FreemarkerAttachmentRenderer("custom_http_request.ftl"));
+        (new CustomAttachmentProcessor()).addAttachment(requestAttachment, new FreemarkerAttachmentRenderer("custom_http_request.ftl"));
         Response response = filterContext.next(requestSpec, responseSpec);
         HttpResponseAttachment responseAttachment = HttpResponseAttachment.Builder.create
                         (responseName.isEmpty() ? "API response" + response.getStatusLine() + " " + requestSpec.getDerivedPath() : responseName)
@@ -47,7 +46,7 @@ public class RestAssuredLoggingFilter extends AllureRestAssured {
                 .setHeaders(toMapConverter(response.getHeaders()))
                 .setBody(StringEscapeUtils.escapeHtml4(prettifier.getPrettifiedBodyIfPossible(response, response.getBody())))
                 .build();
-        (new DefaultAttachmentProcessor()).addAttachment(responseAttachment, new FreemarkerAttachmentRenderer("custom_http_response.ftl"));
+        (new CustomAttachmentProcessor()).addAttachment(responseAttachment, new FreemarkerAttachmentRenderer("custom_http_response.ftl"));
 
         return response;
     }

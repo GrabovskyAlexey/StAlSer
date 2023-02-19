@@ -56,7 +56,7 @@ public class AllureHelper {
     }
 
     @Attachment(value = "{0}", type = "text/plain")
-    static String attachTxt(String title, String message) {
+    public static String attachTxt(String title, String message) {
         return message;
     }
 
