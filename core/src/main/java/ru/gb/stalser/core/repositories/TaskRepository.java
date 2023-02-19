@@ -12,6 +12,7 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
 
-    List<Task> findAllByTagsContaining (TagDto tag);
+
+    List<Task> findAllByTagsContaining (Tag tag);
 
 }

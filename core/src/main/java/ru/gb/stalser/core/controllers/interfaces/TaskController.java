@@ -87,7 +87,6 @@ public interface TaskController {
      * @param tagDto Tag item (required)
      * @return Get list of task (status code 200)
      * or Bad Request (status code 400)
-     * or Not found task (status code 404)
      */
     @Operation(
             operationId = "getTasksByTagsName",
@@ -100,9 +99,6 @@ public interface TaskController {
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Задача не найдена", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
-                    })
             }
     )
     @GetMapping(
