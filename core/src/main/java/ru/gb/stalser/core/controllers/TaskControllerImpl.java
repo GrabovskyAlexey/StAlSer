@@ -47,9 +47,9 @@ public class TaskControllerImpl implements TaskController {
         );
     }
     @Override
-    public ResponseEntity<List<TaskDto>> getTasksByUser(final UserDto userId, Principal principal) {
+    public ResponseEntity<List<TaskDto>> getTasksByUser(final UserDto user, Principal principal) {
         return ResponseEntity.ok(
-                taskService.getTasksByUser(userId).stream()
+                taskService.getTasksByUser(user).stream()
                         .map(taskMapper::mapToDto)
                         .collect(Collectors.toList()));
     }

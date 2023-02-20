@@ -110,9 +110,9 @@ public interface TaskController {
             Principal principal
     );
     /**
-     * GET /${stalser.api.url}/tasks/{userId} : Get Task by user
+     * GET /${stalser.api.url}/tasks/{user} : Get Task by user
      *
-     * @param userId User id (required)
+     * @param user User id (required)
      * @return Get one task (status code 200)
      * or Bad Request (status code 400)
      * or Not found task (status code 404)
@@ -127,15 +127,12 @@ public interface TaskController {
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
-                    }),
-                    @ApiResponse(responseCode = "404", description = "пользователь не найден", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     })
             }
     )
     @GetMapping(produces = {"application/json"})
-    ResponseEntity<List<TaskDto>> getTasksByUser(@Parameter(name = "userId", description = "user id", required = true)
-                                                 @PathVariable("userId") UserDto userId, Principal principal);
+    ResponseEntity<List<TaskDto>> getTasksByUser(@Parameter(name = "user", description = "user", required = true)
+                                                 @PathVariable("user") UserDto user, Principal principal);
 
     /**
      * POST /${stalser.api.url}/tasks : Add task
