@@ -23,7 +23,11 @@ stalser:
     url: localhost:${server.port}/${stalser.api.url}
     email-address-from: "stalser.app@mail.ru"
 jwt:
-  secret: sdfsdfsef5hrjghjukl3kjol5rt653w4r3w43r54rty6tyui6675r54e6w454e52rtu4y13ty5u
-  lifetime: 360000000
+  access:
+    secret: sdfsdfsef5hrjghjukl3kjol5rt653w4r3w43r54rty6tyui6675r54e6w454e52rtu4y13ty5u
+    lifetime: 60 # в минутах
+  refresh:
+    secret: cx09v8fd09fsghds0fg9ds-0gsd0-g8sd-0gf9sd9gfs09fgsudfg0s-dfg7sdgfsd9gjudisjg
+    lifetime: 30 # в днях
 kafka:
   server: localhost:9092

@@ -1,5 +1,6 @@
 package ru.gb.stalser.core.services;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.http.HttpStatus;
@@ -20,12 +21,14 @@ import ru.gb.stalser.api.dto.auth.AuthRequest;
 import ru.gb.stalser.api.dto.auth.AuthRequestPassUpdate;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
 import ru.gb.stalser.api.dto.auth.RegisterRequest;
+import ru.gb.stalser.core.entity.RefreshToken;
 import ru.gb.stalser.core.entity.Role;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.exceptions.EmailAlreadyExistsException;
 import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
 import ru.gb.stalser.core.exceptions.PasswordNotConfirmedException;
 import ru.gb.stalser.core.exceptions.UserAlreadyExistsException;
+import ru.gb.stalser.core.repositories.RefreshTokenRepository;
 import ru.gb.stalser.core.repositories.UserRepository;
 import ru.gb.stalser.core.services.interfaces.RoleService;
 import ru.gb.stalser.core.services.interfaces.UserService;
@@ -33,6 +36,7 @@ import ru.gb.stalser.core.utils.JwtTokenUtil;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
+import javax.security.auth.message.AuthException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,6 +49,8 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
+
+    private final RefreshTokenRepository refreshRepository;
 
     @Override
     public List<User> findAll() {
@@ -100,7 +106,14 @@ public class UserServiceImpl implements UserService {
 
         final UserDetails userDetails = loadUserByUsername(registerRequest.getLogin());
 
-        return new AuthResponse(jwtTokenUtil.generateToken(userDetails));
+        String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+        String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+        final RefreshToken refresh = RefreshToken.builder()
+                .id(userDetails.getUsername())
+                .token(refreshToken)
+                .build();
+        refreshRepository.save(refresh);
+        return new AuthResponse(accessToken, refreshToken);
     }
 
     @Override
@@ -131,8 +144,36 @@ public class UserServiceImpl implements UserService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getLogin(), authRequest.getPassword()));
 
         UserDetails userDetails = loadUserByUsername(authRequest.getLogin());
-        String token = jwtTokenUtil.generateToken(userDetails);
-        return new AuthResponse(token);
+        String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+        String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+        final RefreshToken refresh = RefreshToken.builder()
+                .id(userDetails.getUsername())
+                .token(refreshToken)
+                .build();
+        refreshRepository.save(refresh);
+        return new AuthResponse(accessToken, refreshToken);
+    }
+
+    @Override
+    public AuthResponse refresh(String refreshToken) throws AuthException {
+        if (jwtTokenUtil.validateRefreshToken(refreshToken)) {
+            final Claims claims = jwtTokenUtil.getRefreshClaims(refreshToken);
+            final String login = claims.getSubject();
+            final String saveRefreshToken = refreshRepository.findById(login)
+                    .orElseThrow(() -> new AuthException("Невалидный JWT токен")).getToken();
+            if (saveRefreshToken.equals(refreshToken)) {
+                final UserDetails user = loadUserByUsername(login);
+                final String accessToken = jwtTokenUtil.generateAccessToken(user);
+                final String newRefreshToken = jwtTokenUtil.generateRefreshToken(user);
+                final RefreshToken refresh = RefreshToken.builder()
+                        .id(login)
+                        .token(newRefreshToken)
+                        .build();
+                refreshRepository.save(refresh);
+                return new AuthResponse(accessToken, newRefreshToken);
+            }
+        }
+        throw new AuthException("Невалидный JWT токен");
     }
 
     @Override
@@ -148,8 +189,9 @@ public class UserServiceImpl implements UserService {
             user.setPassword(bCryptPasswordEncoder.encode(authRequestPassUpdate.getNewPassword()));
             userRepository.save(user);
             UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), authRequestPassUpdate.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
-            String token = jwtTokenUtil.generateToken(userDetails);
-            return new AuthResponse(token);
+            String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+            String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+            return new AuthResponse(accessToken, refreshToken);
 
     }
 }

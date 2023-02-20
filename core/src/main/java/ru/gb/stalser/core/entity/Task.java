@@ -50,12 +50,12 @@ public class Task extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "assignee_id")
     @ToString.Exclude
-    private User assigneeId;
+    private User assignee;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
     @ToString.Exclude
-    private User creatorId;
+    private User creator;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -67,7 +67,7 @@ public class Task extends BaseEntity {
 
     @ManyToMany
     @JoinTable(
-            name ="tasks_sprints",
+            name = "tasks_sprints",
             joinColumns = @JoinColumn(name = "tasks_id"),
             inverseJoinColumns = @JoinColumn(name = "sprints_id")
     )
@@ -77,13 +77,12 @@ public class Task extends BaseEntity {
 
     @ManyToMany
     @JoinTable(
-            name ="tags_tasks",
+            name = "tags_tasks",
             joinColumns = @JoinColumn(name = "tasks_id"),
             inverseJoinColumns = @JoinColumn(name = "tags_id")
     )
     @ToString.Exclude
     private List<Tag> tags;
-
 
 
 }
