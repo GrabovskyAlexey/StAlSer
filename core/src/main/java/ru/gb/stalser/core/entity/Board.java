@@ -10,8 +10,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "boards")
-@Data
-public class Board extends BaseEntity{
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+public class Board extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,12 +37,11 @@ public class Board extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "creator_id")
     @ToString.Exclude
-    private User creatorId;
-
+    private User creator;
 
     @ManyToMany
     @JoinTable(
-            name ="users_boards",
+            name = "users_boards",
             joinColumns = @JoinColumn(name = "boards_id"),
             inverseJoinColumns = @JoinColumn(name = "users_id")
     )

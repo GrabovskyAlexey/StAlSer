@@ -15,6 +15,7 @@ import java.time.Instant;
 @Table(name = "invites")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Invite extends BaseEntity {
     @Id

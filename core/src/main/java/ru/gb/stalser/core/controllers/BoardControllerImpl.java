@@ -9,6 +9,7 @@ import ru.gb.stalser.core.controllers.interfaces.BoardController;
 import ru.gb.stalser.core.mappers.BoardMapper;
 import ru.gb.stalser.core.services.interfaces.BoardService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public class BoardControllerImpl implements BoardController {
     private final BoardMapper boardMapper;
 
     @Override
-    public ResponseEntity<List<BoardDto>> getAllBoards() {
+    public ResponseEntity<List<BoardDto>> getAllBoards(Principal principal) {
         return ResponseEntity.ok(
                 boardService.findAll().stream()
                         .map(boardMapper::mapToDto)
@@ -30,12 +31,12 @@ public class BoardControllerImpl implements BoardController {
     }
 
     @Override
-    public ResponseEntity<BoardDto> getBoardById(Long id) {
+    public ResponseEntity<BoardDto> getBoardById(Long id, Principal principal) {
         return ResponseEntity.ok(boardMapper.mapToDto(boardService.findById(id)));
     }
 
     @Override
-    public ResponseEntity<BoardDto> addBoard(BoardDto board) {
+    public ResponseEntity<BoardDto> addBoard(BoardDto board, Principal principal) {
         return ResponseEntity.ok(
                 boardMapper.mapToDto(
                         boardService.save(boardMapper.mapFromDto(board))
@@ -44,7 +45,7 @@ public class BoardControllerImpl implements BoardController {
     }
 
     @Override
-    public void updateBoard(Long id, BoardDto board) {
+    public void updateBoard(Long id, BoardDto board, Principal principal) {
         boardService.updateBoard(boardMapper.mapFromDto(board));
     }
 }

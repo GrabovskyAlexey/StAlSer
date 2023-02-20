@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import ru.gb.stalser.api.dto.board.BoardDto;
 import ru.gb.stalser.core.entity.Board;
 
-@Mapper
+@Mapper(uses = {UserMapper.class})
 public interface BoardMapper {
 
     BoardDto mapToDto(Board entity);

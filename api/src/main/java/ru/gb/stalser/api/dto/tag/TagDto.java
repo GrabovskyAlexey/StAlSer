@@ -6,10 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.gb.stalser.api.dto.task.TaskDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @Builder
@@ -26,4 +28,8 @@ public class TagDto {
     @Schema(description = "Имя тега")
     @JsonProperty("tagName")
     private String tagName;
+
+    @Schema(description = "Список задач")
+    @JsonProperty("tasks")
+    private List<TaskDto> tasks;
 }

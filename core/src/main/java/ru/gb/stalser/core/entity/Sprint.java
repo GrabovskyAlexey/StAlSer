@@ -10,7 +10,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "sprints")
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class Sprint extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
