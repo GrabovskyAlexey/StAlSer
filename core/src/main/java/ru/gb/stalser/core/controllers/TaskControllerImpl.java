@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.api.dto.task.TaskDto;
-import ru.gb.stalser.api.dto.util.MessageDto;
+import ru.gb.stalser.api.dto.user.UserDto;
 import ru.gb.stalser.core.controllers.interfaces.TaskController;
 import ru.gb.stalser.core.mappers.TaskMapper;
 import ru.gb.stalser.core.services.interfaces.TaskService;
@@ -46,6 +46,14 @@ public class TaskControllerImpl implements TaskController {
                         .collect(Collectors.toList())
         );
     }
+    @Override
+    public ResponseEntity<List<TaskDto>> getTasksByUser(final UserDto user, Principal principal) {
+        return ResponseEntity.ok(
+                taskService.getTasksByUser(user).stream()
+                        .map(taskMapper::mapToDto)
+                        .collect(Collectors.toList()));
+    }
+
 
     @Override
     public ResponseEntity<TaskDto> addTask(final TaskDto task, Principal principal) {
