@@ -34,19 +34,21 @@ public class RestAssuredLoggingFilter extends AllureRestAssured {
                 .setHeaders(toMapConverter(requestSpec.getHeaders()))
                 .setCookies(toMapConverter(requestSpec.getCookies()));
         if (Objects.nonNull(requestSpec.getBody())) {
-            requestAttachmentBuilder.setBody(StringEscapeUtils.escapeHtml4(XMLHelper.prettyPrintString(requestSpec.getBody().toString())));
+//            requestAttachmentBuilder.setBody(StringEscapeUtils.escapeHtml4(XMLHelper.prettyPrintString(requestSpec.getBody().toString())));
+            requestAttachmentBuilder.setBody(requestSpec.getBody().toString());
         }
 
         HttpRequestAttachment requestAttachment = requestAttachmentBuilder.build();
-        (new CustomAttachmentProcessor()).addAttachment(requestAttachment, new FreemarkerAttachmentRenderer("custom_http_request.ftl"));
+        (new CustomAttachmentProcessor()).addAttachment(requestAttachment, new CustomAttachmentRenderer("custom_http_request.ftl"));
         Response response = filterContext.next(requestSpec, responseSpec);
         HttpResponseAttachment responseAttachment = HttpResponseAttachment.Builder.create
                         (responseName.isEmpty() ? "API response" + response.getStatusLine() + " " + requestSpec.getDerivedPath() : responseName)
                 .setResponseCode(response.getStatusCode())
                 .setHeaders(toMapConverter(response.getHeaders()))
-                .setBody(StringEscapeUtils.escapeHtml4(prettifier.getPrettifiedBodyIfPossible(response, response.getBody())))
+//                .setBody(StringEscapeUtils.escapeHtml4(prettifier.getPrettifiedBodyIfPossible(response, response.getBody())))
+                .setBody(prettifier.getPrettifiedBodyIfPossible(response, response.getBody()))
                 .build();
-        (new CustomAttachmentProcessor()).addAttachment(responseAttachment, new FreemarkerAttachmentRenderer("custom_http_response.ftl"));
+        (new CustomAttachmentProcessor()).addAttachment(responseAttachment, new CustomAttachmentRenderer("custom_http_response.ftl"));
 
         return response;
     }
