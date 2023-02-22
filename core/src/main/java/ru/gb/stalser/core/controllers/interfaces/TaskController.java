@@ -110,12 +110,11 @@ public interface TaskController {
             Principal principal
     );
     /**
-     * GET /${stalser.api.url}/tasks/{user} : Get Task by user
+     * GET /${stalser.api.url}/tasks/user : Get Task by user
      *
-     * @param user User id (required)
-     * @return Get one task (status code 200)
+     * @param user User item (required)
+     * @return Get List of tasks (status code 200)
      * or Bad Request (status code 400)
-     * or Not found task (status code 404)
      */
     @Operation(
             operationId = "getTaskByUser",
@@ -130,9 +129,13 @@ public interface TaskController {
                     })
             }
     )
-    @GetMapping(produces = {"application/json"})
-    ResponseEntity<List<TaskDto>> getTasksByUser(@Parameter(name = "user", description = "user", required = true)
-                                                 @PathVariable("user") UserDto user, Principal principal);
+
+    @GetMapping(
+            value = "/user",
+            produces = {"application/json"})
+    ResponseEntity<List<TaskDto>> getTasksByUser(
+            @Parameter(name = "user", description = "user", required = true)
+            @Valid @RequestBody UserDto user, Principal principal);
 
     /**
      * POST /${stalser.api.url}/tasks : Add task
