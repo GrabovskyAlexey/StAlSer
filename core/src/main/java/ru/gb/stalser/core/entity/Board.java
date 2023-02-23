@@ -6,7 +6,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "boards")
@@ -47,5 +49,14 @@ public class Board extends BaseEntity {
     )
     @ToString.Exclude
     private List<User> users;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @MapKeyJoinColumn(name = "user_id")
+    @JoinTable(
+            name = "board_binding_board_role_binding_user",
+            joinColumns = @JoinColumn(name = "board_id"),
+            inverseJoinColumns = @JoinColumn(name = "board_role_id")
+    )
+    private Map<User, BoardRole> itemAddedBy = new HashMap<>();
 
 }
