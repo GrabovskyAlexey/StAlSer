@@ -3,10 +3,13 @@ package ru.gb.stalser.core.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.gb.stalser.core.entity.Board;
+import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.repositories.BoardRepository;
 import ru.gb.stalser.core.services.interfaces.BoardService;
+import ru.gb.stalser.core.services.interfaces.UserService;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -14,11 +17,20 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final UserServiceImpl userService;
 
 
     @Override
     public List<Board> findAll() {
         return boardRepository.findAll();
+    }
+
+    @Override
+    public List<Board> findAllByUsername(Principal principal){
+
+        User user = userService.findByLogin(principal.getName());
+        return user.getBoards();
+
     }
 
     @Override
