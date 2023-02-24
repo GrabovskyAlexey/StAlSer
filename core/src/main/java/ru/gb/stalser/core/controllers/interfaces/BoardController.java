@@ -31,7 +31,7 @@ public interface BoardController {
     @Operation(
             operationId = "getUserBoards",
             summary = "Получение списка досок пользователя",
-            tags = {"userBoard"},
+            tags = {"board"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Список всех досок пользователя", content = {
                             @Content(mediaType = "application/json", array = @ArraySchema(
