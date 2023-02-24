@@ -31,6 +31,15 @@ public class BoardControllerImpl implements BoardController {
     }
 
     @Override
+    public ResponseEntity<List<BoardDto>> getUserBoards(Principal principal){
+        return ResponseEntity.ok(
+                boardService.findAllByUsername(principal).stream()
+                        .map(boardMapper::mapToDto)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Override
     public ResponseEntity<BoardDto> getBoardById(Long id, Principal principal) {
         return ResponseEntity.ok(boardMapper.mapToDto(boardService.findById(id)));
     }

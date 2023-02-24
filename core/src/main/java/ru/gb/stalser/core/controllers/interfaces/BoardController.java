@@ -47,6 +47,30 @@ public interface BoardController {
     )
     ResponseEntity<List<BoardDto>> getAllBoards(Principal principal);
 
+
+    @Operation(
+            operationId = "getUserBoards",
+            summary = "Получение списка досок пользователя",
+            tags = {"userBoard"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Список досок пользователя", content = {
+                            @Content(mediaType = "application/json", array = @ArraySchema(
+                                    schema = @Schema(implementation = BoardDto.class)))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Доски пользователя не найдены", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    })
+            }
+    )
+    @GetMapping(
+            produces = {"application/json"}
+    )
+    ResponseEntity<List<BoardDto>> getUserBoards(Principal principal);
+
+
     /**
      * GET /${stalser.api.url}/boards/{id} : Get board by id
      *
