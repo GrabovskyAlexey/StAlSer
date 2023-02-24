@@ -29,11 +29,11 @@ public interface BoardController {
      * or Bad Request (status code 400)
      */
     @Operation(
-            operationId = "getAllBoards",
-            summary = "Получение списка досок",
-            tags = {"board"},
+            operationId = "getUserBoards",
+            summary = "Получение списка досок пользователя",
+            tags = {"userBoard"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Список всех досок", content = {
+                    @ApiResponse(responseCode = "200", description = "Список всех досок пользователя", content = {
                             @Content(mediaType = "application/json", array = @ArraySchema(
                                     schema = @Schema(implementation = BoardDto.class)))
                     }),
@@ -46,29 +46,6 @@ public interface BoardController {
             produces = {"application/json"}
     )
     ResponseEntity<List<BoardDto>> getAllBoards(Principal principal);
-
-
-    @Operation(
-            operationId = "getUserBoards",
-            summary = "Получение списка досок пользователя",
-            tags = {"userBoard"},
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Список досок пользователя", content = {
-                            @Content(mediaType = "application/json", array = @ArraySchema(
-                                    schema = @Schema(implementation = BoardDto.class)))
-                    }),
-                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
-                    }),
-                    @ApiResponse(responseCode = "404", description = "Доски пользователя не найдены", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
-                    })
-            }
-    )
-    @GetMapping(
-            produces = {"application/json"}
-    )
-    ResponseEntity<List<BoardDto>> getUserBoards(Principal principal);
 
 
     /**
