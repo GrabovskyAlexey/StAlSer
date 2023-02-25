@@ -57,6 +57,6 @@ public class Board extends BaseEntity {
             joinColumns = @JoinColumn(name = "board_id"),
             inverseJoinColumns = @JoinColumn(name = "board_role_id")
     )
-    private Map<User, BoardRole> itemAddedBy = new HashMap<>();
+    private Map<User, BoardRole> usersWithRoles = new HashMap<>();
 
 }

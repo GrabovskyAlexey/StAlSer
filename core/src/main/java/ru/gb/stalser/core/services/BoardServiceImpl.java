@@ -3,6 +3,7 @@ package ru.gb.stalser.core.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.gb.stalser.core.entity.Board;
+import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.repositories.BoardRepository;
 import ru.gb.stalser.core.services.interfaces.BoardService;
 
@@ -19,6 +20,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<Board> findAll() {
         return boardRepository.findAll();
+    }
+
+    @Override
+    public List<Board> findAllByUsersContaining(User user) {
+        return boardRepository.findAllByUsersContaining(user);
     }
 
     @Override

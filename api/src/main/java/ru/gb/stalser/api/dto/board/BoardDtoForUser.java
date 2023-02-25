@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.gb.stalser.api.dto.board_role.BoardRoleDto;
+import ru.gb.stalser.api.dto.restriction.RestrictionDto;
 import ru.gb.stalser.api.dto.user.UserDto;
 
 import javax.validation.constraints.Min;
@@ -20,7 +21,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Информация о доске", name = "Board")
-public class BoardDto {
+public class BoardDtoForUser {
 
     @Schema(description = "Идентификатор доски", example = "1")
     @Min(value = 1)
@@ -56,6 +57,6 @@ public class BoardDto {
     @Schema(description = "Список пользователей")
     @JsonProperty("users")
     private List<UserDto> users;
-    @JsonProperty("usersWithRoles")
-    private Map<UserDto, BoardRoleDto> usersWithRoles;
+    @JsonProperty("restrictions")
+    private List<RestrictionDto> restrictions;
 }
