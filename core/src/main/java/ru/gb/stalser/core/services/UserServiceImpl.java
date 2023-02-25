@@ -27,6 +27,7 @@ import ru.gb.stalser.core.utils.JwtTokenUtil;
 
 import javax.persistence.EntityNotFoundException;
 import javax.security.auth.message.AuthException;
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -164,5 +165,9 @@ public class UserServiceImpl implements UserService {
             }
         }
         throw new AuthException("Невалидный JWT токен");
+    }
+    @Override
+    public User getUserFromPrincipal(Principal principal){
+        return findByLogin(principal.getName());
     }
 }
