@@ -164,9 +164,9 @@ public class DBHelper {
                 int columnCount = resultSet.getMetaData().getColumnCount();
                 for (int i = 1; i <= columnCount; i++) {
                     if (resultSet.getMetaData().getColumnTypeName(i).equals("bytea")) {
-                        resulMap.put(resultSet.getMetaData().getColumnTypeName(i), new String(resultSet.getBytes(i)));
+                        resulMap.put(resultSet.getMetaData().getColumnName(i), new String(resultSet.getBytes(i)));
                     } else {
-                        resulMap.put(resultSet.getMetaData().getColumnTypeName(i), resultSet.getString(i));
+                        resulMap.put(resultSet.getMetaData().getColumnName(i), resultSet.getString(i));
                     }
                 }
             }
