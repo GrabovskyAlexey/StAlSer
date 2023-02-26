@@ -2,22 +2,31 @@ package ru.gb.stalser.core.services;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.implementation.bytecode.Throw;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.stalser.api.dto.auth.AuthRequest;
+import ru.gb.stalser.api.dto.auth.AuthRequestPassUpdate;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
 import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.gb.stalser.core.entity.RefreshToken;
 import ru.gb.stalser.core.entity.Role;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.exceptions.EmailAlreadyExistsException;
+import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
+import ru.gb.stalser.core.exceptions.PasswordNotConfirmedException;
 import ru.gb.stalser.core.exceptions.UserAlreadyExistsException;
 import ru.gb.stalser.core.repositories.RefreshTokenRepository;
 import ru.gb.stalser.core.repositories.UserRepository;
@@ -26,6 +35,7 @@ import ru.gb.stalser.core.services.interfaces.UserService;
 import ru.gb.stalser.core.utils.JwtTokenUtil;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import javax.security.auth.message.AuthException;
 import java.security.Principal;
 import java.util.*;
@@ -166,8 +176,31 @@ public class UserServiceImpl implements UserService {
         }
         throw new AuthException("Невалидный JWT токен");
     }
+
     @Override
     public User getUserFromPrincipal(Principal principal){
         return findByLogin(principal.getName());
     }
 }
+
+
+    @Override
+    public AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate, Principal principal){
+
+        User user = userRepository.findByLogin(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User '%s' not found", principal.getName())));
+
+        if (!bCryptPasswordEncoder.matches(authRequestPassUpdate.getOldPassword(), user.getPassword())) {
+            throw new PasswordNotConfirmedException(String.format("Пароль пользователя '%s' не подтвержден", user.getLogin()));
+        }
+
+            user.setPassword(bCryptPasswordEncoder.encode(authRequestPassUpdate.getNewPassword()));
+            userRepository.save(user);
+            UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), authRequestPassUpdate.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
+            String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+            String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+            return new AuthResponse(accessToken, refreshToken);
+
+    }
+}
+

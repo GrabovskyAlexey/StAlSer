@@ -29,11 +29,11 @@ public interface BoardController {
      * or Bad Request (status code 400)
      */
     @Operation(
-            operationId = "getAllBoards",
-            summary = "Получение списка досок",
+            operationId = "getUserBoards",
+            summary = "Получение списка досок пользователя",
             tags = {"board"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Список всех досок", content = {
+                    @ApiResponse(responseCode = "200", description = "Список всех досок пользователя", content = {
                             @Content(mediaType = "application/json", array = @ArraySchema(
                                     schema = @Schema(implementation = BoardDto.class)))
                     }),
@@ -46,6 +46,7 @@ public interface BoardController {
             produces = {"application/json"}
     )
     ResponseEntity<List<BoardDto>> getAllBoards(Principal principal);
+
 
     /**
      * GET /${stalser.api.url}/boards/{id} : Get board by id
