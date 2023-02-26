@@ -1,10 +1,15 @@
 package ru.gb.stalser.core.services;
 
+import com.sun.xml.bind.v2.TODO;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bytecode.Throw;
+import org.springframework.context.MessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,10 +22,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.gb.stalser.api.dto.auth.AuthRequest;
-import ru.gb.stalser.api.dto.auth.AuthRequestPassUpdate;
-import ru.gb.stalser.api.dto.auth.AuthResponse;
-import ru.gb.stalser.api.dto.auth.RegisterRequest;
+import org.springframework.ui.Model;
+import ru.gb.stalser.api.dto.auth.*;
+import ru.gb.stalser.core.entity.PasswordResetToken;
 import ru.gb.stalser.core.entity.RefreshToken;
 import ru.gb.stalser.core.entity.Role;
 import ru.gb.stalser.core.entity.User;
@@ -30,6 +34,7 @@ import ru.gb.stalser.core.exceptions.PasswordNotConfirmedException;
 import ru.gb.stalser.core.exceptions.UserAlreadyExistsException;
 import ru.gb.stalser.core.repositories.RefreshTokenRepository;
 import ru.gb.stalser.core.repositories.UserRepository;
+import ru.gb.stalser.core.services.interfaces.PasswordResetTokenService;
 import ru.gb.stalser.core.services.interfaces.RoleService;
 import ru.gb.stalser.core.services.interfaces.UserService;
 import ru.gb.stalser.core.utils.JwtTokenUtil;
@@ -37,6 +42,7 @@ import ru.gb.stalser.core.utils.JwtTokenUtil;
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import javax.security.auth.message.AuthException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,6 +57,16 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenUtil jwtTokenUtil;
 
     private final RefreshTokenRepository refreshRepository;
+
+    private final PasswordResetTokenServiceImpl passwordResetTokenServiceImpl;
+
+    private final MessageSource messages;
+
+    private final Environment env;
+
+    private final JavaMailSender mailSender;
+
+    private final SecurityUserService securityUserService;
 
     @Override
     public List<User> findAll() {
@@ -194,4 +210,81 @@ public class UserServiceImpl implements UserService {
             return new AuthResponse(accessToken, refreshToken);
 
     }
+
+    @Override
+    public void createPasswordResetTokenForUser(final User user, final String token) {
+        final PasswordResetToken myToken = new PasswordResetToken(token, user);
+        passwordResetTokenServiceImpl.save(myToken);
+    }
+
+    @Override
+    public GenericResponse resetPassword(HttpServletRequest request, String userName){
+        User user = userRepository.findByLogin(userName)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User '%s' not found", userName)));
+        String token = UUID.randomUUID().toString();
+        createPasswordResetTokenForUser(user, token);
+        mailSender.send(constructResetTokenEmail(getAppUrl(request),
+                request.getLocale(), token, user));
+        return new GenericResponse(
+                messages.getMessage("message.resetPasswordEmail", null,
+                        request.getLocale()));
+    }
+
+    @Override
+    public String showChangePasswordPage(Locale locale, Model model, String token) {
+        String result = securityUserService.validatePasswordResetToken(token);
+        if(result != null) {
+            String message = messages.getMessage("auth.message." + result, null, locale);
+  //          TODO Отправляем страницу login
+            return "redirect:/login.html?lang=" + locale.getLanguage() + "&message=" + message;
+        } else {
+            //          TODO Отправляем страницу, с которой отправляется запрос на password/new
+            model.addAttribute("token", token);
+            return "redirect:/updatePassword.html?lang=" + locale.getLanguage();
+        }
+    }
+
+    @Override
+    public AuthResponse setNewPassword(RequestNewPass requestNewPass){
+
+        String result = securityUserService.validatePasswordResetToken(requestNewPass.getToken());
+
+        if (result != null) {
+            throw new PasswordNotConfirmedException("Токен пользователя не подтвержден");
+        }
+
+        PasswordResetToken passwordResetToken = passwordResetTokenServiceImpl.findPasswordResetTokenByToken(requestNewPass.getToken());
+        User user = passwordResetToken.getUser();
+
+        user.setPassword(bCryptPasswordEncoder.encode(requestNewPass.getNewPassword()));
+        userRepository.save(user);
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), requestNewPass.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
+        String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+        String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+        return new AuthResponse(accessToken, refreshToken);
+
+    }
+
+
+    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
+        final String url = contextPath + "/user/changePassword?token=" + token;
+        final String message = messages.getMessage("message.resetPassword", null, locale);
+        return constructEmail("Reset Password", message + " \r\n" + url, user);
+    }
+
+    private SimpleMailMessage constructEmail(String subject, String body, User user) {
+        final SimpleMailMessage email = new SimpleMailMessage();
+        email.setSubject(subject);
+        email.setText(body);
+        email.setTo(user.getEmail());
+        email.setFrom(env.getProperty("support.email"));
+        return email;
+    }
+
+    private String getAppUrl(HttpServletRequest request) {
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    }
+
+
+
 }

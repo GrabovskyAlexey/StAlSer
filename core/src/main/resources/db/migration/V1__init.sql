@@ -45,6 +45,16 @@ CREATE TABLE sprints
     CONSTRAINT fk_sprint_board_id FOREIGN KEY (board_id) REFERENCES boards (id)
 );
 
+CREATE TABLE passwordresettoken
+(
+    id              bigserial NOT NULL,
+    token           varchar(200) NOT NULL,
+    user_id         bigint,
+    created_at      date DEFAULT (current_date),
+    CONSTRAINT passwordresettoken_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_passwordresettoken_user_id FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
 CREATE TABLE tasks
 (
     id          bigserial NOT NULL,

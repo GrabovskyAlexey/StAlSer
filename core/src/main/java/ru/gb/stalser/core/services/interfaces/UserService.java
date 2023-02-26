@@ -2,15 +2,15 @@ package ru.gb.stalser.core.services.interfaces;
 
 
 import org.springframework.security.core.userdetails.UserDetailsService;
-import ru.gb.stalser.api.dto.auth.AuthRequest;
-import ru.gb.stalser.api.dto.auth.AuthRequestPassUpdate;
-import ru.gb.stalser.api.dto.auth.AuthResponse;
-import ru.gb.stalser.api.dto.auth.RegisterRequest;
+import org.springframework.ui.Model;
+import ru.gb.stalser.api.dto.auth.*;
 import ru.gb.stalser.core.entity.User;
 
 import java.security.Principal;
 import javax.security.auth.message.AuthException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
 
 public interface UserService extends UserDetailsService {
 
@@ -33,5 +33,15 @@ public interface UserService extends UserDetailsService {
     AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate, Principal principal);
 
     AuthResponse refresh(String refreshToken) throws AuthException;
+
+    void createPasswordResetTokenForUser(User user, String token);
+
+    GenericResponse resetPassword(HttpServletRequest request, String userName);
+
+    String showChangePasswordPage(Locale locale, Model model, String token);
+
+    AuthResponse setNewPassword (RequestNewPass requestNewPass);
+
+
 
 }
