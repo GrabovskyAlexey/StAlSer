@@ -2,6 +2,8 @@ package ru.stalser.tests.user.methods;
 
 import io.qameta.allure.Step;
 import org.assertj.core.data.TemporalUnitWithinOffset;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ru.gb.stalser.api.dto.auth.AuthRequest;
 import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.stalser.framework.autotestobjects.RegisterRequestDto;
 import ru.stalser.framework.helpers.DBHelper;
@@ -24,7 +26,8 @@ public class UserMethods {
         softly().assertThat(userData.get("id")).as("user id").isNotNull();
         softly().assertThat(userData.get("email")).as("user email").isEqualTo(registerRq.getEmail());
         softly().assertThat(userData.get("login")).as("user login").isEqualTo(registerRq.getLogin());
-        softly().assertThat(userData.get("password")).as("user password").isNotNull();
+        softly().assertThat(new BCryptPasswordEncoder().matches(registerRq.getPassword(), userData.get("password")))
+                .as("user password").isTrue();
         softly().assertThat(userData.get("activation_code")).as("user activation_code").isNotNull();
         softly().assertThat(userData.get("is_enabled")).as("user is_enabled").isEqualToIgnoringCase("t");
         softly().assertThat(userData.get("is_activated")).as("user is_activated").isEqualToIgnoringCase("f");
@@ -33,9 +36,6 @@ public class UserMethods {
                 .isCloseTo(registerRequestDto.getCreationTime(), new TemporalUnitWithinOffset(4, ChronoUnit.SECONDS));
         softly().assertThat(ParseHelper.parseDateTimeFromDBToLocalDateTime(userData.get("updated_at"))).as("user updated_at")
                 .isCloseTo(registerRequestDto.getCreationTime(), new TemporalUnitWithinOffset(4, ChronoUnit.SECONDS));
-
-        /* Удаляем созданного юзера из таблиц users_roles и users */
-        deleteUserFromTablesByLogin(registerRq.getLogin());
     }
 
     @Step("Удаление юзера из таблиц users_roles и users по логину {userLogin}")
@@ -90,5 +90,14 @@ public class UserMethods {
                 .setLogin("grafwwwolf")
                 .setPassword("grafpswd")
                 .setEmail("grafwwwolf@mail.ru");
+    }
+
+    public static AuthRequest createDefaultAuthRequest(RegisterRequest registerRq) {
+
+        AuthRequest authRequest = new AuthRequest();
+        authRequest.setLogin(registerRq.getLogin());
+        authRequest.setPassword(registerRq.getPassword());
+
+        return authRequest;
     }
 }

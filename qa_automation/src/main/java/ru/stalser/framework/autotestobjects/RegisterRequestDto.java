@@ -2,6 +2,7 @@ package ru.stalser.framework.autotestobjects;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import ru.gb.stalser.api.dto.auth.AuthRequestPassUpdate;
 import ru.gb.stalser.api.dto.auth.RegisterRequest;
 
 import java.time.LocalDateTime;
@@ -15,4 +16,6 @@ public class RegisterRequestDto {
     private LocalDateTime creationTime = LocalDateTime.now();
     private LocalDateTime updatedTime = LocalDateTime.now();
     private String token;
+    private String refreshToken;
+    private AuthRequestPassUpdate authRequestPassUpdate;
 }
