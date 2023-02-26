@@ -47,8 +47,8 @@ public class StalserRestSteps {
                 //Получен ответ от сервера
                 .then();
 
-//        softly().assertThat(response.extract().statusCode()).as("response code").isEqualTo(HttpStatus.SC_CREATED);
-        softly().assertThat(response.extract().statusCode()).as("response code").isEqualTo(HttpStatus.SC_OK);
+        softly().assertThat(response.extract().statusCode()).as("response code").isEqualTo(HttpStatus.SC_CREATED);
+//        softly().assertThat(response.extract().statusCode()).as("response code").isEqualTo(HttpStatus.SC_OK);
 //        if (softly().wasSuccess()) {      //TODO раскомментить после фикса баги с ответом 200
 
             softly().assertThat(response.extract().body().asPrettyString()).as("тело ответа").isNotEmpty();
