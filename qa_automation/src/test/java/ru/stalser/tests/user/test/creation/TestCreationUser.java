@@ -4,13 +4,8 @@ import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import ru.gb.stalser.api.dto.auth.RegisterRequest;
 import ru.stalser.TestBase;
-import ru.stalser.framework.autotestobjects.RegisterRequestDto;
-
-import static ru.stalser.framework.steps.rests.StalserRestSteps.doPostToCreateUser;
-import static ru.stalser.tests.user.methods.UserMethods.assertUserCreationInTables;
-import static ru.stalser.tests.user.methods.UserMethods.createDefaultRegisterRequest;
+import ru.stalser.iterators.UserTestIterator;
 
 @Epic("Stalser")
 @Feature("Пользователи")
@@ -26,13 +21,8 @@ public class TestCreationUser extends TestBase {
     @Tag("BLOCKER")
     public void testCreateUserWithRoleUser() {
 
-        /* Создание запроса на создание юзера */
-        RegisterRequest registerRq = createDefaultRegisterRequest();
-
-        /* Отправка запроса на создание юзера через API */
-        RegisterRequestDto registerRequestDto = doPostToCreateUser(registerRq);
-
-        /* Проверка создания юзера в таблицах users_roles и users */
-        assertUserCreationInTables(registerRequestDto);
+        UserTestIterator.instance()
+                .withAfterTestDeletingUser()
+                .userCreateIterating();
     }
 }
