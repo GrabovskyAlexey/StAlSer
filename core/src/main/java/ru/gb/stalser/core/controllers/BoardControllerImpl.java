@@ -40,13 +40,13 @@ public class BoardControllerImpl implements BoardController {
     public ResponseEntity<BoardDto> addBoard(BoardDto board, Principal principal) {
         return ResponseEntity.ok(
                 boardMapper.mapToDto(
-                        boardService.save(boardMapper.mapFromDto(board))
+                        boardService.save(boardMapper.mapFromDto(board), principal)
                 )
         );
     }
 
     @Override
     public void updateBoard(Long id, BoardDto board, Principal principal) {
-        boardService.updateBoard(boardMapper.mapFromDto(board));
+        boardService.updateBoard(boardMapper.mapFromDto(board), principal);
     }
 }
