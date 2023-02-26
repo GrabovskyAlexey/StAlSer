@@ -95,10 +95,10 @@ public class StalserRestSteps {
                 .contentType("application/json; charset=UTF-8")
                 .header("Authorization", "Bearer " + registerRequestDto.getToken())
                 .body(registerRequestDto.getAuthRequestPassUpdate())
-                .when().log().all()
+                .when()
                 .post(BASE_HOST + "/password/change")
                 //Получен ответ от сервера
-                .then().log().all();
+                .then();
 
         softly().assertThat(response.extract().statusCode()).as("response code").isEqualTo(HttpStatus.SC_OK);
 
