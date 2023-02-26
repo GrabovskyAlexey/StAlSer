@@ -38,17 +38,17 @@ public class RestAssuredLoggingFilter extends AllureRestAssured {
             requestAttachmentBuilder.setBody(requestSpec.getBody().toString());
         }
 
-        HttpRequestAttachment requestAttachment = requestAttachmentBuilder.build();
-        (new CustomAttachmentProcessor()).addAttachment(requestAttachment, new CustomAttachmentRenderer("custom_http_request.ftl"));
+//        HttpRequestAttachment requestAttachment = requestAttachmentBuilder.build();       //TODO роаскомментить в будущем при добавлении "custom_http_response.ftl"
+//        (new CustomAttachmentProcessor()).addAttachment(requestAttachment, new CustomAttachmentRenderer("custom_http_request.ftl"));
         Response response = filterContext.next(requestSpec, responseSpec);
-        HttpResponseAttachment responseAttachment = HttpResponseAttachment.Builder.create
-                        (responseName.isEmpty() ? "API response" + response.getStatusLine() + " " + requestSpec.getDerivedPath() : responseName)
-                .setResponseCode(response.getStatusCode())
-                .setHeaders(toMapConverter(response.getHeaders()))
-//                .setBody(StringEscapeUtils.escapeHtml4(prettifier.getPrettifiedBodyIfPossible(response, response.getBody())))
-                .setBody(prettifier.getPrettifiedBodyIfPossible(response, response.getBody()))
-                .build();
-        (new CustomAttachmentProcessor()).addAttachment(responseAttachment, new CustomAttachmentRenderer("custom_http_response.ftl"));
+//        HttpResponseAttachment responseAttachment = HttpResponseAttachment.Builder.create
+//                        (responseName.isEmpty() ? "API response" + response.getStatusLine() + " " + requestSpec.getDerivedPath() : responseName)
+//                .setResponseCode(response.getStatusCode())
+//                .setHeaders(toMapConverter(response.getHeaders()))
+////                .setBody(StringEscapeUtils.escapeHtml4(prettifier.getPrettifiedBodyIfPossible(response, response.getBody())))
+//                .setBody(prettifier.getPrettifiedBodyIfPossible(response, response.getBody()))
+//                .build();
+//        (new CustomAttachmentProcessor()).addAttachment(responseAttachment, new CustomAttachmentRenderer("custom_http_response.ftl"));
 
         return response;
     }

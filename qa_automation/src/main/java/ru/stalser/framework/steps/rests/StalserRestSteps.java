@@ -42,7 +42,6 @@ public class StalserRestSteps {
                 .contentType("application/json; charset=UTF-8")
                 .body(registerRq)
                 .when()
-//                .post("http://localhost:8081/register")
                 .post(BASE_HOST + "/register")
                 //Получен ответ от сервера
                 .then();
