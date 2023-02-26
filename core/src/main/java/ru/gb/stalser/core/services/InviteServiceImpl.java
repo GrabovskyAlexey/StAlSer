@@ -19,6 +19,7 @@ import ru.gb.stalser.core.services.interfaces.InviteService;
 import ru.gb.stalser.core.services.interfaces.UserService;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -91,7 +92,7 @@ public class InviteServiceImpl implements InviteService {
     }
 
     @Transactional
-    public void acceptInvite(String code, String login) {
+    public void acceptInvite(String code, String login, Principal principal) {
         Invite invite = inviteRepository.findByInviteCode(code).orElseThrow(() -> new EntityNotFoundException("Приглашение с кодом = " + code + " не найдено"));
         User user = userService.findByLogin(login);
         if (invite.getStatus().equals(InviteStatus.EXPIRED) || invite.getExpirationDate().isBefore(Instant.now())){
@@ -102,7 +103,7 @@ public class InviteServiceImpl implements InviteService {
         }
         Board board = invite.getBoard();
         board.getUsers().add(user);
-        boardService.updateBoard(board);
+        boardService.updateBoard(board, principal);
         invite.setStatus(InviteStatus.ACCEPT);
         inviteRepository.save(invite);
     }
