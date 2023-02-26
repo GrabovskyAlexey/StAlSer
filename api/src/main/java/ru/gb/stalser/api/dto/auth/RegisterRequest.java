@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
+@Accessors(chain = true)
 @Schema(description = "Запрос регистрации", name = "RegisterRequest")
 public class RegisterRequest {
     @NotEmpty(message = "Имя пользователя не может быть пустым")
