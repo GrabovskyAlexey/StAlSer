@@ -1,8 +1,12 @@
 package ru.gb.stalser.core.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import ru.gb.stalser.core.utils.DefaultInstantDeserializer;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -26,9 +30,13 @@ public class Board extends BaseEntity {
     private String boardDesc;
     @CreationTimestamp
     @Column(name = "created_at")
+    @JsonSerialize(using= InstantSerializer.class)
+    @JsonDeserialize(using= DefaultInstantDeserializer.class)
     private Instant createdAt;
     @UpdateTimestamp
     @Column(name = "updated_at")
+    @JsonSerialize(using= InstantSerializer.class)
+    @JsonDeserialize(using= DefaultInstantDeserializer.class)
     private Instant updatedAt;
     @Column(name = "board_alias")
     private String boardAlias;
