@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.board.BoardDto;
-import ru.gb.stalser.api.dto.board.BoardDtoForUser;
 import ru.gb.stalser.core.controllers.interfaces.BoardController;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.mappers.BoardMapper;
@@ -13,7 +12,6 @@ import ru.gb.stalser.core.services.interfaces.BoardService;
 import ru.gb.stalser.core.services.interfaces.UserService;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,8 +27,8 @@ public class BoardControllerImpl implements BoardController {
     public ResponseEntity<?> getAllBoards(Principal principal) {
         User user = userService.findByLogin(principal.getName());
         return ResponseEntity.ok(
-                boardService.findAllByUsersContaining(user).stream()
-                        .map(entity-> boardMapper.mapToDtoForUser(entity, user))
+                boardService.findAllBoardWithUser(user).stream()
+                        .map(boardMapper::mapToDto)
                         .collect(Collectors.toList())
         );
     }

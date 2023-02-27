@@ -6,14 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.gb.stalser.api.dto.board_role.BoardRoleDto;
+import ru.gb.stalser.api.dto.board_user_role.BoardUserRoleDto;
 import ru.gb.stalser.api.dto.user.UserDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -53,9 +53,7 @@ public class BoardDto {
     @JsonProperty("creator")
     private UserDto creator;
 
-    @Schema(description = "Список пользователей")
-    @JsonProperty("users")
-    private List<UserDto> users;
-    @JsonProperty("usersWithRoles")
-    private Map<UserDto, BoardRoleDto> usersWithRoles;
+    @Schema(description = "Список пользователей с ролями")
+    @JsonProperty("boardUserRoles")
+    private Set<BoardUserRoleDto> boardUserRoles = new HashSet<>();
 }

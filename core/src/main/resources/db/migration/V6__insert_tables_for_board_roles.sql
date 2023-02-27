@@ -17,14 +17,6 @@ CREATE TABLE board_roles_binding_restriction
     CONSTRAINT fk_restriction_board_role FOREIGN KEY (restriction_id) REFERENCES restrictions (id)
 );
 
-CREATE TABLE board_roles_binding_board
-(
-    board_role_id bigint,
-    board_id      bigint,
-    CONSTRAINT board_role_board_pkey PRIMARY KEY (board_role_id, board_id),
-    CONSTRAINT fk_board_role_board FOREIGN KEY (board_role_id) REFERENCES board_roles (id),
-    CONSTRAINT fk_board_board_role FOREIGN KEY (board_id) REFERENCES boards (id)
-);
 ALTER TABLE board_roles
     DROP CONSTRAINT fk_board_roles_id,
     DROP COLUMN board_id;
@@ -65,31 +57,23 @@ VALUES (1, 1), (1, 2),
        (3, 1), (3, 2), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8), (3, 9), (3, 10), (3, 11), (3, 12), (3, 13), (3, 14), (3, 15), (3, 16), (3, 17), (3, 18), (3, 19),
        (4, 1), (4, 2), (4, 3), (4, 4), (4, 5), (4, 6), (4, 7), (4, 8), (4, 9), (4, 10), (4, 11), (4, 12), (4, 13), (4, 14), (4, 15), (4, 16), (4, 17), (4, 18), (4, 19), (4, 20), (4, 21), (4, 22);
 
-CREATE TABLE board_binding_board_role_binding_user
+CREATE TABLE boards_users_roles
 (
     board_id  bigint,
-    board_role_id bigint,
     user_id bigint,
+    board_role_id bigint,
     CONSTRAINT board_binding_board_role_binding_user_pkey PRIMARY KEY (board_id, user_id),
     CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards (id),
-    CONSTRAINT fk_board_role_id FOREIGN KEY (board_role_id) REFERENCES board_roles (id),
-    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id)
-);
-insert into users_boards (users_id, boards_id)
-values (1, 2), (1, 3), (1, 4),
-       (2, 3), (2, 4),
-       (3, 1),
-       (4, 2),
-       (5, 1), (5, 2), (5, 3),
-       (6, 4), (6, 1),
-       (7, 2), (7, 4),
-       (8, 2), (8, 3),
-       (9, 4), (9, 1),
-       (10, 1);
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT fk_board_role_id FOREIGN KEY (board_role_id) REFERENCES board_roles (id)
 
-insert into board_binding_board_role_binding_user(board_id, board_role_id, user_id)
-values (1, 1, 9),
-       (1, 2, 3),
-       (1, 3, 5),
-       (1, 4, 6),
-       (1, 1, 10);
+);
+DROP TABLE users_boards;
+
+insert into boards_users_roles(board_id, user_id, board_role_id)
+values (1, 9, 1),
+       (1, 3, 2),
+       (1, 5, 3),
+       (2, 5, 4),
+       (1, 6, 4),
+       (1, 10, 1);

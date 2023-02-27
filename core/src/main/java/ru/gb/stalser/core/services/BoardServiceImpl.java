@@ -23,8 +23,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Board> findAllByUsersContaining(User user) {
-        return boardRepository.findAllByUsersContaining(user);
+    public List<Board> findAllBoardWithUser(User user) {
+        return boardRepository.findAllBoardWithUser(user);
     }
 
     @Override

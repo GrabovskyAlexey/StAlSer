@@ -52,20 +52,10 @@ public class User extends BaseEntity {
 
     @ManyToMany
     @JoinTable(
-            name ="users_roles",
+            name = "users_roles",
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id")
     )
     @ToString.Exclude
     private List<Role> roles;
-
-    @ManyToMany
-    @JoinTable(
-            name ="users_boards",
-            joinColumns = @JoinColumn(name = "users_id"),
-            inverseJoinColumns = @JoinColumn(name = "boards_id")
-    )
-    @ToString.Exclude
-    private List<Board> boards ;
-
 }

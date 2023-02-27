@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.stalser.api.dto.invite.InviteStatus;
 import ru.gb.stalser.api.dto.notify.SimpleTextEmailMessage;
-import ru.gb.stalser.core.entity.Board;
-import ru.gb.stalser.core.entity.Invite;
-import ru.gb.stalser.core.entity.User;
+import ru.gb.stalser.core.entity.*;
 import ru.gb.stalser.core.exceptions.DifferentEmailException;
 import ru.gb.stalser.core.exceptions.InviteWasExpiredException;
 import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
@@ -101,7 +99,8 @@ public class InviteServiceImpl implements InviteService {
             throw new DifferentEmailException("Почта пользователя не совпадает с почтой в приглашении");
         }
         Board board = invite.getBoard();
-        board.getUsers().add(user);
+        //TODO тут надо прикрутить что бы доставать из базы нашу дефолтную роль, допустим наблюдатель, и добавлять ее в "BoardUserRole"
+        board.getBoardUserRoles().add(new BoardUserRole(user, new BoardRole()));
         boardService.updateBoard(board);
         invite.setStatus(InviteStatus.ACCEPT);
         inviteRepository.save(invite);
