@@ -8,17 +8,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.gb.stalser.api.dto.auth.*;
 import ru.gb.stalser.api.dto.util.MessageDto;
-
-import javax.servlet.http.HttpServletRequest;
+import javax.security.auth.message.AuthException;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Locale;
+
 
 
 @Tag(name = "auth", description = "Контроллер для аутентификации")
@@ -123,7 +121,7 @@ public interface UserController {
             tags = {"auth"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "PasswordResetToken не почту пользователя", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = GenericResponse.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -136,45 +134,10 @@ public interface UserController {
             path = {"/password/reset"}
     )
 
-    ResponseEntity<GenericResponse> resetPassword(
+    ResponseEntity<MessageDto> resetPassword(
             @Parameter(name = "UserMameForPasswordReset", description = "String Item", required = true)
-            @Valid @RequestBody String userNameForPasswordReset,
-            HttpServletRequest request
+            @Valid @RequestBody String userNameForPasswordReset
     );
-
-
-
-
-
-
-    @Operation(
-            operationId = "passwordReset",
-            summary = "Сброс пароля",
-            tags = {"auth"},
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Ссылка на страницу для сброса пароля", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
-                    }),
-                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
-                    }),
-            }
-    )
-    @PostMapping(
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            path = {"/password/showchangepasspage"}
-    )
-
-    ResponseEntity<String> showChangePasswordPage(
-            @Parameter(name = "UserMameForPasswordReset", description = "String Item", required = true)
-            @Valid @RequestBody String token,
-            Locale locale,
-            Model model
-    );
-
-
-
 
 
     @Operation(
@@ -199,7 +162,7 @@ public interface UserController {
     ResponseEntity<AuthResponse> setNewPassword(
             @Parameter(name = "UserMameForPasswordReset", description = "RequestNewPass Item", required = true)
             @Valid @RequestBody RequestNewPass requestNewPass
-            );
+            ) throws AuthException;
 
 
 

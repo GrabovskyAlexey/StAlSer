@@ -1,54 +1,45 @@
 package ru.gb.stalser.core.services;
 
-import com.sun.xml.bind.v2.TODO;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
-import org.springframework.context.MessageSource;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import ru.gb.stalser.api.dto.auth.*;
-import ru.gb.stalser.core.entity.PasswordResetToken;
-import ru.gb.stalser.core.entity.RefreshToken;
-import ru.gb.stalser.core.entity.Role;
-import ru.gb.stalser.core.entity.User;
+import ru.gb.stalser.api.dto.notify.SimpleTextEmailMessage;
+import ru.gb.stalser.api.dto.util.MessageDto;
+import ru.gb.stalser.core.entity.*;
 import ru.gb.stalser.core.exceptions.EmailAlreadyExistsException;
-import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
 import ru.gb.stalser.core.exceptions.PasswordNotConfirmedException;
 import ru.gb.stalser.core.exceptions.UserAlreadyExistsException;
+import ru.gb.stalser.core.repositories.ConfirmTokenRepository;
 import ru.gb.stalser.core.repositories.RefreshTokenRepository;
 import ru.gb.stalser.core.repositories.UserRepository;
-import ru.gb.stalser.core.services.interfaces.PasswordResetTokenService;
 import ru.gb.stalser.core.services.interfaces.RoleService;
 import ru.gb.stalser.core.services.interfaces.UserService;
 import ru.gb.stalser.core.utils.JwtTokenUtil;
-
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import javax.security.auth.message.AuthException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
+    @Value("${stalser.invite.url}")
+    private String url;
+    @Value("${stalser.invite.email-address-from}")
+    private String emailFrom;
 
     private final UserRepository userRepository;
     private final RoleService roleService;
@@ -58,15 +49,11 @@ public class UserServiceImpl implements UserService {
 
     private final RefreshTokenRepository refreshRepository;
 
-    private final PasswordResetTokenServiceImpl passwordResetTokenServiceImpl;
+    private final ConfirmTokenRepository confirmTokenRepository;
 
-    private final MessageSource messages;
+    private final SecurityUserServiceImpl securityUserService;
 
-    private final Environment env;
-
-    private final JavaMailSender mailSender;
-
-    private final SecurityUserService securityUserService;
+    private final KafkaTemplate<String, SimpleTextEmailMessage> kafkaTemplate;
 
     @Override
     public List<User> findAll() {
@@ -212,49 +199,46 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createPasswordResetTokenForUser(final User user, final String token) {
-        final PasswordResetToken myToken = new PasswordResetToken(token, user);
-        passwordResetTokenServiceImpl.save(myToken);
+    public void createConfirmTokenForUser(final User user, final String token) {
+        ConfirmToken confirmToken = ConfirmToken.builder()
+                .id(user.getLogin())
+                .token(token)
+                .build();
+       confirmTokenRepository.save(confirmToken);
     }
 
     @Override
-    public GenericResponse resetPassword(HttpServletRequest request, String userName){
+    public MessageDto resetPassword(String userName){
+        SimpleTextEmailMessage message;
         User user = userRepository.findByLogin(userName)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User '%s' not found", userName)));
         String token = UUID.randomUUID().toString();
-        createPasswordResetTokenForUser(user, token);
-        mailSender.send(constructResetTokenEmail(getAppUrl(request),
-                request.getLocale(), token, user));
-        return new GenericResponse(
-                messages.getMessage("message.resetPasswordEmail", null,
-                        request.getLocale()));
-    }
-
-    @Override
-    public String showChangePasswordPage(Locale locale, Model model, String token) {
-        String result = securityUserService.validatePasswordResetToken(token);
-        if(result != null) {
-            String message = messages.getMessage("auth.message." + result, null, locale);
-  //          TODO Отправляем страницу login
-            return "redirect:/login.html?lang=" + locale.getLanguage() + "&message=" + message;
+        createConfirmTokenForUser(user, token);
+        message = configureMessage(user.getEmail(), user.getLogin());
+        if (user.getIsActivated()) {
+            //если пользователь активирован, кидаем его на страницу где он сформирует requestNewPass и отправит на /password/new
+            message.setText(url + "/password/newpage?code=" + token);
+            kafkaTemplate.send("simple-text-email", message);
+            return new MessageDto(String.format("Отправлено письмо на электронную почту '%s' для смены пароля", user.getEmail()));
         } else {
-            //          TODO Отправляем страницу, с которой отправляется запрос на password/new
-            model.addAttribute("token", token);
-            return "redirect:/updatePassword.html?lang=" + locale.getLanguage();
+            message.setText(url + "/register?code=" + token + "&email=" + user.getEmail().replaceAll("@", "%40"));//пользователя нет, кидаем на страницу регистрации
+            kafkaTemplate.send("simple-text-email", message);
+            return new MessageDto("Переадресовано на страницу регистрации");
         }
+
     }
 
     @Override
-    public AuthResponse setNewPassword(RequestNewPass requestNewPass){
+    public AuthResponse setNewPassword(RequestNewPass requestNewPass) throws AuthException {
 
-        String result = securityUserService.validatePasswordResetToken(requestNewPass.getToken());
+        String result = securityUserService.validatePasswordResetToken(requestNewPass.getUserName());
 
         if (result != null) {
             throw new PasswordNotConfirmedException("Токен пользователя не подтвержден");
         }
 
-        PasswordResetToken passwordResetToken = passwordResetTokenServiceImpl.findPasswordResetTokenByToken(requestNewPass.getToken());
-        User user = passwordResetToken.getUser();
+        User user = userRepository.findByLogin(requestNewPass.getUserName())
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User '%s' not found", requestNewPass.getUserName())));
 
         user.setPassword(bCryptPasswordEncoder.encode(requestNewPass.getNewPassword()));
         userRepository.save(user);
@@ -265,25 +249,42 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
-    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
-        final String url = contextPath + "/user/changePassword?token=" + token;
-        final String message = messages.getMessage("message.resetPassword", null, locale);
-        return constructEmail("Reset Password", message + " \r\n" + url, user);
+    private SimpleTextEmailMessage configureMessage(String email, String userName) {
+        return SimpleTextEmailMessage.builder()
+                .from(emailFrom)
+                .to(email)
+                .subject("Ссылка для сброса пароля для пользователя " + userName)
+                .build();
     }
 
-    private SimpleMailMessage constructEmail(String subject, String body, User user) {
-        final SimpleMailMessage email = new SimpleMailMessage();
-        email.setSubject(subject);
-        email.setText(body);
-        email.setTo(user.getEmail());
-        email.setFrom(env.getProperty("support.email"));
-        return email;
-    }
 
-    private String getAppUrl(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-    }
+
+
+
+
+
+
+
+
+
+//    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
+//        final String url = contextPath + "/user/changePassword?token=" + token;
+//        final String message = messages.getMessage("message.resetPassword", null, locale);
+//        return constructEmail("Reset Password", message + " \r\n" + url, user);
+//    }
+
+//    private SimpleMailMessage constructEmail(String subject, String body, User user) {
+//        final SimpleMailMessage email = new SimpleMailMessage();
+//        email.setSubject(subject);
+//        email.setText(body);
+//        email.setTo(user.getEmail());
+//        email.setFrom(env.getProperty("support.email"));
+//        return email;
+//    }
+//
+//    private String getAppUrl(HttpServletRequest request) {
+//        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+//    }
 
 
 
