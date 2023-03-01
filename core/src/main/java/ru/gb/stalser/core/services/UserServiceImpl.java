@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
     public User getUserFromPrincipal(Principal principal){
         return findByLogin(principal.getName());
     }
-}
+
 
 
     @Override

@@ -7,3 +7,13 @@ Content-Type: application/json
     "password": "grafpswd",
     "email": "grafwwwolf@mail.ru"
 }
+
+### Запрос на создание юзера
+POST http://localhost:8081/register
+Content-Type: application/json
+
+{
+  "login": "autotest_user",
+  "password": "autotestpswd",
+  "email": "autotest@mail.ru"
+}

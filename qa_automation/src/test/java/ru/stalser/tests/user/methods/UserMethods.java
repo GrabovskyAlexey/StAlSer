@@ -17,6 +17,7 @@ import static ru.stalser.framework.helpers.SoftAssertHelper.softly;
 
 public class UserMethods {
 
+    @Step("Проверка записи в таблицах users_roles и users")
     public static void assertUserCreationInTables(RegisterRequestDto registerRequestDto) {
 
         RegisterRequest registerRq = registerRequestDto.getRegisterRequest();
@@ -35,10 +36,9 @@ public class UserMethods {
         softly().assertThat(ParseHelper.parseDateTimeFromDBToLocalDateTime(userData.get("created_at"))).as("user created at")
                 .isCloseTo(registerRequestDto.getCreationTime(), new TemporalUnitWithinOffset(4, ChronoUnit.SECONDS));
         softly().assertThat(ParseHelper.parseDateTimeFromDBToLocalDateTime(userData.get("updated_at"))).as("user updated_at")
-                .isCloseTo(registerRequestDto.getCreationTime(), new TemporalUnitWithinOffset(4, ChronoUnit.SECONDS));
+                .isCloseTo(registerRequestDto.getUpdatedTime(), new TemporalUnitWithinOffset(4, ChronoUnit.SECONDS));
     }
 
-    @Step("Удаление юзера из таблиц users_roles и users по логину {userLogin}")
     public static void deleteUserFromTablesByLogin(String userLogin) {
 
         String sql = String.format("BEGIN;\n" +

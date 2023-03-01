@@ -8,7 +8,10 @@ import org.apache.http.HttpStatus;
 import ru.gb.stalser.api.dto.auth.AuthRequest;
 import ru.gb.stalser.api.dto.auth.AuthResponse;
 import ru.gb.stalser.api.dto.auth.RegisterRequest;
+import ru.gb.stalser.api.dto.board.BoardDto;
+import ru.stalser.framework.autotestobjects.BoardCreateRqDto;
 import ru.stalser.framework.autotestobjects.RegisterRequestDto;
+import ru.stalser.framework.helpers.Cache;
 
 import static ru.stalser.framework.constants.Hosts.BASE_HOST;
 import static ru.stalser.framework.helpers.SoftAssertHelper.softly;
@@ -110,5 +113,31 @@ public class StalserRestSteps {
         registerRequestDto.setToken(authResponse.getToken());
         registerRequestDto.setRefreshToken(authResponse.getRefreshToken());
         return registerRequestDto;
+    }
+
+    @Step("Делаю POST запрос на создание борды Stalser")
+    public static BoardCreateRqDto doPostToCreateBoard(BoardDto boardDto) {
+
+        ValidatableResponse response = RestAssured
+                .given()
+                .contentType("application/json; charset=UTF-8")
+                .header("Authorization", "Bearer " + Cache.getToken())
+                .body(boardDto)
+                .when().log().all()
+                .post(BASE_HOST + "/api/v1/boards")
+                //Получен ответ от сервера
+                .then().log().all();
+
+//        softly().assertThat(response.extract().statusCode()).as("response code").isEqualTo(HttpStatus.SC_CREATED);
+        softly().assertThat(response.extract().statusCode()).as("response code").isEqualTo(HttpStatus.SC_OK);
+
+        softly().assertThat(response.extract().body().asPrettyString()).as("тело ответа").isNotEmpty();
+        BoardDto actualBoardDto = response.extract().body().as(BoardDto.class);
+        boardDto.setId(actualBoardDto.getId());
+
+        BoardCreateRqDto boardCreateRqDto = BoardCreateRqDto.of(boardDto);
+        boardCreateRqDto.setBoardId(actualBoardDto.getId().toString());
+
+        return boardCreateRqDto;
     }
 }
