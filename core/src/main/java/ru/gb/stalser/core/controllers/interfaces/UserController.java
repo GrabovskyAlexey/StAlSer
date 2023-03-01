@@ -68,7 +68,7 @@ public interface UserController {
             summary = "Регистрация",
             tags = {"auth"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Токен авторизации при успешной регистрации", content = {
+                    @ApiResponse(responseCode = "201", description = "Токен авторизации при успешной регистрации", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
@@ -82,7 +82,7 @@ public interface UserController {
             path = {"/register"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<AuthResponse> register(
+    AuthResponse register(
             @Parameter(name = "RegisterRequest", description = "RegisterRequest Item", required = true)
             @Valid @RequestBody RegisterRequest registerRequest
     );
