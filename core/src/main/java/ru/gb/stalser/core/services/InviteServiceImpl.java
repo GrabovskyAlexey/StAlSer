@@ -5,18 +5,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gb.stalser.api.dto.ConfirmToken;
 import ru.gb.stalser.api.dto.invite.InviteStatus;
 import ru.gb.stalser.api.dto.notify.SimpleTextEmailMessage;
 import ru.gb.stalser.core.entity.Board;
 import ru.gb.stalser.core.entity.Invite;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.exceptions.DifferentEmailException;
+import ru.gb.stalser.core.exceptions.InviteTokenException;
 import ru.gb.stalser.core.exceptions.InviteWasExpiredException;
 import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
 import ru.gb.stalser.core.repositories.InviteRepository;
 import ru.gb.stalser.core.services.interfaces.BoardService;
 import ru.gb.stalser.core.services.interfaces.InviteService;
 import ru.gb.stalser.core.services.interfaces.UserService;
+import ru.gb.stalser.core.utils.JwtTokenUtil;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
@@ -35,6 +38,7 @@ public class InviteServiceImpl implements InviteService {
     private final InviteRepository inviteRepository;
     private final UserService userService;
     private final BoardService boardService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     private final KafkaTemplate<String, SimpleTextEmailMessage> kafkaTemplate;
 
@@ -57,16 +61,21 @@ public class InviteServiceImpl implements InviteService {
         invite.setInviteCode(UUID.randomUUID().toString());//генерируем уникальное число и сохраняем его в приглашении
         invite.setExpirationDate(Instant.now().plus(7, ChronoUnit.DAYS));//устанавливаем дату когда приглашение "протухнет"
         if (!boardService.existsBoardById(invite.getBoard().getId())) {
-            //TODO Когда появится глобальный обработчик добавить туда исключение
             throw new InviteWithoutBoardException("Не удалось создать приглашение. Доска с id = " + invite.getBoard().getId() + " не найдена.");
         }
         String boardName = boardService.findById(invite.getBoard().getId()).getBoardName();
         message = configureMessage(invite.getEmail(), boardName);
+        ConfirmToken token = ConfirmToken.builder()
+                .code(invite.getInviteCode())
+                .type(ConfirmToken.TokenType.INVITE)
+                .email(invite.getEmail())
+                .build();
         if (userService.existsByEmail(invite.getEmail())) {
             user = userService.findByEmail(invite.getEmail());
-            message.setText(url + "/invites?code=" + invite.getInviteCode());//если пользователь существует, кидаем его на страницу с приглашением, где он может принять или отклонить его.
+            message.setText(url + "/invites?code=" + jwtTokenUtil.generateConfirmationToken(token));//если пользователь существует, кидаем его на страницу с приглашением, где он может принять или отклонить его.
         } else {
-            message.setText(url + "/register?code=" + invite.getInviteCode() + "&email=" + invite.getEmail().replaceAll("@", "%40"));//пользователя нет, кидаем на страницу регистрации
+            token.setType(ConfirmToken.TokenType.REGISTER);
+            message.setText(url + "/register?code=" + jwtTokenUtil.generateConfirmationToken(token));//пользователя нет, кидаем на страницу регистрации
         }
         kafkaTemplate.send("simple-text-email", message);
         invite.setUser(user);
@@ -92,12 +101,16 @@ public class InviteServiceImpl implements InviteService {
     }
 
     @Transactional
-    public void acceptInvite(String code, String login, Principal principal) {
-        Invite invite = inviteRepository.findByInviteCode(code).orElseThrow(() -> new EntityNotFoundException("Приглашение с кодом = " + code + " не найдено"));
-        User user = userService.findByLogin(login);
-        if (invite.getStatus().equals(InviteStatus.EXPIRED) || invite.getExpirationDate().isBefore(Instant.now())){
+    public void acceptInvite(String token, Principal principal) {
+        ConfirmToken confirmToken = jwtTokenUtil.parseConfirmToken(token);
+        if (!confirmToken.getType().equals(ConfirmToken.TokenType.INVITE)) {
+            throw new InviteTokenException("Тип токена не является приглашением (TokenType.INVITE)");
+        }
+        Invite invite = inviteRepository.findByInviteCode(confirmToken.getCode()).orElseThrow(() -> new EntityNotFoundException("Приглашение с кодом = " + confirmToken.getCode() + " не найдено"));
+        if (invite.getStatus().equals(InviteStatus.EXPIRED) || invite.getExpirationDate().isBefore(Instant.now())) {
             throw new InviteWasExpiredException("Время ожидания приглашения истекло");
         }
+        User user = userService.findByLogin(principal.getName());
         if (!user.getEmail().equals(invite.getEmail())) {
             throw new DifferentEmailException("Почта пользователя не совпадает с почтой в приглашении");
         }
