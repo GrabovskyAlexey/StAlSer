@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.stalser.api.dto.sprint.SprintDto;
 import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.api.dto.task.TaskDto;
 import ru.gb.stalser.api.dto.user.UserDto;
@@ -110,12 +111,11 @@ public interface TaskController {
             Principal principal
     );
     /**
-     * GET /${stalser.api.url}/tasks/{user} : Get Task by user
+     * GET /${stalser.api.url}/tasks/user : Get Task by user
      *
-     * @param user User id (required)
-     * @return Get one task (status code 200)
+     * @param user User item (required)
+     * @return Get List of tasks (status code 200)
      * or Bad Request (status code 400)
-     * or Not found task (status code 404)
      */
     @Operation(
             operationId = "getTaskByUser",
@@ -130,9 +130,41 @@ public interface TaskController {
                     })
             }
     )
-    @GetMapping(produces = {"application/json"})
-    ResponseEntity<List<TaskDto>> getTasksByUser(@Parameter(name = "user", description = "user", required = true)
-                                                 @PathVariable("user") UserDto user, Principal principal);
+
+    @GetMapping(
+            value = "/user",
+            produces = {"application/json"})
+    ResponseEntity<List<TaskDto>> getTasksByUser(
+            @Parameter(name = "user", description = "user", required = true)
+            @Valid @RequestBody UserDto user, Principal principal);
+
+    /**
+     * GET /${stalser.api.url}/tasks/sprint : Get Tasks by sprint
+     *
+     * @param sprint Sprint item (required)
+     * @return Get List of tasks by sprint (status code 200)
+     * or Bad Request (status code 400)
+     */
+    @Operation(
+            operationId = "getTasksBySprint",
+            summary = "Получить Список задач по спринту",
+            tags = {"task"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Список задач по спринту", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    })
+            }
+    )
+
+    @GetMapping(
+            value = "/sprint",
+            produces = {"application/json"})
+    ResponseEntity<List<TaskDto>> getTasksBySprint(
+            @Parameter(name = "sprint", description = "sprint", required = true)
+            @Valid @RequestBody SprintDto sprint, Principal principal);
 
     /**
      * POST /${stalser.api.url}/tasks : Add task

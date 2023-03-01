@@ -1,0 +1,8 @@
+<aspectj>
+    <aspects>
+        <aspect name="ru.stalser.framework.aspects.LoggingAspect"/>
+        <aspect name="ru.stalser.framework.aspects.AssertAspects"/>
+        <aspect name="ru.stalser.framework.aspects.StepsAspectsOverride"/>
+        <exclude within="io.qameta.allure.aspects.StepsAspects"/>
+    </aspects>
+</aspectj>

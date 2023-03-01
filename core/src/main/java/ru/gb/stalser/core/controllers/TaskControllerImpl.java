@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.gb.stalser.api.dto.sprint.SprintDto;
 import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.api.dto.task.TaskDto;
 import ru.gb.stalser.api.dto.user.UserDto;
@@ -50,6 +51,14 @@ public class TaskControllerImpl implements TaskController {
     public ResponseEntity<List<TaskDto>> getTasksByUser(final UserDto user, Principal principal) {
         return ResponseEntity.ok(
                 taskService.getTasksByUser(user).stream()
+                        .map(taskMapper::mapToDto)
+                        .collect(Collectors.toList()));
+    }
+
+    @Override
+    public ResponseEntity<List<TaskDto>> getTasksBySprint(final SprintDto sprint, Principal principal) {
+        return ResponseEntity.ok(
+                taskService.getTasksBySprint(sprint).stream()
                         .map(taskMapper::mapToDto)
                         .collect(Collectors.toList()));
     }

@@ -10,6 +10,7 @@ import ru.gb.stalser.core.entity.User;
 
 import java.security.Principal;
 import javax.security.auth.message.AuthException;
+import java.security.Principal;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
@@ -33,5 +34,7 @@ public interface UserService extends UserDetailsService {
     AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate, Principal principal);
 
     AuthResponse refresh(String refreshToken) throws AuthException;
+
+    User getUserFromPrincipal(Principal principal);
 
 }
