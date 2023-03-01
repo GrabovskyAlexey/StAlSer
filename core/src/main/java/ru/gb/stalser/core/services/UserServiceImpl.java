@@ -181,8 +181,6 @@ public class UserServiceImpl implements UserService {
     public User getUserFromPrincipal(Principal principal){
         return findByLogin(principal.getName());
     }
-}
-
 
     @Override
     public AuthResponse registerPassUpdate(AuthRequestPassUpdate authRequestPassUpdate, Principal principal){
