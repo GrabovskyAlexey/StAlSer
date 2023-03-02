@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResetPasswordTokenExeption("На почту отправителя токен не отправлялся"));
         ConfirmToken confirmTokenFromRedis = jwtTokenUtil.parseConfirmToken(passwordResetToken.getToken());
        ConfirmToken confirmTokenFromUser = jwtTokenUtil.parseConfirmToken(requestNewPass.getToken());
-       if(confirmTokenFromUser.getType().equals(ConfirmToken.TokenType.RESET)){
+       if(!confirmTokenFromUser.getType().equals(ConfirmToken.TokenType.RESET)){
            throw new ResetPasswordTokenExeption("Некорректный тип токена");
        }
        if(confirmTokenFromUser.getCode().equals(confirmTokenFromRedis.getCode())){
