@@ -71,4 +71,9 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toList());
         return new ValidationErrorResponseDto(violations);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<MessageDto> catchResetPasswordTokenExeption(ResetPasswordTokenExeption e) {
+        return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 }

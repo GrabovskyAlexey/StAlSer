@@ -13,7 +13,7 @@ public class ConfirmToken {
     private TokenType type;
 
     public enum TokenType {
-        REGISTER, INVITE;
+        REGISTER, INVITE, RESET;
 
         public static TokenType getByName(final String name){
             if(Objects.isNull(name)){
