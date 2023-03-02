@@ -13,7 +13,7 @@ import ru.gb.stalser.core.entity.Invite;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.exceptions.DifferentEmailException;
 import ru.gb.stalser.core.exceptions.InviteTokenException;
-import ru.gb.stalser.core.exceptions.InviteWasExpiredException;
+import ru.gb.stalser.core.exceptions.InviteHasBeenProcessedException;
 import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
 import ru.gb.stalser.core.repositories.InviteRepository;
 import ru.gb.stalser.core.services.interfaces.BoardService;
@@ -104,15 +104,15 @@ public class InviteServiceImpl implements InviteService {
     public void acceptInvite(String token, Principal principal) {
         ConfirmToken confirmToken = jwtTokenUtil.parseConfirmToken(token);
         if (!confirmToken.getType().equals(ConfirmToken.TokenType.INVITE)) {
-            throw new InviteTokenException("Тип токена не является приглашением (TokenType.INVITE)");
+            throw new InviteTokenException("Некорректный тип токена");
         }
         Invite invite = inviteRepository.findByInviteCode(confirmToken.getCode()).orElseThrow(() -> new EntityNotFoundException("Приглашение с кодом = " + confirmToken.getCode() + " не найдено"));
-        if (invite.getStatus().equals(InviteStatus.EXPIRED) || invite.getExpirationDate().isBefore(Instant.now())) {
-            throw new InviteWasExpiredException("Время ожидания приглашения истекло");
+        if (!invite.getStatus().equals(InviteStatus.SENT)) {
+            throw new InviteHasBeenProcessedException("Приглашение уже было обработано");
         }
         User user = userService.findByLogin(principal.getName());
-        if (!user.getEmail().equals(invite.getEmail())) {
-            throw new DifferentEmailException("Почта пользователя не совпадает с почтой в приглашении");
+        if (!(user.getEmail().equals(invite.getEmail()) && invite.getEmail().equals(confirmToken.getEmail()))) {
+            throw new DifferentEmailException("Почта не совпадает с почтой из приглашения");
         }
         Board board = invite.getBoard();
         board.getUsers().add(user);

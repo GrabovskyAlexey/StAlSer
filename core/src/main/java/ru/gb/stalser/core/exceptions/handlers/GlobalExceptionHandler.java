@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            InviteWasExpiredException.class,
+            InviteHasBeenProcessedException.class,
             DifferentEmailException.class,
             InviteTokenException.class
     })
