@@ -23,8 +23,8 @@ public class RequestNewPass {
     @JsonProperty("newPassword")
     private String newPassword;
 
-    @NotEmpty(message = "Имя не может быть пустым")
-    @Schema(description = "Имя для смены пароля")
+    @NotEmpty(message = "Email пользователя не может быть пустым")
+    @Schema(description = "Email пользователя для смены пароля")
     @JsonProperty("userEmail")
     private String userEmail;
 }

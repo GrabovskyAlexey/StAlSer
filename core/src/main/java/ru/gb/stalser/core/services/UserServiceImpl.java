@@ -198,20 +198,19 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
     @Override
     public MessageDto resetPassword(String userEmail){
         User user = null;
         SimpleTextEmailMessage message = null;
-        if(userRepository.existsByEmailIgnoreCase(userEmail)) {
-            user = userRepository.findByEmail(userEmail)
-                    .orElseThrow(() -> new UsernameNotFoundException(String.format("User by email '%s' not found", userEmail)));
+        user = userRepository.findByEmail(userEmail).get();
+        if (user == null){
+            return new MessageDto("На предоставленный адрес электронной почты выслано письмо");
         }
-//
+
         String token = UUID.randomUUID().toString();
         ConfirmToken confirmToken = ConfirmToken.builder()
                 .code(token)
-                .type(ConfirmToken.TokenType.RESET)
+                .type(ConfirmToken.TokenType.RESET_PASSWORD)
                 .email(user.getEmail())
                 .build();
         String resetToken = jwtTokenUtil.generateConfirmationToken(confirmToken);
@@ -221,17 +220,13 @@ public class UserServiceImpl implements UserService {
                 .build();
         passwordResetTokenRepository.save(passwordResetToken);
 
-       message = configureMessage(user.getEmail(), user.getLogin());
+        message = configureMessage(user.getEmail(), user.getLogin());
         if (user.getIsActivated()) {
             //если пользователь активирован, кидаем его на страницу где он сформирует requestNewPass и отправит на /password/new
             message.setText(url + "/password/newpage?code=" + resetToken);
             kafkaTemplate.send("simple-text-email", message);
-            return new MessageDto(String.format("Отправлено письмо на электронную почту '%s' для смены пароля", user.getEmail()));
-        } else {
-            message.setText(url + "/register?code=" + token + "&email=" + user.getEmail().replaceAll("@", "%40"));//пользователя нет, кидаем на страницу регистрации
-            kafkaTemplate.send("simple-text-email", message);
-            return new MessageDto("Переадресовано на страницу регистрации");
         }
+        return new MessageDto(String.format("Отправлено письмо на электронную почту '%s' для смены пароля", user.getEmail()));
 
     }
 
@@ -242,24 +237,21 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResetPasswordTokenExeption("На почту отправителя токен не отправлялся"));
         ConfirmToken confirmTokenFromRedis = jwtTokenUtil.parseConfirmToken(passwordResetToken.getToken());
        ConfirmToken confirmTokenFromUser = jwtTokenUtil.parseConfirmToken(requestNewPass.getToken());
-       if(!confirmTokenFromUser.getType().equals(ConfirmToken.TokenType.RESET)){
+       if(!confirmTokenFromUser.getType().equals(ConfirmToken.TokenType.RESET_PASSWORD)){
            throw new ResetPasswordTokenExeption("Некорректный тип токена");
        }
        if(confirmTokenFromUser.getCode().equals(confirmTokenFromRedis.getCode())){
            User user = userRepository.findByLogin(requestNewPass.getUserEmail())
                    .orElseThrow(() -> new UsernameNotFoundException(String.format("User with emile '%s' not found", requestNewPass.getUserEmail())));
-
            user.setPassword(bCryptPasswordEncoder.encode(requestNewPass.getNewPassword()));
            userRepository.save(user);
+           passwordResetTokenRepository.deleteById(requestNewPass.getUserEmail());
            UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), requestNewPass.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
            String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
            String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
            return new AuthResponse(accessToken, refreshToken);
-       }else {
-           throw new ResetPasswordTokenExeption("Token не подтвержден");
        }
-
-
+       throw new ResetPasswordTokenExeption("Token не подтвержден");
     }
 
     private SimpleTextEmailMessage configureMessage(String email, String userName) {
