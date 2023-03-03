@@ -42,17 +42,13 @@ public class UserServiceImpl implements UserService {
     private String url;
     @Value("${stalser.invite.email-address-from}")
     private String emailFrom;
-
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-
     private final RefreshTokenRepository refreshRepository;
-
     private final PasswordResetTokenRepository passwordResetTokenRepository;
-
     private final KafkaTemplate<String, SimpleTextEmailMessage> kafkaTemplate;
 
     @Override
@@ -188,16 +184,13 @@ public class UserServiceImpl implements UserService {
         if (!bCryptPasswordEncoder.matches(authRequestPassUpdate.getOldPassword(), user.getPassword())) {
             throw new PasswordNotConfirmedException(String.format("Пароль пользователя '%s' не подтвержден", user.getLogin()));
         }
-
             user.setPassword(bCryptPasswordEncoder.encode(authRequestPassUpdate.getNewPassword()));
             userRepository.save(user);
             UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), authRequestPassUpdate.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
             String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
             String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
             return new AuthResponse(accessToken, refreshToken);
-
     }
-
     @Override
     public MessageDto resetPassword(String userEmail){
         User user = null;
@@ -206,7 +199,6 @@ public class UserServiceImpl implements UserService {
         if (user == null){
             return new MessageDto("На предоставленный адрес электронной почты выслано письмо");
         }
-
         String token = UUID.randomUUID().toString();
         ConfirmToken confirmToken = ConfirmToken.builder()
                 .code(token)
@@ -219,7 +211,6 @@ public class UserServiceImpl implements UserService {
                 .token(resetToken)
                 .build();
         passwordResetTokenRepository.save(passwordResetToken);
-
         message = configureMessage(user.getEmail(), user.getLogin());
         if (user.getIsActivated()) {
             //если пользователь активирован, кидаем его на страницу где он сформирует requestNewPass и отправит на /password/new
@@ -227,12 +218,9 @@ public class UserServiceImpl implements UserService {
             kafkaTemplate.send("simple-text-email", message);
         }
         return new MessageDto(String.format("Отправлено письмо на электронную почту '%s' для смены пароля", user.getEmail()));
-
     }
-
     @Override
     public AuthResponse setNewPassword(RequestNewPass requestNewPass) throws AuthException {
-
         PasswordResetToken passwordResetToken = passwordResetTokenRepository.findById(requestNewPass.getUserEmail())
                 .orElseThrow(() -> new ResetPasswordTokenExeption("На почту отправителя токен не отправлялся"));
         ConfirmToken confirmTokenFromRedis = jwtTokenUtil.parseConfirmToken(passwordResetToken.getToken());
@@ -261,6 +249,4 @@ public class UserServiceImpl implements UserService {
                 .subject("Ссылка для сброса пароля для пользователя " + userName)
                 .build();
     }
-
-
 }

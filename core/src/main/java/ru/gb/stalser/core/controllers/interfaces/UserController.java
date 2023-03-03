@@ -87,8 +87,6 @@ public interface UserController {
             @Valid @RequestBody RegisterRequest registerRequest
     );
 
-
-
     @Operation(
             operationId = "userPasswordUpdate",
             summary = "Смена пароля",
@@ -114,7 +112,6 @@ public interface UserController {
             Principal principal
             );
 
-
     @Operation(
             operationId = "passwordReset",
             summary = "Сброс пароля",
@@ -139,7 +136,6 @@ public interface UserController {
             @Valid @RequestBody String userEmailForPasswordReset
     );
 
-
     @Operation(
             operationId = "setNewPassword",
             summary = "Установка нового пароля",
@@ -163,18 +159,5 @@ public interface UserController {
             @Parameter(name = "PasswordResetRequest", description = "RequestNewPass Item", required = true)
             @Valid @RequestBody RequestNewPass requestNewPass
             ) throws AuthException;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

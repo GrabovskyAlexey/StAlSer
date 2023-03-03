@@ -31,9 +31,7 @@ public interface UserService extends UserDetailsService {
 
     AuthResponse refresh(String refreshToken) throws AuthException;
 
-
     MessageDto resetPassword(String userEmail);
-
 
     AuthResponse setNewPassword (RequestNewPass requestNewPass) throws AuthException;
 
