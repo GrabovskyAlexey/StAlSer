@@ -90,7 +90,7 @@ public interface UserController {
 
 
     @Operation(
-            operationId = "userUpdate",
+            operationId = "userPasswordUpdate",
             summary = "Смена пароля",
             tags = {"auth"},
             responses = {
@@ -135,14 +135,14 @@ public interface UserController {
     )
 
     ResponseEntity<MessageDto> resetPassword(
-            @Parameter(name = "UserMameForPasswordReset", description = "String Item", required = true)
-            @Valid @RequestBody String userNameForPasswordReset
+            @Parameter(name = "UserEmailForPasswordReset", description = "String Item", required = true)
+            @Valid @RequestBody String userEmailForPasswordReset
     );
 
 
     @Operation(
-            operationId = "passwordReset",
-            summary = "Сброс пароля",
+            operationId = "setNewPassword",
+            summary = "Установка нового пароля",
             tags = {"auth"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Токен авторизации при успешной смене пароля", content = {
@@ -160,7 +160,7 @@ public interface UserController {
     )
 
     ResponseEntity<AuthResponse> setNewPassword(
-            @Parameter(name = "UserMameForPasswordReset", description = "RequestNewPass Item", required = true)
+            @Parameter(name = "PasswordResetRequest", description = "RequestNewPass Item", required = true)
             @Valid @RequestBody RequestNewPass requestNewPass
             ) throws AuthException;
 

@@ -36,10 +36,9 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<MessageDto> resetPassword (@RequestBody String userNameForPasswordReset){
-        return ResponseEntity.ok(userService.resetPassword(userNameForPasswordReset));
+    public ResponseEntity<MessageDto> resetPassword (@RequestBody String userEmailForPasswordReset){
+        return ResponseEntity.ok(userService.resetPassword(userEmailForPasswordReset));
     }
-
 
     @Override
     public ResponseEntity<AuthResponse> setNewPassword (@RequestBody RequestNewPass requestNewPass) throws AuthException {
