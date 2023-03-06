@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
+import java.util.List;
 
 @Data
 @Builder
@@ -40,4 +41,8 @@ public class UserDto {
     @Size(min = 2, message = "Отображаемое логин в телеграмм должен содержать не мение 2-х символов")
     @Schema(description = "Отображаемое логин в телеграмм")
     private String telegram;
+
+    @Schema(description = "Список пользователей с ролями")
+    @JsonProperty("boardId")
+    private List<Long> boardId;
 }

@@ -45,7 +45,7 @@ public interface BoardController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<?> getAllBoards(Principal principal);
+    ResponseEntity<List<BoardDto>> getAllBoards(Principal principal);
 
     /**
      * GET /${stalser.api.url}/boards/{id} : Get board by id

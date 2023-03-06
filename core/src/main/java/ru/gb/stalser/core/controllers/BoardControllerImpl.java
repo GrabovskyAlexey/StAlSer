@@ -12,6 +12,7 @@ import ru.gb.stalser.core.services.interfaces.BoardService;
 import ru.gb.stalser.core.services.interfaces.UserService;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,7 +25,7 @@ public class BoardControllerImpl implements BoardController {
     private final UserService userService;
 
     @Override
-    public ResponseEntity<?> getAllBoards(Principal principal) {
+    public ResponseEntity<List<BoardDto>> getAllBoards(Principal principal) {
         User user = userService.findByLogin(principal.getName());
         return ResponseEntity.ok(
                 boardService.findAllBoardWithUser(user).stream()
