@@ -19,8 +19,8 @@ public class UserControllerImpl implements UserController {
     private final UserServiceImpl userService;
 
     @Override
-    public ResponseEntity<ActivateResponse> activateUser(ConfirmToken confirmToken) {
-        return ResponseEntity.ok(userService.activateUser(confirmToken));
+    public AuthResponse activateUser(String confirmToken) {
+        return userService.activateUser(confirmToken);
     }
 
     @Override

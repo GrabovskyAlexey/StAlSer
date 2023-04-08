@@ -186,13 +186,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ActivateResponse activateUser(ConfirmToken confirmToken) {
-
-        User user = findByEmail(confirmToken.getEmail());
-        if (!confirmToken.isValidToken() | !user.getActivationCode().matches(confirmToken.getCode())) throw new IncorrectConfirmTokenException("Неправильный код подтверждения");
+    public AuthResponse activateUser(String confirmToken) {
+        ConfirmToken token = jwtTokenUtil.parseConfirmToken(confirmToken);
+        if(!token.isValidToken() || token.getType() != ConfirmToken.TokenType.REGISTER) {
+            throw new IncorrectConfirmTokenException("Неправильный код подтверждения");
+        }
+        User user = findByEmail(token.getEmail());
+        if (user.getIsActivated()) {
+            throw new UserAlreadyActivatedException("Пользователь уже активирован");
+        }
+        if (!user.getActivationCode().equals(token.getCode())) {
+            throw new IncorrectConfirmTokenException("Неправильный код подтверждения");
+        }
         user.setIsActivated(true);
-        updateUser(user);
-        return new ActivateResponse("Активация прошла успешно");
+        userRepository.save(user);
+        final UserDetails details = loadUserByUsername(user.getLogin());
+        final String accessToken = jwtTokenUtil.generateAccessToken(details);
+        final String newRefreshToken = jwtTokenUtil.generateRefreshToken(details);
+        final RefreshToken refresh = RefreshToken.builder()
+                .id(user.getLogin())
+                .token(newRefreshToken)
+                .build();
+        refreshRepository.save(refresh);
+        return new AuthResponse(accessToken, newRefreshToken);
     }
 
     @Override

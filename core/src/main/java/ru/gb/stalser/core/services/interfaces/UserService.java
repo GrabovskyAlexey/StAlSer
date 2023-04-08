@@ -35,7 +35,7 @@ public interface UserService extends UserDetailsService {
 
     User getUserFromPrincipal(Principal principal);
 
-    ActivateResponse activateUser(ConfirmToken token);
+    AuthResponse activateUser(String confirmToken);
 
     MessageDto resetPassword(String userEmail);
 

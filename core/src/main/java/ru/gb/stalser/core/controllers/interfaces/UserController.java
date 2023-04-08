@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.ConfirmToken;
 import ru.gb.stalser.api.dto.auth.*;
 import ru.gb.stalser.api.dto.util.MessageDto;
@@ -37,10 +34,10 @@ public interface UserController {
     @Operation(
             operationId = "activate",
             summary = "Активация",
-            tags = {"activate"},
+            tags = {"auth"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Успешная активация", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = ActivateResponse.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -49,15 +46,12 @@ public interface UserController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
     )
-    @PostMapping(
+    @GetMapping(
             produces = {"application/json"},
-            consumes = {"application/json"},
             path = {"/activate"}
     )
-    @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<ActivateResponse> activateUser(
-            @Parameter(name = "ConfirmToken", description = "ConfirmToken Item", required = true) @RequestBody ConfirmToken confirmToken
-            );
+    AuthResponse activateUser(
+            @Parameter(name = "ConfirmToken", description = "ConfirmToken", required = true) @RequestParam String confirmToken);
 
 
     /**
