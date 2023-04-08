@@ -87,10 +87,8 @@ public interface UserController {
             @Valid @RequestBody RegisterRequest registerRequest
     );
 
-
-
     @Operation(
-            operationId = "userUpdate",
+            operationId = "userPasswordUpdate",
             summary = "Смена пароля",
             tags = {"auth"},
             responses = {
@@ -143,5 +141,52 @@ public interface UserController {
             @Parameter(name = "RefreshRequest", description = "RefreshRequest Item", required = true)
             @Valid @RequestBody RefreshRequest refreshRequest
     ) throws AuthException;
+    @Operation(
+            operationId = "passwordReset",
+            summary = "Сброс пароля",
+            tags = {"auth"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "PasswordResetToken не почту пользователя", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+            }
+    )
+    @PostMapping(
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            path = {"/password/reset"}
+    )
+
+    ResponseEntity<MessageDto> resetPassword(
+            @Parameter(name = "UserEmailForPasswordReset", description = "String Item", required = true)
+            @Valid @RequestBody String userEmailForPasswordReset
+    );
+
+    @Operation(
+            operationId = "setNewPassword",
+            summary = "Установка нового пароля",
+            tags = {"auth"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Токен авторизации при успешной смене пароля", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+            }
+    )
+    @PostMapping(
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            path = {"/password/new"}
+    )
+
+    ResponseEntity<AuthResponse> setNewPassword(
+            @Parameter(name = "PasswordResetRequest", description = "RequestNewPass Item", required = true)
+            @Valid @RequestBody RequestNewPass requestNewPass
+            ) throws AuthException;
 
 }

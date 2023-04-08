@@ -2,38 +2,32 @@ package ru.gb.stalser.core.services;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.gb.stalser.api.dto.auth.AuthRequest;
-import ru.gb.stalser.api.dto.auth.AuthRequestPassUpdate;
-import ru.gb.stalser.api.dto.auth.AuthResponse;
-import ru.gb.stalser.api.dto.auth.RegisterRequest;
-import ru.gb.stalser.core.entity.RefreshToken;
-import ru.gb.stalser.core.entity.Role;
-import ru.gb.stalser.core.entity.User;
+import ru.gb.stalser.api.dto.ConfirmToken;
+import ru.gb.stalser.api.dto.auth.*;
+import ru.gb.stalser.api.dto.notify.SimpleTextEmailMessage;
+import ru.gb.stalser.api.dto.util.MessageDto;
+import ru.gb.stalser.core.entity.*;
 import ru.gb.stalser.core.exceptions.EmailAlreadyExistsException;
-import ru.gb.stalser.core.exceptions.InviteWithoutBoardException;
 import ru.gb.stalser.core.exceptions.PasswordNotConfirmedException;
+import ru.gb.stalser.core.exceptions.ResetPasswordTokenExeption;
 import ru.gb.stalser.core.exceptions.UserAlreadyExistsException;
+import ru.gb.stalser.core.repositories.PasswordResetTokenRepository;
 import ru.gb.stalser.core.repositories.RefreshTokenRepository;
 import ru.gb.stalser.core.repositories.UserRepository;
 import ru.gb.stalser.core.services.interfaces.RoleService;
 import ru.gb.stalser.core.services.interfaces.UserService;
 import ru.gb.stalser.core.utils.JwtTokenUtil;
-
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import javax.security.auth.message.AuthException;
@@ -45,13 +39,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    @Value("${stalser.invite.url}")
+    private String url;
+    @Value("${stalser.invite.email-address-from}")
+    private String emailFrom;
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-
     private final RefreshTokenRepository refreshRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final KafkaTemplate<String, SimpleTextEmailMessage> kafkaTemplate;
 
     @Override
     public List<User> findAll() {
@@ -191,14 +190,70 @@ public class UserServiceImpl implements UserService {
         if (!bCryptPasswordEncoder.matches(authRequestPassUpdate.getOldPassword(), user.getPassword())) {
             throw new PasswordNotConfirmedException(String.format("Пароль пользователя '%s' не подтвержден", user.getLogin()));
         }
-
             user.setPassword(bCryptPasswordEncoder.encode(authRequestPassUpdate.getNewPassword()));
             userRepository.save(user);
             UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), authRequestPassUpdate.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
             String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
             String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
             return new AuthResponse(accessToken, refreshToken);
+    }
+    @Override
+    public MessageDto resetPassword(String userEmail){
+        User user = null;
+        SimpleTextEmailMessage message = null;
+        user = userRepository.findByEmail(userEmail).get();
+        if (user == null){
+            return new MessageDto("На предоставленный адрес электронной почты выслано письмо");
+        }
+        String token = UUID.randomUUID().toString();
+        ConfirmToken confirmToken = ConfirmToken.builder()
+                .code(token)
+                .type(ConfirmToken.TokenType.RESET_PASSWORD)
+                .email(user.getEmail())
+                .build();
+        String resetToken = jwtTokenUtil.generateConfirmationToken(confirmToken);
+        PasswordResetToken passwordResetToken = PasswordResetToken.builder()
+                .id(user.getEmail())
+                .token(resetToken)
+                .build();
+        passwordResetTokenRepository.save(passwordResetToken);
+        message = configureMessage(user.getEmail(), user.getLogin());
+        if (user.getIsActivated()) {
+            //если пользователь активирован, кидаем его на страницу где он сформирует requestNewPass и отправит на /password/new
+            message.setText(url + "/password/newpage?code=" + resetToken);
+            kafkaTemplate.send("simple-text-email", message);
+        }
+        return new MessageDto(String.format("Отправлено письмо на электронную почту '%s' для смены пароля", user.getEmail()));
+    }
+    @Override
+    public AuthResponse setNewPassword(RequestNewPass requestNewPass) throws AuthException {
+        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findById(requestNewPass.getUserEmail())
+                .orElseThrow(() -> new ResetPasswordTokenExeption("На почту отправителя токен не отправлялся"));
+        ConfirmToken confirmTokenFromRedis = jwtTokenUtil.parseConfirmToken(passwordResetToken.getToken());
+       ConfirmToken confirmTokenFromUser = jwtTokenUtil.parseConfirmToken(requestNewPass.getToken());
+       if(!confirmTokenFromUser.getType().equals(ConfirmToken.TokenType.RESET_PASSWORD)){
+           throw new ResetPasswordTokenExeption("Некорректный тип токена");
+       }
+       if(confirmTokenFromUser.getCode().equals(confirmTokenFromRedis.getCode())){
+           User user = userRepository.findByLogin(requestNewPass.getUserEmail())
+                   .orElseThrow(() -> new UsernameNotFoundException(String.format("User with emile '%s' not found", requestNewPass.getUserEmail())));
+           user.setPassword(bCryptPasswordEncoder.encode(requestNewPass.getNewPassword()));
+           userRepository.save(user);
+           passwordResetTokenRepository.deleteById(requestNewPass.getUserEmail());
+           UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), requestNewPass.getNewPassword(), mapRolesToAuthorities(user.getRoles()));
+           String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+           String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+           return new AuthResponse(accessToken, refreshToken);
+       }
+       throw new ResetPasswordTokenExeption("Token не подтвержден");
+    }
 
+    private SimpleTextEmailMessage configureMessage(String email, String userName) {
+        return SimpleTextEmailMessage.builder()
+                .from(emailFrom)
+                .to(email)
+                .subject("Ссылка для сброса пароля для пользователя " + userName)
+                .build();
     }
 }
 
