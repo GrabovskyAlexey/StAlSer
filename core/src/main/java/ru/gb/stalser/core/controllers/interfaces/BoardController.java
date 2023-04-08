@@ -111,7 +111,7 @@ public interface BoardController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<BoardDto> addBoard(
+    BoardDto addBoard(
             @Parameter(name = "Board", description = "Board Item", required = true)
             @Valid @RequestBody BoardDto board,
             Principal principal

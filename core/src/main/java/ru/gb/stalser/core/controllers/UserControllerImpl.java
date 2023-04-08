@@ -26,13 +26,18 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<AuthResponse> register(final RegisterRequest registerRequest) {
-        return ResponseEntity.ok(userService.register(registerRequest));
+    public AuthResponse register(final RegisterRequest registerRequest) {
+        return userService.register(registerRequest);
     }
 
     @Override
     public ResponseEntity<AuthResponse> changePassword (@RequestBody AuthRequestPassUpdate authRequestPassUpdate, Principal principal){
         return ResponseEntity.ok(userService.registerPassUpdate(authRequestPassUpdate, principal));
+    }
+
+    @Override
+    public ResponseEntity<AuthResponse> refresh(final RefreshRequest refreshRequest) throws AuthException {
+        return ResponseEntity.ok(userService.refresh(refreshRequest.getRefreshToken()));
     }
 
     @Override

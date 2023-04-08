@@ -2,9 +2,11 @@ package ru.gb.stalser.core.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.gb.stalser.api.dto.sprint.SprintDto;
 import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.api.dto.user.UserDto;
 import ru.gb.stalser.core.entity.Task;
+import ru.gb.stalser.core.mappers.SprintMapper;
 import ru.gb.stalser.core.mappers.TagMapper;
 import ru.gb.stalser.core.mappers.UserMapper;
 import ru.gb.stalser.core.repositories.TaskRepository;
@@ -18,6 +20,7 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
     private  final TagMapper tagMapper;
     private  final UserMapper userMapper;
+    private  final SprintMapper sprintMapper;
     private  final TaskRepository taskRepository;
     @Override
     public List<Task> findAll() {
@@ -56,7 +59,10 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.getTasksByAssigneeContaining(userMapper.mapFromDto(assigned));
     }
 
-
+    @Override
+    public List<Task> getTasksBySprint(SprintDto sprint) {
+        return taskRepository.getTasksBySprintsContaining(sprintMapper.mapFromDto(sprint));
+    }
 
 
 }

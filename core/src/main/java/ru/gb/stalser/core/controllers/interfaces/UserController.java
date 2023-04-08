@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.gb.stalser.api.dto.auth.*;
 import ru.gb.stalser.api.dto.util.MessageDto;
+
 import javax.security.auth.message.AuthException;
 import javax.validation.Valid;
 import java.security.Principal;
-
 
 
 @Tag(name = "auth", description = "Контроллер для аутентификации")
@@ -68,7 +68,7 @@ public interface UserController {
             summary = "Регистрация",
             tags = {"auth"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Токен авторизации при успешной регистрации", content = {
+                    @ApiResponse(responseCode = "201", description = "Токен авторизации при успешной регистрации", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
@@ -82,7 +82,7 @@ public interface UserController {
             path = {"/register"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<AuthResponse> register(
+    AuthResponse register(
             @Parameter(name = "RegisterRequest", description = "RegisterRequest Item", required = true)
             @Valid @RequestBody RegisterRequest registerRequest
     );
@@ -112,6 +112,35 @@ public interface UserController {
             Principal principal
             );
 
+    /**
+     * POST /register : register user
+     *
+     * @param refreshRequest registerRequest Item (required)
+     * @return Successfully create token (status code 200)
+     * or Bad Request (status code 400)
+     */
+    @Operation(
+            operationId = "refresh",
+            summary = "Получение нового токена",
+            tags = {"auth"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Новая пара токенов доступа и обновления", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+            }
+    )
+    @PostMapping(
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            path = {"/refresh"}
+    )
+    ResponseEntity<AuthResponse> refresh(
+            @Parameter(name = "RefreshRequest", description = "RefreshRequest Item", required = true)
+            @Valid @RequestBody RefreshRequest refreshRequest
+    ) throws AuthException;
     @Operation(
             operationId = "passwordReset",
             summary = "Сброс пароля",

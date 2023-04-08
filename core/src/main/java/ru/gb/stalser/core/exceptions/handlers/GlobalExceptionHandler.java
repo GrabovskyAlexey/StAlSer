@@ -36,8 +36,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            InviteWasExpiredException.class,
-            DifferentEmailException.class
+            InviteHasBeenProcessedException.class,
+            DifferentEmailException.class,
+            InviteTokenException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public MessageDto catchInviteException(RuntimeException e) {

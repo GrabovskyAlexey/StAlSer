@@ -22,6 +22,7 @@ public class DBHelper {
         final String url = Props.getString("postgre.stalser.jdbc.url");
         final String login = Props.getString("postgre.stalser.jdbc.login");
         final String password = Props.getString("postgre.stalser.jdbc.password");
+        connectPostgre(url, login, password);
     }
 
     private void connectPostgre(final String url, final String login, final String password) {
@@ -64,7 +65,7 @@ public class DBHelper {
     }
 
     @Step("Делаю запрос в базу данных. {logMessage}")
-    public List<Map<String, String>> doRequestInToList(Connection con, String sql, String logMessage) {
+    private List<Map<String, String>> doRequestInToList(Connection con, String sql, String logMessage) {
 
         attachTxt("DB Query", sql);
         List<Map<String, String>> result = new ArrayList<>();
@@ -163,9 +164,9 @@ public class DBHelper {
                 int columnCount = resultSet.getMetaData().getColumnCount();
                 for (int i = 1; i <= columnCount; i++) {
                     if (resultSet.getMetaData().getColumnTypeName(i).equals("bytea")) {
-                        resulMap.put(resultSet.getMetaData().getColumnTypeName(i), new String(resultSet.getBytes(i)));
+                        resulMap.put(resultSet.getMetaData().getColumnName(i), new String(resultSet.getBytes(i)));
                     } else {
-                        resulMap.put(resultSet.getMetaData().getColumnTypeName(i), resultSet.getString(i));
+                        resulMap.put(resultSet.getMetaData().getColumnName(i), resultSet.getString(i));
                     }
                 }
             }

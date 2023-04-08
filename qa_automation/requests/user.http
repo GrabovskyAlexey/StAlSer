@@ -1,0 +1,9 @@
+### Запрос на создание юзера
+POST http://localhost:8081/register
+Content-Type: application/json
+
+{
+    "login": "grafwwwolf",
+    "password": "grafpswd",
+    "email": "grafwwwolf@mail.ru"
+}
