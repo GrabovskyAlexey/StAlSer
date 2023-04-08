@@ -55,6 +55,16 @@ public class GlobalExceptionHandler {
         return new MessageDto(e.getMessage());
     }
 
+    @ExceptionHandler({
+            UserAlreadyActivatedException.class,
+            IncorrectConfirmTokenException.class
+    })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public MessageDto catchActivatedException(RuntimeException e){
+        log.warn("Catch exception {}\n Message: {}", e.getClass().getSimpleName(), e.getMessage());
+        return new MessageDto(e.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ValidationErrorResponseDto onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -71,5 +81,10 @@ public class GlobalExceptionHandler {
                 .map(error -> new ValidationError(error.getPropertyPath().toString(), error.getMessage()))
                 .collect(Collectors.toList());
         return new ValidationErrorResponseDto(violations);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<MessageDto> catchResetPasswordTokenExeption(ResetPasswordTokenExeption e) {
+        return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

@@ -8,9 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
+import ru.gb.stalser.api.dto.ConfirmToken;
 import ru.gb.stalser.api.dto.auth.*;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
@@ -21,6 +20,39 @@ import java.security.Principal;
 
 @Tag(name = "auth", description = "Контроллер для аутентификации")
 public interface UserController {
+
+
+    /**
+     * POST /activate : activate user
+     *
+     * @param confirmToken confirmToken Item (required)
+     * @return Successfully activate user (status code 200)
+     * or Bad Request (status code 400)
+     * or Unauthorized (status code 401)
+     * or Forbidden (status code 403)
+     */
+    @Operation(
+            operationId = "activate",
+            summary = "Активация",
+            tags = {"auth"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Успешная активация", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+            }
+    )
+    @GetMapping(
+            produces = {"application/json"},
+            path = {"/activate"}
+    )
+    AuthResponse activateUser(
+            @Parameter(name = "ConfirmToken", description = "ConfirmToken", required = true) @RequestParam String confirmToken);
+
 
     /**
      * POST /auth : create token
@@ -87,10 +119,8 @@ public interface UserController {
             @Valid @RequestBody RegisterRequest registerRequest
     );
 
-
-
     @Operation(
-            operationId = "userUpdate",
+            operationId = "userPasswordUpdate",
             summary = "Смена пароля",
             tags = {"auth"},
             responses = {
@@ -143,5 +173,52 @@ public interface UserController {
             @Parameter(name = "RefreshRequest", description = "RefreshRequest Item", required = true)
             @Valid @RequestBody RefreshRequest refreshRequest
     ) throws AuthException;
+    @Operation(
+            operationId = "passwordReset",
+            summary = "Сброс пароля",
+            tags = {"auth"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "PasswordResetToken не почту пользователя", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+            }
+    )
+    @PostMapping(
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            path = {"/password/reset"}
+    )
+
+    ResponseEntity<MessageDto> resetPassword(
+            @Parameter(name = "UserEmailForPasswordReset", description = "String Item", required = true)
+            @Valid @RequestBody String userEmailForPasswordReset
+    );
+
+    @Operation(
+            operationId = "setNewPassword",
+            summary = "Установка нового пароля",
+            tags = {"auth"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Токен авторизации при успешной смене пароля", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
+                    }),
+            }
+    )
+    @PostMapping(
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            path = {"/password/new"}
+    )
+
+    ResponseEntity<AuthResponse> setNewPassword(
+            @Parameter(name = "PasswordResetRequest", description = "RequestNewPass Item", required = true)
+            @Valid @RequestBody RequestNewPass requestNewPass
+            ) throws AuthException;
 
 }
