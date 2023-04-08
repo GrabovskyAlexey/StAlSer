@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.sprint.SprintDto;
 import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.api.dto.task.TaskDto;
+import ru.gb.stalser.api.dto.task.TaskListResponse;
 import ru.gb.stalser.api.dto.user.UserDto;
 import ru.gb.stalser.core.controllers.interfaces.TaskController;
 import ru.gb.stalser.core.mappers.TaskMapper;
 import ru.gb.stalser.core.services.interfaces.TaskService;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,51 +25,55 @@ public class TaskControllerImpl implements TaskController {
     private final TaskMapper taskMapper;
 
     @Override
-    public ResponseEntity<List<TaskDto>> getAllTasks(Principal principal) {
-        return ResponseEntity.ok(
-                taskService.findAll().stream()
-                        .map(taskMapper::mapToDto)
-                        .collect(Collectors.toList())
-        );
+    public TaskListResponse getAllTasks(Principal principal) {
+        return TaskListResponse.builder()
+                .tasks(
+                        taskService.findAll().stream()
+                                .map(taskMapper::mapToDto)
+                                .collect(Collectors.toList()))
+                .build();
     }
 
     @Override
-    public ResponseEntity<TaskDto> getTaskById(final Long id, Principal principal) {
-        return ResponseEntity.ok(taskMapper.mapToDto(taskService.findById(id)));
+    public TaskDto getTaskById(final Long id, Principal principal) {
+        return taskMapper.mapToDto(taskService.findById(id));
     }
 
     @Override
-    public ResponseEntity<List<TaskDto>> getAllTaskByTag(TagDto tagDto, Principal principal) {
-        return ResponseEntity.ok(
-                taskService.findAllTaskByTag(tagDto)
-                        .stream()
-                        .map(taskMapper::mapToDto)
-                        .collect(Collectors.toList())
-        );
+    public TaskListResponse getAllTaskByTag(TagDto tagDto, Principal principal) {
+        return TaskListResponse.builder()
+                .tasks(
+                        taskService.findAllTaskByTag(tagDto)
+                                .stream()
+                                .map(taskMapper::mapToDto)
+                                .collect(Collectors.toList()))
+                .build();
     }
     @Override
-    public ResponseEntity<List<TaskDto>> getTasksByUser(final UserDto user, Principal principal) {
-        return ResponseEntity.ok(
-                taskService.getTasksByUser(user).stream()
-                        .map(taskMapper::mapToDto)
-                        .collect(Collectors.toList()));
+    public TaskListResponse getTasksByUser(final UserDto user, Principal principal) {
+        return TaskListResponse.builder()
+                .tasks(
+                        taskService.getTasksByUser(user).stream()
+                                .map(taskMapper::mapToDto)
+                                .collect(Collectors.toList()))
+                .build();
     }
 
     @Override
-    public ResponseEntity<List<TaskDto>> getTasksBySprint(final SprintDto sprint, Principal principal) {
-        return ResponseEntity.ok(
-                taskService.getTasksBySprint(sprint).stream()
-                        .map(taskMapper::mapToDto)
-                        .collect(Collectors.toList()));
+    public TaskListResponse getTasksBySprint(final SprintDto sprint, Principal principal) {
+        return TaskListResponse.builder()
+                .tasks(
+                        taskService.getTasksBySprint(sprint).stream()
+                                .map(taskMapper::mapToDto)
+                                .collect(Collectors.toList()))
+                .build();
     }
 
 
     @Override
-    public ResponseEntity<TaskDto> addTask(final TaskDto task, Principal principal) {
-        return ResponseEntity.ok(
-                taskMapper.mapToDto(
-                        taskService.save(taskMapper.mapFromDto(task))
-                )
+    public TaskDto addTask(final TaskDto task, Principal principal) {
+        return taskMapper.mapToDto(
+                taskService.save(taskMapper.mapFromDto(task))
         );
     }
 

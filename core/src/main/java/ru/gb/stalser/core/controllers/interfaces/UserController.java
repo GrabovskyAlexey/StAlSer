@@ -52,7 +52,7 @@ public interface UserController {
             path = {"/auth"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<AuthResponse> createAuthToken(
+    AuthResponse createAuthToken(
             @Parameter(name = "AuthRequest", description = "AuthRequest Item", required = true) @Valid @RequestBody AuthRequest authRequest
     );
 
@@ -108,7 +108,7 @@ public interface UserController {
             path = {"/password/change"}
     )
 
-    ResponseEntity<AuthResponse> changePassword(
+    AuthResponse changePassword(
             @Parameter(name = "RegisterUpdateRequest", description = "AuthRequestPassUpdate Item", required = true)
             @Valid @RequestBody AuthRequestPassUpdate authRequestPassUpdate,
             Principal principal
@@ -139,7 +139,7 @@ public interface UserController {
             consumes = {"application/json"},
             path = {"/refresh"}
     )
-    ResponseEntity<AuthResponse> refresh(
+    AuthResponse refresh(
             @Parameter(name = "RefreshRequest", description = "RefreshRequest Item", required = true)
             @Valid @RequestBody RefreshRequest refreshRequest
     ) throws AuthException;

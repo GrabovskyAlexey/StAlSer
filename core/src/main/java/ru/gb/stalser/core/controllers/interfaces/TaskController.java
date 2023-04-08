@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.sprint.SprintDto;
 import ru.gb.stalser.api.dto.tag.TagDto;
 import ru.gb.stalser.api.dto.task.TaskDto;
+import ru.gb.stalser.api.dto.task.TaskListResponse;
 import ru.gb.stalser.api.dto.user.UserDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
@@ -34,8 +35,7 @@ public interface TaskController {
             tags = {"task"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Список всех задач", content = {
-                            @Content(mediaType = "application/json", array = @ArraySchema(
-                                    schema = @Schema(implementation = TaskDto.class)))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskListResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -45,7 +45,7 @@ public interface TaskController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<TaskDto>> getAllTasks(Principal principal);
+    TaskListResponse getAllTasks(Principal principal);
     /**
      * GET /${stalser.api.url}/tasks/{id} : Get Task by id
      *
@@ -74,7 +74,7 @@ public interface TaskController {
             value = "/{id}",
             produces = {"application/json"}
     )
-    ResponseEntity<TaskDto> getTaskById(
+    TaskDto getTaskById(
             @Parameter(name = "id", description = "task id", required = true)
             @PathVariable("id") Long id,
             Principal principal
@@ -93,7 +93,7 @@ public interface TaskController {
             tags = {"task"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Задача", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskDto.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskListResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -105,7 +105,7 @@ public interface TaskController {
             value = "/tag",
             produces = {"application/json"}
     )
-    ResponseEntity<List<TaskDto>> getAllTaskByTag(
+    TaskListResponse getAllTaskByTag(
             @Parameter(name = "tag", description = "Tags item", required = true)
             @Valid @RequestBody TagDto tagDto,
             Principal principal
@@ -123,7 +123,7 @@ public interface TaskController {
             tags = {"task"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Список задач", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskDto.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskListResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -134,7 +134,7 @@ public interface TaskController {
     @GetMapping(
             value = "/user",
             produces = {"application/json"})
-    ResponseEntity<List<TaskDto>> getTasksByUser(
+    TaskListResponse getTasksByUser(
             @Parameter(name = "user", description = "user", required = true)
             @Valid @RequestBody UserDto user, Principal principal);
 
@@ -151,7 +151,7 @@ public interface TaskController {
             tags = {"task"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Список задач по спринту", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskDto.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = TaskListResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -162,7 +162,7 @@ public interface TaskController {
     @GetMapping(
             value = "/sprint",
             produces = {"application/json"})
-    ResponseEntity<List<TaskDto>> getTasksBySprint(
+    TaskListResponse getTasksBySprint(
             @Parameter(name = "sprint", description = "sprint", required = true)
             @Valid @RequestBody SprintDto sprint, Principal principal);
 
@@ -195,7 +195,7 @@ public interface TaskController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<TaskDto> addTask(
+    TaskDto addTask(
             @Parameter(name = "Task", description = "Task Item", required = true)
             @Valid @RequestBody TaskDto task,
             Principal principal

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.comment.CommentDto;
+import ru.gb.stalser.api.dto.comment.CommentListResponse;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import java.security.Principal;
@@ -35,9 +36,8 @@ public interface CommentController {
             summary = "Получение списка коментариев",
             tags = {"comment"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Список всех коментариев", content = {
-                            @Content(mediaType = "application/json", array = @ArraySchema(
-                                    schema = @Schema(implementation = CommentDto.class)))
+                    @ApiResponse(responseCode = "200", description = "Список всех комментариев", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = CommentListResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -47,7 +47,7 @@ public interface CommentController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<CommentDto>> getAllComments(Principal principal);
+    CommentListResponse getAllComments(Principal principal);
 
     /**
      * GET /${stalser.api.url}/comments/{id} : Get Comment by id
@@ -77,7 +77,7 @@ public interface CommentController {
             value = "/{id}",
             produces = {"application/json"}
     )
-    ResponseEntity<CommentDto> getCommentById(
+    CommentDto getCommentById(
             @Parameter(name = "id", description = "task id", required = true)
             @PathVariable("id") Long id,
             Principal principal
@@ -112,7 +112,7 @@ public interface CommentController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<CommentDto> addComment(
+    CommentDto addComment(
             @Parameter(name = "Comment", description = "Comment Item", required = true)
             @Valid @RequestBody CommentDto comment,
             Principal principal

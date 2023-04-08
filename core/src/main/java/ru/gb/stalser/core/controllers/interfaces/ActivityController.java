@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.activity.ActivityDto;
+import ru.gb.stalser.api.dto.activity.ActivityListResponse;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
@@ -34,8 +35,7 @@ public interface ActivityController {
             tags = {"activity"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Список всех активностей", content = {
-                            @Content(mediaType = "application/json", array = @ArraySchema(
-                                    schema = @Schema(implementation = ActivityDto.class)))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityListResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -45,7 +45,7 @@ public interface ActivityController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<ActivityDto>> getAllActivities(Principal principal);
+    ActivityListResponse getAllActivities(Principal principal);
 
     /**
      * GET /${stalser.api.url}/activity/{id} : Get activity by id
@@ -75,7 +75,7 @@ public interface ActivityController {
             value = "/{id}",
             produces = {"application/json"}
     )
-    ResponseEntity<ActivityDto> getActivityById(
+    ActivityDto getActivityById(
             @Parameter(name = "id", description = "activity id", required = true)
             @PathVariable("id") Long id,
             Principal principal
@@ -110,7 +110,7 @@ public interface ActivityController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<ActivityDto> addActivity(
+    ActivityDto addActivity(
             @Parameter(name = "activity", description = "Activity Item", required = true)
             @Valid @RequestBody ActivityDto activity,
             Principal principal
@@ -131,9 +131,7 @@ public interface ActivityController {
             summary = "Обновление активности",
             tags = {"activity"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Активность успешно обновлена", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))
-                    }),
+                    @ApiResponse(responseCode = "204", description = "Активность успешно обновлена"),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),
@@ -171,7 +169,7 @@ public interface ActivityController {
             summary = "Удаление активности",
             tags = {"activity"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Активность успешно удалена"),
+                    @ApiResponse(responseCode = "204", description = "Активность успешно удалена"),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),

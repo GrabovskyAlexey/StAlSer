@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.board.BoardDto;
+import ru.gb.stalser.api.dto.board.BoardListResponse;
 import ru.gb.stalser.core.controllers.interfaces.BoardController;
 import ru.gb.stalser.core.mappers.BoardMapper;
 import ru.gb.stalser.core.services.interfaces.BoardService;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,18 +22,18 @@ public class BoardControllerImpl implements BoardController {
     private final BoardMapper boardMapper;
 
     @Override
-    public ResponseEntity<List<BoardDto>> getAllBoards(Principal principal) {
-        return ResponseEntity.ok(
-                boardService.findAllByUsername(principal).stream()
+    public BoardListResponse getAllBoards(Principal principal) {
+        return BoardListResponse.builder()
+                .boards(boardService.findAllByUsername(principal).stream()
                         .map(boardMapper::mapToDto)
-                        .collect(Collectors.toList())
-        );
+                        .collect(Collectors.toList()))
+                .build();
     }
 
 
     @Override
-    public ResponseEntity<BoardDto> getBoardById(Long id, Principal principal) {
-        return ResponseEntity.ok(boardMapper.mapToDto(boardService.findById(id)));
+    public BoardDto getBoardById(Long id, Principal principal) {
+        return boardMapper.mapToDto(boardService.findById(id));
     }
 
     @Override

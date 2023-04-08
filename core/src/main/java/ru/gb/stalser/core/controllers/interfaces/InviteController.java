@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.invite.InviteDto;
+import ru.gb.stalser.api.dto.invite.InviteListResponse;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
@@ -34,8 +35,7 @@ public interface InviteController {
             tags = {"invite"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Список всех приглашений", content = {
-                            @Content(mediaType = "application/json", array = @ArraySchema(
-                                    schema = @Schema(implementation = InviteDto.class)))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = InviteListResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -45,7 +45,7 @@ public interface InviteController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<InviteDto>> getAllInvites(Principal principal);
+    InviteListResponse getAllInvites(Principal principal);
 
     /**
      * GET /${stalser.api.url}/invites/{id} : Get invite by id
@@ -75,7 +75,7 @@ public interface InviteController {
             value = "/{id}",
             produces = {"application/json"}
     )
-    ResponseEntity<InviteDto> getInviteById(
+    InviteDto getInviteById(
             @Parameter(name = "id", description = "идентификатор приглашения", required = true)
             @PathVariable("id") Long id,
             Principal principal
@@ -110,7 +110,7 @@ public interface InviteController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<InviteDto> addInvite(
+    InviteDto addInvite(
             @Parameter(name = "invite", description = "Приглашение", required = true)
             @Valid @RequestBody InviteDto invite,
             Principal principal
@@ -131,9 +131,7 @@ public interface InviteController {
             summary = "Обновление приглашения",
             tags = {"invite"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Приглашение успешно обновлено", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = InviteDto.class))
-                    }),
+                    @ApiResponse(responseCode = "204", description = "Приглашение успешно обновлено"),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),
@@ -171,7 +169,7 @@ public interface InviteController {
             summary = "Удаление приглашения",
             tags = {"invite"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Приглашение успешно удалено"),
+                    @ApiResponse(responseCode = "204", description = "Приглашение успешно удалено"),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),
