@@ -2,9 +2,8 @@ package ru.gb.stalser.core.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.gb.stalser.api.dto.ConfirmToken;
 import ru.gb.stalser.api.dto.auth.*;
 import ru.gb.stalser.api.dto.util.MessageDto;
 import ru.gb.stalser.core.controllers.interfaces.UserController;
@@ -18,6 +17,11 @@ import java.security.Principal;
 public class UserControllerImpl implements UserController {
 
     private final UserServiceImpl userService;
+
+    @Override
+    public AuthResponse activateUser(String confirmToken) {
+        return userService.activateUser(confirmToken);
+    }
 
     @Override
     public ResponseEntity<AuthResponse> createAuthToken(@RequestBody AuthRequest authRequest) {

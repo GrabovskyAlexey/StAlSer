@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.stalser.api.dto.ConfirmToken;
 import ru.gb.stalser.api.dto.auth.*;
+import ru.gb.stalser.core.entity.RefreshToken;
+import ru.gb.stalser.core.entity.Role;
+import ru.gb.stalser.core.entity.User;
+import ru.gb.stalser.core.exceptions.*;
 import ru.gb.stalser.api.dto.notify.SimpleTextEmailMessage;
 import ru.gb.stalser.api.dto.util.MessageDto;
 import ru.gb.stalser.core.entity.*;
@@ -31,7 +35,6 @@ import ru.gb.stalser.core.utils.JwtTokenUtil;
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import javax.security.auth.message.AuthException;
-import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -179,6 +182,33 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserFromPrincipal(Principal principal){
         return findByLogin(principal.getName());
+    }
+
+    @Override
+    @Transactional
+    public AuthResponse activateUser(String confirmToken) {
+        ConfirmToken token = jwtTokenUtil.parseConfirmToken(confirmToken);
+        if(!token.isValidToken() || token.getType() != ConfirmToken.TokenType.REGISTER) {
+            throw new IncorrectConfirmTokenException("Неправильный код подтверждения");
+        }
+        User user = findByEmail(token.getEmail());
+        if (user.getIsActivated()) {
+            throw new UserAlreadyActivatedException("Пользователь уже активирован");
+        }
+        if (!user.getActivationCode().equals(token.getCode())) {
+            throw new IncorrectConfirmTokenException("Неправильный код подтверждения");
+        }
+        user.setIsActivated(true);
+        userRepository.save(user);
+        final UserDetails details = loadUserByUsername(user.getLogin());
+        final String accessToken = jwtTokenUtil.generateAccessToken(details);
+        final String newRefreshToken = jwtTokenUtil.generateRefreshToken(details);
+        final RefreshToken refresh = RefreshToken.builder()
+                .id(user.getLogin())
+                .token(newRefreshToken)
+                .build();
+        refreshRepository.save(refresh);
+        return new AuthResponse(accessToken, newRefreshToken);
     }
 
     @Override

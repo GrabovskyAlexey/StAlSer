@@ -55,6 +55,16 @@ public class GlobalExceptionHandler {
         return new MessageDto(e.getMessage());
     }
 
+    @ExceptionHandler({
+            UserAlreadyActivatedException.class,
+            IncorrectConfirmTokenException.class
+    })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public MessageDto catchActivatedException(RuntimeException e){
+        log.warn("Catch exception {}\n Message: {}", e.getClass().getSimpleName(), e.getMessage());
+        return new MessageDto(e.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ValidationErrorResponseDto onMethodArgumentNotValidException(MethodArgumentNotValidException e) {

@@ -2,6 +2,7 @@ package ru.gb.stalser.core.services.interfaces;
 
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import ru.gb.stalser.api.dto.ConfirmToken;
 import ru.gb.stalser.api.dto.auth.*;
 import ru.gb.stalser.api.dto.util.MessageDto;
 import ru.gb.stalser.core.entity.User;
@@ -33,6 +34,8 @@ public interface UserService extends UserDetailsService {
     AuthResponse refresh(String refreshToken) throws AuthException;
 
     User getUserFromPrincipal(Principal principal);
+
+    AuthResponse activateUser(String confirmToken);
 
     MessageDto resetPassword(String userEmail);
 
