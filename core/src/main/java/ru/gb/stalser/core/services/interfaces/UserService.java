@@ -4,11 +4,11 @@ package ru.gb.stalser.core.services.interfaces;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.gb.stalser.api.dto.ConfirmToken;
 import ru.gb.stalser.api.dto.auth.*;
+import ru.gb.stalser.api.dto.util.MessageDto;
 import ru.gb.stalser.core.entity.User;
 
 import java.security.Principal;
 import javax.security.auth.message.AuthException;
-import java.security.Principal;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
@@ -37,4 +37,7 @@ public interface UserService extends UserDetailsService {
 
     ActivateResponse activateUser(ConfirmToken token);
 
+    MessageDto resetPassword(String userEmail);
+
+    AuthResponse setNewPassword (RequestNewPass requestNewPass) throws AuthException;
 }
