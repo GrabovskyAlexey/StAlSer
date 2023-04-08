@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.activity.ActivityDto;
 import ru.gb.stalser.api.dto.tag.TagDto;
+import ru.gb.stalser.api.dto.tag.TagListResponse;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
@@ -35,8 +36,7 @@ public interface TagController {
             tags = {"tag"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Список всех тегов", content = {
-                            @Content(mediaType = "application/json", array = @ArraySchema(
-                                    schema = @Schema(implementation = TagDto.class)))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = TagListResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -46,7 +46,7 @@ public interface TagController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<TagDto>> getAllTags(Principal principal);
+    TagListResponse getAllTags(Principal principal);
 
 
     /**
@@ -77,7 +77,7 @@ public interface TagController {
             value = "/{id}",
             produces = {"application/json"}
     )
-    ResponseEntity<TagDto> getTagById(
+    TagDto getTagById(
             @Parameter(name = "id", description = "tag id", required = true)
             @PathVariable("id") Long id,
             Principal principal
@@ -112,7 +112,7 @@ public interface TagController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<TagDto> addTag(
+    TagDto addTag(
             @Parameter(name = "tag", description = "Tag Item", required = true)
             @Valid @RequestBody TagDto tag,
             Principal principal
@@ -134,9 +134,7 @@ public interface TagController {
             summary = "Обновление тега",
             tags = {"tag"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Тег успешно обновлен", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = TagDto.class))
-                    }),
+                    @ApiResponse(responseCode = "204", description = "Тег успешно обновлен"),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),
@@ -174,7 +172,7 @@ public interface TagController {
             summary = "Удаление тега",
             tags = {"tag"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Тег успешно удален"),
+                    @ApiResponse(responseCode = "204", description = "Тег успешно удален"),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
                     }),

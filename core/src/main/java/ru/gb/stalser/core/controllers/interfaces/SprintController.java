@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.sprint.SprintDto;
+import ru.gb.stalser.api.dto.sprint.SprintListResponse;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
@@ -28,8 +29,7 @@ public interface SprintController {
             tags = {"sprint"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Список всех спринтов", content = {
-                            @Content(mediaType = "application/json", array = @ArraySchema(
-                                    schema = @Schema(implementation = SprintDto.class)))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = SprintListResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -38,7 +38,7 @@ public interface SprintController {
     )
 
     @GetMapping(produces = {"application/json"})
-    ResponseEntity<List<SprintDto>> getAllSprints(Principal principal);
+    SprintListResponse getAllSprints(Principal principal);
 
     @Operation(
             operationId = "getSprintById",
@@ -58,7 +58,7 @@ public interface SprintController {
     )
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    ResponseEntity<SprintDto> getSprintById(
+    SprintDto getSprintById(
             @Parameter(name = "id", description = "sprint id", required = true)
             @PathVariable("id") Long id,
             Principal principal
@@ -85,7 +85,7 @@ public interface SprintController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<SprintDto> addSprint(
+    SprintDto addSprint(
             @Parameter(name = "Sprint", description = "Sprint Item", required = true)
             @Valid
             @RequestBody SprintDto sprint,

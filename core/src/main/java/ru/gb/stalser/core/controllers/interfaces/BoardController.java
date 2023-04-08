@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.board.BoardDto;
+import ru.gb.stalser.api.dto.board.BoardListResponse;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
@@ -34,8 +35,7 @@ public interface BoardController {
             tags = {"board"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Список всех досок пользователя", content = {
-                            @Content(mediaType = "application/json", array = @ArraySchema(
-                                    schema = @Schema(implementation = BoardDto.class)))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = BoardListResponse.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))
@@ -45,7 +45,7 @@ public interface BoardController {
     @GetMapping(
             produces = {"application/json"}
     )
-    ResponseEntity<List<BoardDto>> getAllBoards(Principal principal);
+    BoardListResponse getAllBoards(Principal principal);
 
 
     /**
@@ -76,7 +76,7 @@ public interface BoardController {
             value = "/{id}",
             produces = {"application/json"}
     )
-    ResponseEntity<BoardDto> getBoardById(
+    BoardDto getBoardById(
             @Parameter(name = "id", description = "board id", required = true)
             @PathVariable("id") Long id,
             Principal principal

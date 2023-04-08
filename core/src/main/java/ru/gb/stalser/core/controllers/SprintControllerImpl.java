@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.sprint.SprintDto;
+import ru.gb.stalser.api.dto.sprint.SprintListResponse;
 import ru.gb.stalser.core.controllers.interfaces.SprintController;
 import ru.gb.stalser.core.mappers.SprintMapper;
 import ru.gb.stalser.core.services.interfaces.SprintService;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,26 +22,26 @@ public class SprintControllerImpl implements SprintController {
     private final SprintMapper sprintMapper;
 
     @Override
-    public ResponseEntity<List<SprintDto>> getAllSprints(Principal principal) {
-        return ResponseEntity.ok(
-                sprintService.findAll().stream()
-                        .map(sprintMapper::mapToDto)
-                        .collect(Collectors.toList())
-        );
+    public SprintListResponse getAllSprints(Principal principal) {
+        return SprintListResponse.builder()
+                .sprints(
+                        sprintService.findAll().stream()
+                                .map(sprintMapper::mapToDto)
+                                .collect(Collectors.toList()))
+                .build();
     }
 
     @Override
-    public ResponseEntity<SprintDto> getSprintById(final Long id, Principal principal) {
-        return ResponseEntity.ok(sprintMapper
+    public SprintDto getSprintById(final Long id, Principal principal) {
+        return sprintMapper
                 .mapToDto(sprintService
-                        .findById(id)));
+                        .findById(id));
     }
 
     @Override
-    public ResponseEntity<SprintDto> addSprint(final SprintDto sprintDto, Principal principal) {
-        return ResponseEntity.ok(sprintMapper.mapToDto(
-                        sprintService.save(sprintMapper.mapFromDto(sprintDto))
-                )
+    public SprintDto addSprint(final SprintDto sprintDto, Principal principal) {
+        return sprintMapper.mapToDto(
+                sprintService.save(sprintMapper.mapFromDto(sprintDto))
         );
     }
 

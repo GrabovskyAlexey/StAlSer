@@ -17,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Информация о Комментарие", name = "Comment")
+@Schema(description = "Информация о комментарии", name = "Comment")
 public class CommentDto {
 
     @Schema(description = "Id Комментария", example = "1")

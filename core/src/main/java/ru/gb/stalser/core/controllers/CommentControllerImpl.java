@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.stalser.api.dto.comment.CommentDto;
+import ru.gb.stalser.api.dto.comment.CommentListResponse;
 import ru.gb.stalser.core.controllers.interfaces.CommentController;
 import ru.gb.stalser.core.mappers.CommentMapper;
 import ru.gb.stalser.core.services.interfaces.CommentService;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,20 +22,22 @@ public class CommentControllerImpl implements CommentController {
     private final CommentMapper commentMapper;
 
     @Override
-    public ResponseEntity<List<CommentDto>> getAllComments(Principal principal) {
-        return ResponseEntity.ok(commentService.findAll().stream()
-                .map(commentMapper::mapToDto)
-                .collect(Collectors.toList()));
+    public CommentListResponse getAllComments(Principal principal) {
+        return CommentListResponse.builder()
+                .comments(commentService.findAll().stream()
+                        .map(commentMapper::mapToDto)
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     @Override
-    public ResponseEntity<CommentDto> getCommentById(Long id, Principal principal) {
-        return ResponseEntity.ok(commentMapper.mapToDto(commentService.findById(id)));
+    public CommentDto getCommentById(Long id, Principal principal) {
+        return commentMapper.mapToDto(commentService.findById(id));
     }
 
     @Override
-    public ResponseEntity<CommentDto> addComment(CommentDto comment, Principal principal) {
-        return ResponseEntity.ok(commentMapper.mapToDto(commentService.save(commentMapper.mapFromDto(comment))));
+    public CommentDto addComment(CommentDto comment, Principal principal) {
+        return commentMapper.mapToDto(commentService.save(commentMapper.mapFromDto(comment)));
     }
 
     @Override
