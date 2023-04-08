@@ -1,391 +1,528 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>StAlSer App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <title>StAlSer</title>
+  <link rel="icon" href="favicon.ico"/>
+  <link rel="stylesheet" type="text/css" href="css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+
 </head>
-<body>
-<header>
-    <div class="container">
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">StAlSer</a>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                Доски
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Доска 1</a></li>
-                                <li><a class="dropdown-item" href="#">Доска 2</a></li>
-                                <li><a class="dropdown-item" href="#">Доска 3</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <div class="d-flex" style="margin-right: 10px">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item dropdown">
-                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown"
-                                        aria-expanded="false" data-bs-auto-close="outside">
-                                    <span class="bi bi-person-circle"> Username</span>
-                                </button>
-
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Профиль</a></li>
-                                    <div class="dropdown-divider"></div>
-                                    <li><a class="dropdown-item" href="#">Выйти</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="d-flex">
-                        <div class="dropdown">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="dropdown"
-                                    aria-expanded="false" data-bs-auto-close="outside">
-                                Войти
-                            </button>
-                            <form class="dropdown-menu px-4 py-3">
-                                <div class="mb-3">
-                                    <label for="singInLogin" class="form-label">Login</label>
-                                    <input type="text" class="form-control" id="singInLogin" placeholder="Login">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="singInPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="singInPassword"
-                                           placeholder="Password">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Войти</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="dropdown">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="dropdown"
-                                    aria-expanded="false" data-bs-auto-close="outside">
-                                Регистрация
-                            </button>
-                            <form class="dropdown-menu px-4 py-3">
-                                <div class="mb-3">
-                                    <label for="singUpLogin" class="form-label">Login</label>
-                                    <input type="text" class="form-control" id="singUpLogin" placeholder="Login">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="singUpPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="singUpPassword"
-                                           placeholder="Password">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="singUpEmail" class="form-label">Email address</label>
-                                    <input type="email" class="form-control" id="singUpEmail"
-                                           placeholder="email@example.com">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <button class="btn btn-primary">Выйти</button>
-                    </div>
-                </div>
-            </div>
-        </nav>
+<body class="page-body">
+<header class="main-header">
+  <nav class="main-navbar">
+    <div class="left-main-menu">
+      <ul class="left-menu">
+        <li class="left-menu-item dropdown-left-menu">
+          <a class="left-menu-link" href="#">
+            <img src="icons/menu.svg" width="20" height="20" alt="">
+          </a>
+        </li>
+        <li class="left-menu-item logo">
+          <a class="left-menu-link" href="#">
+            <img src="icons/full_logo.svg" width="104" height="24" alt="">
+          </a>
+        </li>
+        <li class="left-menu-item">
+          <a class="left-menu-link" href="#">Ваша работа</a>
+        </li>
+        <li class="left-menu-item">
+          <a class="left-menu-link" href="#">Проект
+            <img src="icons/arrow-down.svg" alt="" width="8" height="4" class="dropdown-icon">
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-menu-item">
+              <a href="blank.html">Проект 1</a>
+            </li>
+            <li class="dropdown-menu-item">
+              <a href="blank.html">Проект 2</a>
+            </li>
+            <li class="dropdown-menu-item">
+              <a href="blank.html">Проект 3</a>
+            </li>
+          </ul>
+        </li>
+        <li class="left-menu-item">
+          <a class="left-menu-link" href="#">Доски
+            <img src="icons/arrow-down.svg" alt="" width="8" height="4" class="dropdown-icon">
+          </a>
+          <ul class="dropdown-menu hide">
+            <li class="dropdown-menu-item">
+              <a href="blank.html">Доска 1</a>
+            </li>
+            <li class="dropdown-menu-item">
+              <a href="blank.html">Доска 2</a>
+            </li>
+            <li class="dropdown-menu-item">
+              <a href="blank.html">Доска 3</a>
+            </li>
+          </ul>
+        </li>
+        <li class="left-menu-item">
+          <a class="left-menu-link" href="#">Команда
+            <img src="icons/arrow-down.svg" alt="" width="8" height="4" class="dropdown-icon">
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-menu-item">
+              <img src="img/avatar1.png" width="24" height="24" alt="">
+              <a href="blank.html">Иванов</a>
+            </li>
+            <li class="dropdown-menu-item">
+              <img src="img/avatar2.png" width="24" height="24" alt="">
+              <a href="blank.html">Петров</a>
+            </li>
+            <li class="dropdown-menu-item">
+              <img src="img/avatar3.png" width="24" height="24" alt="">
+              <a href="blank.html">Сидоров</a>
+            </li>
+          </ul>
+        </li>
+        <li class="left-menu-item btn">
+          <a class="left-menu-link" href="#">Создать</a>
+        </li>
+      </ul>
     </div>
+    <div class="right-main-menu">
+      <ul class="right-menu">
+        <li class="search-input-wrapper">
+          <label>
+            <input class="search-input" type="text" placeholder="Поиск">
+          </label>
+        </li>
+        <li class="right-menu-item">
+          <a class="right-menu-link" href="#">
+            <img src="icons/notify.svg" width="14" height="16" alt="">
+          </a>
+        </li>
+        <li class="right-menu-item">
+          <a class="right-menu-link" href="#">
+            <img src="icons/help.svg" width="16" height="16" alt="">
+          </a>
+        </li>
+        <li class="right-menu-item">
+          <a class="right-menu-link" href="#">
+            <img src="icons/settings.svg" width="16" height="16" alt="">
+          </a>
+        </li>
+        <li class="right-menu-item avatar-mini">
+          <a href="#">
+            <img class="avatar-mini-img" src="img/avatar1.png" width="24" height="24" alt="">
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 </header>
-<div class="container">
-    <div class="row align-items-start">
-    <div class="col">
-    <div class="card board-column">
-        <div class="card-header">
-            <h5 class="card-title">Backlog</h5>
+<main class="main-content">
+  <h1 class="main-content-title">StAlSer Kanban Board</h1>
+  <div class="main-content-block">
+    <section class="main-content-block-left-info-panel">
+      <div class="left-info-panel-title">
+        <div class="left-info-panel-title-logo">
+          <img src="icons/com_at.svg" width="22" height="22" alt="">
         </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
+        <div class="left-info-panel-title-desc">
+          <h2 class="left-info-panel-title-desc-header">Продукт Web</h2>
+          <span class="left-info-panel-title-desc-text">Классический проект</span>
         </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div class="col">
-    <div class="card board-column">
-        <div class="card-header">
-            <h5 class="card-title">TO DO</h5>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div class="col">
-    <div class="card board-column">
-        <div class="card-header">
-            <h5 class="card-title">In work</h5>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div class="col">
-    <div class="card board-column">
-        <div class="card-header">
-            <h5 class="card-title">Review</h5>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div class="col">
-    <div class="card board-column">
-        <div class="card-header">
-            <h5 class="card-title">Resolve</h5>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-        <div class="card inner-card">
-            <div class="card-header">
-                <h5 class="card-title">TaskName</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Card description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <span class="badge text-bg-warning">Sprint1</span>
-                <span class="badge text-bg-info">Assignee</span>
-            </div>
-        </div>
-    </div>
-    </div>
-    </div>
+      </div>
+      <ul class="left-info-menu">
+        <li class="left-info-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="none"><path fill="#84919A" fill-rule="evenodd" d="M.586.586A2 2 0 0 0 0 2v10a2 2 0 0 0 2 2h12a2 2 0 0 1-2-2V2a2 2 0 0 0-2-2H2A2 2 0 0 0 .586.586ZM9 3H3v4h6V3ZM3 9h6v2H3V9Z" clip-rule="evenodd"/><path fill="#84919A" d="M14 4h-1v7.5a1.5 1.5 0 1 0 3 0V6a2 2 0 0 0-2-2Z"/></svg>
+          <a class="left-info-menu-item-link" href="#">Бэклог</a>
+        </li>
+        <li class="left-info-menu-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="none"><path fill="#84919A" d="M0 1a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1Zm6 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V1Zm7-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-2Z"/></svg>
+          <a class="left-info-menu-item-link" href="#">Активные спринты</a>
+        </li>
+        <li class="left-info-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="none"><path fill="#84919A" fill-rule="evenodd" d="M10 2a1 1 0 0 1 0-2h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V3.414L9.707 7.707a1 1 0 0 1-1.414 0L6 5.414 1.707 9.707A1 1 0 0 1 .293 8.293l5-5a1 1 0 0 1 1.414 0L9 5.586 12.586 2H10Z" clip-rule="evenodd"/></svg>
+          <a class="left-info-menu-item-link" href="#">Отчеты</a>
+        </li>
+      </ul>
+      <hr class="left-info-menu-divider">
+      <ul class="left-info-menu">
+        <li class="left-info-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="none"><path fill="#84919A" d="M5 0a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5ZM2 4a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1ZM0 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8Z"/></svg>
+          <a class="left-info-menu-item-link" href="#">Задачи</a>
+        </li>
+        <li class="left-info-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><path fill="#84919A" d="M8 1.5a1.5 1.5 0 0 1 3 0V2a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-.5a1.5 1.5 0 0 0 0 3h.5a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-.5a1.5 1.5 0 1 0-3 0v.5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1h-.5a1.5 1.5 0 1 1 0-3H2a1 1 0 0 0 1-1V4a1 1 0 0 1 1-1h3a1 1 0 0 0 1-1v-.5Z"/></svg>
+          <a class="left-info-menu-item-link" href="#">Компоненты</a>
+        </li>
+        <li class="left-info-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" fill="none"><path fill="#84919A" fill-rule="evenodd" d="M11.316.051a1 1 0 0 1 .633 1.265l-4 12a1 1 0 1 1-1.898-.632l4-12a1 1 0 0 1 1.265-.633ZM4.707 3.293a1 1 0 0 1 0 1.414L2.414 7l2.293 2.293a1 1 0 1 1-1.414 1.414l-3-3a1 1 0 0 1 0-1.414l3-3a1 1 0 0 1 1.414 0Zm8.586 0a1 1 0 0 1 1.414 0l3 3a1 1 0 0 1 0 1.414l-3 3a1 1 0 1 1-1.414-1.414L15.586 7l-2.293-2.293a1 1 0 0 1 0-1.414Z" clip-rule="evenodd"/></svg>
+          <a class="left-info-menu-item-link" href="#">Код</a>
+        </li>
+        <li class="left-info-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="none"><path fill="#84919A" d="M4.293.293A1 1 0 0 1 5 0h2a1 1 0 0 1 0 2H5A1 1 0 0 1 4.293.293Z"/><path fill="#84919A" fill-rule="evenodd" d="M.586 1.586A2 2 0 0 0 0 3v11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2 3 3 0 0 1-3 3H5a3 3 0 0 1-3-3 2 2 0 0 0-1.414.586Zm9.402 6.418a1 1 0 0 1-.281.703l-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L5 10.586l3.293-3.293a1 1 0 0 1 1.695.71Z" clip-rule="evenodd"/></svg>
+          <a class="left-info-menu-item-link" href="#">Релизы</a>
+        </li>
+        <li class="left-info-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" fill="none"><path fill="#84919A" d="M4.586.586A2 2 0 0 1 6 0h3.586A2 2 0 0 1 11 .586L13.414 3A2 2 0 0 1 14 4.414V10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2A2 2 0 0 1 4.586.586Z"/><path fill="#84919A" d="M.586 4.586A2 2 0 0 0 0 6v8a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2H2V4a2 2 0 0 0-1.414.586Z"/></svg>
+          <a class="left-info-menu-item-link" href="#">Страницы проекта</a>
+        </li>
+      </ul>
+    </section>
+    <div class="main-content-board">
+      <section class="breadcrumbs-wrapper">
+        <ul class="breadcrumbs">
+          <li class="breadcrumbs-item"><a class="breadcrumbs-item-link" href="#">Проекты</a></li>
+          <li class="breadcrumbs-item"><a class="breadcrumbs-item-link" href="#">Интернациональные</a></li>
+          <li class="breadcrumbs-item-last"><a>Продукт Web</a></li>
+        </ul>
+      </section>
+      <section class="top-info-panel">
+        <h2 class="top-info-panel-header">Все спринты</h2>
+        <ul class="top-info-panel-actions">
+          <li class="top-info-panel-actions-item">
+            <a class="top-info-panel-actions-item-link" href="#">
+              <img src="icons/star.svg" width="15" height="14" alt="">
+            </a>
+          </li>
+          <li class="top-info-panel-actions-item btn btn-blue">
+            <a class="top-info-panel-actions-item-link" href="#">Завершить спринт</a>
+          </li>
+          <li class="top-info-panel-actions-item">
+            <a class="top-info-panel-actions-item-link" href="#">
+              <img src="icons/relations.svg" width="16" height="16" alt="">
+            </a>
+          </li>
+          <li class="top-info-panel-actions-item btn">
+            <a class="top-info-panel-actions-item-link-btn" href="#">
+              <img src="icons/more.svg" width="16" height="4" alt="">
+            </a>
+          </li>
+        </ul>
+      </section>
+      <section class="main-board-menu">
+        <h2 class="main-board-menu-title">Меню доски</h2>
+        <ul class="main-board-menu-list">
+          <li class="search-input-wrapper">
+            <label>
+              <input class="search-input" type="text" placeholder="Поиск">
+            </label>
+          </li>
+          <li class="main-board-menu-list-item avatar-list">
+            <ul class="main-board-menu-people-list">
+              <li class="main-board-menu-people-list-item avatar-1">
+                <a href="#">
+                  <img src="img/avatar1.png" width="32" height="32" alt="">
+                </a>
+              </li>
+              <li class="main-board-menu-people-list-item avatar-2">
+                <a href="#">
+                  <img src="img/avatar2.png" width="32" height="32" alt="">
+                </a>
+              </li>
+              <li class="main-board-menu-people-list-item avatar-3">
+                <a href="#">
+                  <img src="img/avatar3.png" width="32" height="32" alt="">
+                </a>
+              </li>
+              <li class="main-board-menu-people-list-item avatar-4">
+                <a href="#">
+                  <img src="img/avatar4.png" width="32" height="32" alt="">
+                </a>
+              </li>
+              <li class="main-board-menu-people-list-item summary-people">
+                <a class="main-board-menu-people-list-item-link" href="#">
+                  9
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="main-board-menu-list-item"><a class="main-board-menu-list-item-link" href="#">Только мои задачи</a>
+          </li>
+          <li class="main-board-menu-list-item"><a class="main-board-menu-list-item-link" href="#">Недавно
+            обновленные</a></li>
 
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-        crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
-
+          <li class="main-board-menu-list-item">
+            <a class="main-board-menu-list-item-link" href="#">Спринты
+              <img src="icons/arrow-down.svg" alt="" width="8" height="4" class="dropdown-icon">
+            </a>
+            <ul class="dropdown-menu">
+              <li class="dropdown-menu-item"><a href="#">Спринт 1</a></li>
+              <li class="dropdown-menu-item"><a href="#">Спринт 2</a></li>
+              <li class="dropdown-menu-item"><a href="#">Спринт 3</a></li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+      <section class="main-board">
+        <h2 class="main-board-title">Доска</h2>
+        <section class="main-board-column">
+          <h3 class="main-board-column-title">TO DO</h3>
+          <ul class="main-board-cards">
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/experiment.svg" width="16" height="16"
+                       alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no 1</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar1.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/task.svg" width="16" height="16" alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar2.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/subtask.svg" width="16" height="16"
+                       alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar3.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/design.svg" width="16" height="16"
+                       alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar4.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section class="main-board-column">
+          <h3 class="main-board-column-title">IN PROGRESS</h3>
+          <ul class="main-board-cards">
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/experiment.svg" width="16" height="16"
+                       alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar1.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/task.svg" width="16" height="16" alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar2.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/subtask.svg" width="16" height="16"
+                       alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar3.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/design.svg" width="16" height="16"
+                       alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar4.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section class="main-board-column">
+          <h3 class="main-board-column-title">DONE</h3>
+          <ul class="main-board-cards">
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/experiment.svg" width="16" height="16"
+                       alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar1.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/task.svg" width="16" height="16" alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar2.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/subtask.svg" width="16" height="16"
+                       alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar3.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+            <li class="main-board-cards-item">
+              <div class="main-board-cards-item-header">
+                <p class="main-board-cards-item-label"><a href="#">Epic</a></p>
+                <p class="main-board-cards-item-title">EXP | Create kanban board</p>
+              </div>
+              <div class="main-board-cards-item-info">
+                <div class="main-board-cards-item-info-icon-wrapper">
+                  <img class="main-board-cards-item-info-icon" src="icons/types/design.svg" width="16" height="16"
+                       alt="">
+                  <p class="main-board-cards-item-info-task-number">Ticket no</p>
+                </div>
+                <a href="#">
+                  <img src="img/avatar4.png" width="18" height="18" alt="">
+                </a>
+              </div>
+              <ul class="main-board-cards-item-tags">
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG1</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG2</a></li>
+                <li class="main-board-cards-item-tags-item"><a href="#">TAG3</a></li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+      </section>
+    </div>
+  </div>
+</main>
+<footer>
+  <p>StAlSer © 2023</p>
+</footer>
+<script src="js/script.js"></script>
 </body>
 </html>
