@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import ru.gb.stalser.core.entity.Board;
 import ru.gb.stalser.core.entity.User;
 import ru.gb.stalser.core.repositories.BoardRepository;
+import ru.gb.stalser.core.repositories.UserRepository;
 import ru.gb.stalser.core.services.interfaces.BoardService;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final UserServiceImpl userService;
+    private final UserRepository userRepository;
 
 
     @Override
@@ -79,4 +82,12 @@ public class BoardServiceImpl implements BoardService {
     public Boolean existsBoardById(Long id) {
         return boardRepository.existsBoardById(id);
     }
+
+    public void createBoard(Long creatorId, Board board) {
+        User creator = userRepository.findById(creatorId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        board.setCreator(creator);
+        boardRepository.save(board);
+    }
+
 }

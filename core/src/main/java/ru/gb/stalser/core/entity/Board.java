@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
 import ru.gb.stalser.core.utils.DefaultInstantDeserializer;
 
 import javax.persistence.*;
@@ -43,6 +44,8 @@ public class Board extends BaseEntity {
     private String boardAlias;
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @CreatedBy
     @ManyToOne
     @JoinColumn(name = "creator_id")
     @ToString.Exclude

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.stalser.api.dto.board.BoardDto;
+import ru.gb.stalser.api.dto.user.UserDto;
 import ru.gb.stalser.api.dto.util.MessageDto;
 
 import javax.validation.Valid;
@@ -111,7 +112,7 @@ public interface BoardController {
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
-    BoardDto addBoard(
+    BoardDto addBoard(@RequestParam UserDto creatorId,
             @Parameter(name = "Board", description = "Board Item", required = true)
             @Valid @RequestBody BoardDto board,
             Principal principal
